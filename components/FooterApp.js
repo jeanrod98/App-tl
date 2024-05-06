@@ -2,13 +2,30 @@ import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 
 import { AntDesign } from '@expo/vector-icons';
 
-const FooterApp = ({ ruta, name}) => {
+const FooterApp = ({ ruta, name, setInicio}) => {
+
+    const handleNex = () => {
+
+        if(ruta === "/siguiente") {
+            setInicio(false);
+        }else if (ruta === "REGISTRAR"){
+            console.log("Registrando")
+
+        }else{
+            console.log("Inicio de sesion")
+        }
+    }
+
+    const mostrarAyuda = () => {
+
+        alert("Mostrar Ayuda")
+    }
     return ( 
 
         <View style={styles.container}>
-            <AntDesign name="questioncircle" size={24} color="#fff" />
+            <AntDesign name="questioncircle" size={24} color="#fff" onPress={mostrarAyuda}/>
 
-            <TouchableOpacity style={styles.boton}>
+            <TouchableOpacity style={styles.boton} onPress={handleNex}>
                 <Text style={styles.text}>
                     {name}
                 </Text>

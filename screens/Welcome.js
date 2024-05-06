@@ -5,7 +5,7 @@ import FooterApp from "../components/FooterApp";
 import imagen_1 from "../assets/imagen_1_inicio.png"
 
 
-const Welcome = () => {
+const Welcome = ( { setInicio } ) => {
     return ( 
         <View style={styles.container}>
             <HeaderApp text={"BIENVENIDO A MAVE"}/>
@@ -22,7 +22,7 @@ const Welcome = () => {
                 <Image source={imagen_1} style={styles.img}/>
             </View>
             
-            <FooterApp ruta={"/siguiente"} name={"SIGUIENTE"}/>
+            <FooterApp ruta={"/siguiente"} name={"SIGUIENTE"} setInicio={setInicio}/>
         </View>
      );
 }
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
       backgroundColor: "#fff",
       alignItems: "center",
       justifyContent: "space-between",
-      height: width-50,
+      height: width-510,
       
     },
     contenido:{

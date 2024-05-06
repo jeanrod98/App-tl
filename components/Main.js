@@ -12,7 +12,7 @@ const Main = () => {
 
             {
                 inicio ?
-                <Welcome/>
+                <Welcome setInicio={setInicio}/>
                 :
                 <MenuLogin/>
 
