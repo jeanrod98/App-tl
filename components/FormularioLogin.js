@@ -1,5 +1,6 @@
 import {
     Image,
+    ImageBackground,
     StyleSheet,
     Text,
     TextInput,
@@ -8,23 +9,18 @@ import {
   } from "react-native";
   
   import imagen_3 from "../assets/imagen_3_login.png";
+  import imagen_2 from "../assets/registro.jpg";
+
 const FormularioLogin = () => {
     return ( 
         <View style={styles.container}>
-            <Image source={imagen_3} style={styles.img} />
+            {/* <Image source={imagen_3} style={styles.img} /> */}
 
       <View style={styles.form}>
-        <View
-          style={{
-            width: "100%",
-            height: 200,
-            display: "flex",
-            alignItems: "center",
-            backgroundColor: "#303F9F",
-            paddingVertical: 10,
-
-            
-          }}
+        <ImageBackground
+        source={imagen_2}
+          resizeMode="center"
+          style={styles.contenedorFormulario}
         >
           {/* <Image style={{ width: 100, height: 65, marginTop: 35 }} source={logo} /> */}
           <View style={styles.formulario}>
@@ -47,7 +43,7 @@ const FormularioLogin = () => {
             </View>
            
           </View>
-        </View>
+        </ImageBackground>
       </View>
     </View>
      );
@@ -75,9 +71,20 @@ const styles = StyleSheet.create({
       
       
     },
+    contenedorFormulario:{
+      width: "100%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      // backgroundColor: "#303F9F",
+      paddingVertical: 10,
+      height: 220,
+      
+  
+    },
   
     form: {
-      width: "40%",
+      width: "80%",
       backgroundColor: "#fff",
       display: "flex",
       alignItems: "center",
@@ -96,10 +103,13 @@ const styles = StyleSheet.create({
     },
     formulario: {
       // backgroundColor: 'yellow',
-      width: "90%",
+      backgroundColor: 'rgba(48, 63, 159, .5)',
+      width: "70%",
       // overflow: "scroll",
       // margin: "auto",
       // marginLeft: 50,
+      padding: 10,
+      borderRadius: 8,
     },
     contenedorInputs: {
       display: "flex",
@@ -115,7 +125,7 @@ const styles = StyleSheet.create({
       color: "#575353",
       fontWeight: "bold",
       width: "90%",
-      height: 25,
+      height: 30,
       paddingLeft: 10,
       // marginLeft: 15,
       marginTop: 12,
@@ -125,9 +135,9 @@ const styles = StyleSheet.create({
     },
     label: {
       fontWeight: "bold",
-      fontSize: 12,
+      fontSize: 14,
       alignSelf: "flex-start",
-      paddingLeft: 0,
+      paddingLeft: 10,
       marginTop: 10,
       color: "#fff"
     },

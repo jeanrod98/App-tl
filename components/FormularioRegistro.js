@@ -1,5 +1,6 @@
 import {
   Image,
+  ImageBackground,
   StyleSheet,
   Text,
   TextInput,
@@ -7,26 +8,24 @@ import {
   View,
 } from "react-native";
 
-import imagen_2 from "../assets/imagen_2_registro.png";
+import imagen_2 from "../assets/registro.jpg";
 
 const FormularioRegistro = () => {
   return (
     <View style={styles.container}>
-      <Image source={imagen_2} style={styles.img} />
+      {/* <Image source={imagen_2} style={styles.img} /> */}
 
       <View style={styles.form}>
-        <View
-          style={{
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            backgroundColor: "#303F9F",
-            paddingVertical: 10,
-          }}
+        <ImageBackground
+        source={imagen_2}
+        resizeMode="center"
+          style={styles.contenedorFormulario}
         >
+         <Text style={styles.titulo}>REGISTRO DE USUARIO</Text>
+
           {/* <Image style={{ width: 100, height: 65, marginTop: 35 }} source={logo} /> */}
           <View style={styles.formulario}>
-            {/* <Text style={styles.titulo}>INICIAR SESIÓN</Text> */}
+          
 
             <View style={styles.contenedorInputs}>
               <Text style={styles.label}>Nombre de usuario:</Text>
@@ -57,7 +56,7 @@ const FormularioRegistro = () => {
               />
             </View>
           </View>
-        </View>
+        </ImageBackground>
       </View>
     </View>
   );
@@ -79,40 +78,66 @@ const styles = StyleSheet.create({
   },
 
   img: {
-    width: "40%",
+    width: "20%",
     height: 200,
     
   },
 
   form: {
-    width: "40%",
-    backgroundColor: "#fff",
+    width: "80%",
+    // backgroundColor: "#fff",
+    // backgroundColor: "yellow",
     display: "flex",
-    alignItems: "center",
+    
+    // alignItems: "center",
     // justifyContent: "center"
   },
 
   titulo: {
     fontSize: 20,
-    color: "#1E9416",
+    color: "#fff",
     fontWeight: "700",
     //  marginTop: 50,
     textAlign: "center",
+    backgroundColor: "rgba(48, 63, 159, .5)",
+    width: "80%",
+    paddingTop: 20,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+  },
+  contenedorFormulario:{
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    // backgroundColor: "#303F9F",
+    paddingVertical: 10,
+    height: 220,
+    
+
   },
   formulario: {
-    // backgroundColor: 'yellow',
-    width: "90%",
+    backgroundColor: 'rgba(48, 63, 159, .5)',
+    
+    width: "80%",
     // overflow: "scroll",
     // margin: "auto",
     // marginLeft: 50,
     display: "flex",
-    alignItems: "center",
+    flexDirection: "row",
+    gap: 20,
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignContent: "center",
+    height: "80%",
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
   },
   contenedorInputs: {
     display: "flex",
     flexDirection: "column",
     // backgroundColor: "red",
-    width: "100%",
+    width: "40%",
     marginTop: 2,
     display: "flex",
     alignItems: "center",
@@ -121,8 +146,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#575353",
     fontWeight: "bold",
-    width: "90%",
-    height: 25,
+    width: "100%",
+    height: 30,
     paddingLeft: 10,
     // marginLeft: 15,
     marginTop: 5,
@@ -132,7 +157,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: "bold",
-    fontSize: 12,
+    fontSize: 14,
     alignSelf: "flex-start",
     paddingLeft: 0,
     marginTop: 5,

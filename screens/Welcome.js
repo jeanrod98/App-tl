@@ -32,19 +32,21 @@ export default Welcome;
 const {height,width} = Dimensions.get("screen");
 // console.log(height);
 
+
 const styles = StyleSheet.create({
     container: {
       display: "flex",
       backgroundColor: "#fff",
       alignItems: "center",
       justifyContent: "space-between",
-      height: width-510,
+      
       
     },
     contenido:{
         display: "flex",
         flexDirection: "row",
-        gap: 20
+        gap: 20,
+        height: width - 132,
     },
     texto: {
         width: "30%"

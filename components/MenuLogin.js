@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "space-between",
-    height: width - 590,
+    // height: width - 590,
     // overflow: "scroll"
   },
 
@@ -91,12 +91,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 20,
     alignItems: "space-between",
-    width: "100%"
+    width: "100%",
+    height: width - 132,
   },
 
   menu:{
     // backgroundColor: "red",
-    height: width-590,
+    height: width - 132,
     width: "20%",
     paddingTop: 20,
     display: "flex",
