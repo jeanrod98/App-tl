@@ -11,7 +11,7 @@ import {
   import imagen_3 from "../assets/imagen_3_login.png";
   import imagen_2 from "../assets/registro.jpg";
 
-const FormularioLogin = () => {
+const FormularioLogin = ({ setDataForm, dataForm}) => {
     return ( 
         <View style={styles.container}>
             {/* <Image source={imagen_3} style={styles.img} /> */}
@@ -32,6 +32,9 @@ const FormularioLogin = () => {
               <TextInput
                 style={styles.textInput}
                 placeholder="Ingrese su correo"
+                onChangeText={(text) => {
+                  setDataForm({...dataForm, "correo" : text})
+                }}
               />
             </View>
             <View style={styles.contenedorInputs}>
@@ -39,6 +42,11 @@ const FormularioLogin = () => {
               <TextInput
                 style={styles.textInput}
                 placeholder="Ingrese su contraseña"
+                secureTextEntry={true}
+                onChangeText={(text) => {
+                  setDataForm({...dataForm, "password" : text})
+                  
+                }}
               />
             </View>
            
@@ -110,6 +118,8 @@ const styles = StyleSheet.create({
       // marginLeft: 50,
       padding: 10,
       borderRadius: 8,
+      paddingBottom: 15,
+
     },
     contenedorInputs: {
       display: "flex",

@@ -6,18 +6,38 @@ import {
   TouchableOpacity,
 } from "react-native";
 import HeaderApp from "./HeaderApp";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FormularioLogin from "./FormularioLogin";
 import FormularioRegistro from "./FormularioRegistro";
 import FooterApp from "./FooterApp";
 
 import { AntDesign } from '@expo/vector-icons';
+import Alerts from "./Alerts";
+import useAuth from "../Hooks/useAuth";
+import Loading from "./Loading";
 
 const MenuLogin = () => {
 
     const [mostrarRegistro, setMostrarRegistro] = useState(false);
     const [mostrarLogin, setMostrarLogin] = useState(true);
     const [nameOpcion, setNameOpcion] = useState("INGRESAR");
+
+
+    const { dataAlert, cargando, setAuth, setCargando, inicio } = useAuth();
+    
+
+    const [dataForm, setDataForm] = useState({
+      nombres: "",
+      correo: "",
+      password: "",
+      rptPassword: ""
+    });
+
+    useEffect(() => {
+      setCargando(false)
+      console.log(inicio);
+    }, []);
+    
   return (
     <View style={styles.container}>
       <HeaderApp text={"BIENVENIDO A MAVE"} />
@@ -47,16 +67,33 @@ const MenuLogin = () => {
             >
             <Text style={styles.text}>{"REGISTRARSE"}</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+            style={{...styles.botonSinConexion, backgroundColor: "#C5CAE9"}}
+            onPress={(text) => {
+                setMostrarLogin(true)
+                setMostrarRegistro(false)
+                setAuth({
+                  nombres_usu: "USUARIO",
+                  tipo_usu: "Invitado",
+                  _id: 1
+
+                })
+
+            }}
+            >
+            <Text style={{...styles.text, fontSize: 12, textAlign: "center"}}>{"CONTINUAR SIN CONEXIÓN"}</Text>
+            </TouchableOpacity>
         </View>
 
         <View style={styles.form}>
 
             {
-                mostrarLogin && <FormularioLogin/>
+                mostrarLogin && <FormularioLogin dataForm={dataForm} setDataForm={setDataForm}/>
             }
 
             {
-                mostrarRegistro && <FormularioRegistro/>
+                mostrarRegistro && <FormularioRegistro dataForm={dataForm} setDataForm={setDataForm} />
             }
             
         </View>
@@ -66,7 +103,9 @@ const MenuLogin = () => {
         
         
       </View>
-      <FooterApp ruta={nameOpcion} name={nameOpcion} />
+      <FooterApp ruta={nameOpcion} name={nameOpcion} data={dataForm} />
+      { dataAlert.active && <Alerts/> }
+      { cargando && <Loading/> }
       
     </View>
   );
@@ -74,7 +113,7 @@ const MenuLogin = () => {
 
 export default MenuLogin;
 
-const { height, width } = Dimensions.get("screen");
+let { height, width } = Dimensions.get("screen");
 
 const styles = StyleSheet.create({
   container: {
@@ -90,14 +129,14 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     gap: 20,
-    alignItems: "space-between",
+    // alignItems: "space-between",
     width: "100%",
-    height: width - 132,
+    height: height < 500 ? (height - 132) : (width - 132),
   },
 
   menu:{
     // backgroundColor: "red",
-    height: width - 132,
+    height: height < 500 ? (height - 132) : (width - 132),
     width: "20%",
     paddingTop: 20,
     display: "flex",
@@ -129,6 +168,17 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+  },
+  botonSinConexion:{
+    width: "100%",
+    height: 45,
+    borderTopRightRadius: 4,
+    borderBottomRightRadius: 4,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    // paddingVertical: 10,
+
   },
 
   footer:{

@@ -10,7 +10,8 @@ import {
 
 import imagen_2 from "../assets/registro.jpg";
 
-const FormularioRegistro = () => {
+const FormularioRegistro = ({ dataForm, setDataForm }) => {
+
   return (
     <View style={styles.container}>
       {/* <Image source={imagen_2} style={styles.img} /> */}
@@ -28,10 +29,13 @@ const FormularioRegistro = () => {
           
 
             <View style={styles.contenedorInputs}>
-              <Text style={styles.label}>Nombre de usuario:</Text>
+              <Text style={styles.label}>Nombre y Apellido:</Text>
               <TextInput
                 style={styles.textInput}
-                placeholder="Ingrese su nombre"
+                placeholder="Ingrese su nombre y apellido"
+                onChangeText={(text) => {
+                  setDataForm({...dataForm, "nombres" : text})
+                }}
               />
             </View>
             <View style={styles.contenedorInputs}>
@@ -39,6 +43,9 @@ const FormularioRegistro = () => {
               <TextInput
                 style={styles.textInput}
                 placeholder="Ingrese su correo"
+                onChangeText={(text) => {
+                  setDataForm({...dataForm, "correo" : text})
+                }}
               />
             </View>
             <View style={styles.contenedorInputs}>
@@ -46,6 +53,9 @@ const FormularioRegistro = () => {
               <TextInput
                 style={styles.textInput}
                 placeholder="Ingrese su contraseña"
+                onChangeText={(text) => {
+                  setDataForm({...dataForm, "password" : text})
+                }}
               />
             </View>
             <View style={styles.contenedorInputs}>
@@ -53,6 +63,9 @@ const FormularioRegistro = () => {
               <TextInput
                 style={styles.textInput}
                 placeholder="Repita su contraseña"
+                onChangeText={(text) => {
+                  setDataForm({...dataForm, "rptPassword" : text})
+                }}
               />
             </View>
           </View>
@@ -91,6 +104,7 @@ const styles = StyleSheet.create({
     
     // alignItems: "center",
     // justifyContent: "center"
+    
   },
 
   titulo: {
@@ -100,7 +114,7 @@ const styles = StyleSheet.create({
     //  marginTop: 50,
     textAlign: "center",
     backgroundColor: "rgba(48, 63, 159, .5)",
-    width: "80%",
+    width: "100%",
     paddingTop: 20,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
@@ -119,7 +133,7 @@ const styles = StyleSheet.create({
   formulario: {
     backgroundColor: 'rgba(48, 63, 159, .5)',
     
-    width: "80%",
+    width: "100%",
     // overflow: "scroll",
     // margin: "auto",
     // marginLeft: 50,
@@ -132,12 +146,14 @@ const styles = StyleSheet.create({
     height: "80%",
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
+    paddingBottom: 15,
+
   },
   contenedorInputs: {
     display: "flex",
     flexDirection: "column",
     // backgroundColor: "red",
-    width: "40%",
+    width: "45%",
     marginTop: 2,
     display: "flex",
     alignItems: "center",
