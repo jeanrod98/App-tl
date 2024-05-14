@@ -13,10 +13,17 @@ const AuthProvider = ({ children }) => {
   const [inicio, setInicio] = useState("true");
 
   const [dataAlert, setDataAlert] = useState({
-    tipe: "error",
-    tittle: "ERRO DE AUTENTICACION",
-    detalle: "LA CONTRASENIA ESTA EQUIVOCADA",
+    icon: "",
+    tittle: "",
+    detalle: "",
     active: false,
+    tipe: "",
+  });
+
+  const [option, setOption] = useState({
+    activo: false,
+    nameOption: "",
+    next: false
   });
 
   useEffect(() => {
@@ -51,25 +58,28 @@ const AuthProvider = ({ children }) => {
   const logOut = async () => {
     // setCargando(true)
 
-    // setCargando(true)
+    // ! resetear estados
+    setDataAlert({
+      icon: "",
+      tittle: "",
+      detalle: "",
+      active: false,
+      tipe: "",
+    });
+
+    setOption({
+      activo: false,
+      nameOption: "",
+    });
 
     try {
-      
-      
-        
-        await AsyncStorage.removeItem("token");
-      
-        // await AsyncStorage.removeItem("welcome");
-        setAuth({})
+      await AsyncStorage.removeItem("token");
+
+      // await AsyncStorage.removeItem("welcome");
+      setAuth({});
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-
-    setTimeout( () => {
-
-    setCargando(false)
-  }, 2000);
-    
   };
 
   const login = async (correo, password) => {
@@ -95,16 +105,16 @@ const AuthProvider = ({ children }) => {
       // console.log(e.response.data.msg);
       // ! Alert]
       setDataAlert({
-        tipe: "error",
+        icon: "error",
         tittle: "ERROR DE AUTENTICACIÓN",
         detalle: e.response.data.msg,
         active: true,
+        tipe: "info",
       });
     }
     setTimeout(() => {
       setCargando(false);
     }, 3000);
-    
   };
 
   const registrarUsuario = async (datos) => {
@@ -117,20 +127,22 @@ const AuthProvider = ({ children }) => {
       if (data) {
         // * Alert
         setDataAlert({
-          tipe: "success",
+          icon: "success",
           tittle: "ERROR DE AUTENTICACIÓN",
           detalle: e.response.data.msg,
           active: true,
+          tipe: "info",
         });
       }
     } catch (e) {
       // console.log(e);
       // ! Alert
       setDataAlert({
-        tipe: "error",
+        icon: "error",
         tittle: "ERROR DE AUTENTICACIÓN",
         detalle: e.response.data.msg,
         active: true,
+        tipe: "info",
       });
     }
   };
@@ -146,8 +158,10 @@ const AuthProvider = ({ children }) => {
         setDataAlert,
         cargando,
         setCargando,
-        inicio, 
+        inicio,
         setInicio,
+        option,
+        setOption,
         registrarUsuario,
         login,
         logOut,

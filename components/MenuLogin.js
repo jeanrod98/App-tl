@@ -35,7 +35,7 @@ const MenuLogin = () => {
 
     useEffect(() => {
       setCargando(false)
-      console.log(inicio);
+      // console.log(inicio);
     }, []);
     
   return (

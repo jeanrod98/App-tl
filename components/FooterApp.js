@@ -5,7 +5,7 @@ import useAuth from "../Hooks/useAuth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const FooterApp = ({ ruta, name, data }) => {
-  const { registrarUsuario, login, logOut, auth, setInicio } = useAuth();
+  const { registrarUsuario, login, logOut, auth, setInicio, option, setOption, setDataAlert } = useAuth();
 
   const handleNex = async () => {
    
@@ -23,7 +23,24 @@ const FooterApp = ({ ruta, name, data }) => {
 
       await login(data.correo, data.password);
     } else if (ruta === "/menu") {
-      console.log("Entrar al juego");
+      // console.log("menu");
+      // console.log(option.active);
+      // validar que se haya elegido una opcion del menu
+      if (option.activo === false) {
+        // ! alerta 
+        setDataAlert({
+          tipe: "error",
+          tittle: "ELIGE UNA OPCIÓN",
+          detalle: "Debes elegir una opción del menú para continuar!",
+          active: true,
+        });
+
+        return
+        
+      }
+
+      setOption({...option, next: true})
+
     }
   };
 
@@ -52,11 +69,11 @@ const FooterApp = ({ ruta, name, data }) => {
         <Text style={styles.text}>{name}</Text>
       </TouchableOpacity>
 
-      {ruta === "/menu" && (
+      {/* {ruta === "/menu" && (
         <TouchableOpacity style={{...styles.boton, backgroundColor: "#FC5151"}} onPress={logOut}>
           <Text style={{...styles.text, color: "#fff"}}>{auth?._id !== 1 ? "Cerrar Sesion" : "Salir"}</Text>
         </TouchableOpacity>
-      )}
+      )} */}
       </View>
       
     </View>
