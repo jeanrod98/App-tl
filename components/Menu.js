@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
   },
   txt: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 14,
     textAlign: "center",
   },
 });
