@@ -26,6 +26,9 @@ const AuthProvider = ({ children }) => {
     next: false
   });
 
+
+  const [ conffetiShow, setConffetiShow ] = useState(false);
+
   useEffect(() => {
     obtenerLogin();
     // console.log(auth);
@@ -162,6 +165,8 @@ const AuthProvider = ({ children }) => {
         setInicio,
         option,
         setOption,
+        conffetiShow, 
+        setConffetiShow,
         registrarUsuario,
         login,
         logOut,

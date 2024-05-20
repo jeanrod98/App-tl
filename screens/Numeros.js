@@ -4,11 +4,15 @@ import {
     Dimensions,
     StyleSheet,
     TouchableOpacity,
+    ImageBackground
   } from "react-native";
   import { AntDesign } from "@expo/vector-icons";
   import useAuth from "../Hooks/useAuth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OrdenarNumeros from "../components/OrdenarNumeros";
+
+import fondo_number from "../assets/juego_numeros.jpg"
+
   
   const Numeros = () => {
     const { dataAlert, setDataAlert, logOut, setOption, option } = useAuth();
@@ -17,10 +21,39 @@ import OrdenarNumeros from "../components/OrdenarNumeros";
     const [ escogerNumeros, setEscogerNumeros ] = useState(false);
     const [ encontrarNumeros, setEncontrarNumeros ] = useState(false);
 
+
+    useEffect(() => {
+
+      //Obtener tiempo que lleva en esta opcion
+      obtenerTiempo();
+    }, [])
+  
+    const obtenerTiempo = () => {
+      console.log(12345);
+    }
+
     return (
       <View style={styles.containerNumeros}>
         <View style={styles.header}>
-          <View style={styles.opcionesModulo}>
+          
+          <TouchableOpacity
+            onPress={() => {
+              setOption({...option,
+                next: false,
+              });
+            }}
+          >
+            <AntDesign
+              style={styles.btnClose}
+              name="closecircle"
+              size={28}
+              color="red"
+            />
+          </TouchableOpacity>
+        </View>
+        <ImageBackground source={fondo_number} resizeMode="contain" style={styles.contenido}>
+
+        <View style={styles.opcionesModulo}>
           <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
@@ -32,7 +65,7 @@ import OrdenarNumeros from "../components/OrdenarNumeros";
             <Text style={styles.txtSubmenu}>Ordena los números</Text>
           </TouchableOpacity>
             
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
               setOrdenarNumeros(false);
@@ -52,26 +85,10 @@ import OrdenarNumeros from "../components/OrdenarNumeros";
             }}
           >
             <Text style={styles.txtSubmenu}>Encuentra los números</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
             
             
           </View>
-          <TouchableOpacity
-            onPress={() => {
-              setOption({...option,
-                next: false,
-              });
-            }}
-          >
-            <AntDesign
-              style={styles.btnClose}
-              name="closecircle"
-              size={28}
-              color="red"
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.contenido}>
           {
             ordenarNumeros && <OrdenarNumeros setOrdenarNumeros={setOrdenarNumeros}/>
           }
@@ -81,11 +98,10 @@ import OrdenarNumeros from "../components/OrdenarNumeros";
           {
             encontrarNumeros && <Text>Encuentra los números</Text>
           }
-          {
-            !ordenarNumeros && !escogerNumeros && !encontrarNumeros && <Text style={styles.txtAviso}>Elija una opción para iniciar</Text>
-          }
           
-        </View>
+          
+        </ImageBackground>
+        
       </View>
     );
   };
@@ -112,16 +128,18 @@ import OrdenarNumeros from "../components/OrdenarNumeros";
       // backgroundColor: "blue",
       width: "100%",
       alignItems: "center",
-      justifyContent: "space-between",
+      justifyContent: "flex-end",
       paddingHorizontal: 10,
       height: 50,
     },
     opcionesModulo: {
       display: "flex",
-      flexDirection: "row",
+      // flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
-      gap: 10,
+      gap: 20,
+      // backgroundColor: "red",
+      // width: "100%"
     },
     btnClose: {
       // position: "absolute",
@@ -139,10 +157,13 @@ import OrdenarNumeros from "../components/OrdenarNumeros";
       backgroundColor: "#7986cb",
       padding: 10,
       borderRadius: 4,
+      width: 200,
 
     },
     txtSubmenu: {
       color: "#fff",
+      textAlign: "center"
+
     },
     txtAviso: {
       color: "red",

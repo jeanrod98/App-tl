@@ -1,16 +1,24 @@
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Dimensions, StyleSheet, Text, TouchableOpacity, View, ImageBackground} from "react-native";
 
 import { Ionicons } from '@expo/vector-icons';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, createRef, useRef } from "react";
 import { AntDesign } from '@expo/vector-icons';
 
 import { Card } from "react-native-paper";
+import useAuth from "../Hooks/useAuth";
+import Alerts from "./Alerts";
+import conffeti from "../assets/confeti.json"
+import LottieView from 'lottie-react-native';
 
 const ComponentOnGame = ({ setMostrarGame }) => {
+
+  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
+
   const [arregloNumeros, setArregloNumeros] = useState([]);
   const [resultNumeros, setResultNumeros] = useState([]);
-
+  const confettiRef = useRef(null);
+  
   useEffect(() => {
     let arregloNumeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -34,16 +42,73 @@ const ComponentOnGame = ({ setMostrarGame }) => {
       setResultNumeros([...resultNumeros, values])
     }else{
       console.log("Ya se completaron los 10 numeros");
+      setDataAlert({
+        icon: "error",
+        tittle: "Validación",
+        detalle: "Los 10 números ya están completos!",
+        active: true,
+        tipe: "validation",
+      })
     }
     
   }
 
+  
+  
+
+  
+
   const validarResultados = () => {
     console.log("validando...");
-  }
+    // !validar que existan los 10 numeros
+    if(resultNumeros.length !== 10){
+      setDataAlert({
+        icon: "error",
+        tittle: "Validación",
+        detalle: "Debes agregar 10 números.",
+        active: true,
+        tipe: "validation",
+      })
+      return
+    };
+    let arregloNumeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+    let count = 0;
+    for (let index = 0; index < arregloNumeros.length; index++) {
+      const arr1 = arregloNumeros[index];
+      const arr2 = resultNumeros[index];
+      if (arr1 == arr2) count++; 
+      
+    };
+    
+    
+    
+
+    if (count == 10) {
+      setConffetiShow(true);
+       confettiRef.current?.play(0);
+      setDataAlert({
+        icon: "success",
+        tittle: "¡FELICIDADES!",
+        detalle: "Has logrado ordenar los números del 1 al 10. Sigue así y llegarás lejos!.",
+        active: true,
+        tipe: "validation",
+      });
+      
+    }else{
+      setDataAlert({
+        icon: "error",
+        tittle: "Validación",
+        detalle: "Ups! Los números no se encuentran ordenados.",
+        active: true,
+        tipe: "validation",
+      });
+    };
+  };
   return (
+    <>
     <View style={styles.contenido}>
-      <Text>Selecciona un número</Text>
+      <Text style={{ fontWeight: "700"}}>Selecciona un número</Text>
       <View style={styles.contenidoCard}>
         {arregloNumeros.map((value, index) => (
           <TouchableOpacity key={index} onPress={() => ubicarNumero(value)} >
@@ -56,7 +121,7 @@ const ComponentOnGame = ({ setMostrarGame }) => {
           </TouchableOpacity>
         ))}
       </View>
-      <Text>Números Ordenados</Text>
+      <Text style={{ fontWeight: "700"}}>Números Ordenados</Text>
 
       <View style={styles.contenidoCard}>
         {
@@ -113,8 +178,18 @@ const ComponentOnGame = ({ setMostrarGame }) => {
       </View>
 
       
-              
+          
     </View>
+    <LottieView
+    ref={confettiRef}
+    source={conffeti}
+    autoPlay={false}
+    loop={false}
+    style={{...styles.lottie, zIndex: conffetiShow ? 1000 : -1,}}
+    resizeMode='cover'
+  />
+    </>
+
   );
 };
 
@@ -123,6 +198,15 @@ export default ComponentOnGame;
 let { height, width } = Dimensions.get("screen");
 
 const styles = StyleSheet.create({
+  lottie: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    pointerEvents: 'none',
+  },
+
   contenido: {
     display: "flex",
     // backgroundColor: "yellow",

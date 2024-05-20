@@ -11,7 +11,34 @@ import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import useAuth from "../Hooks/useAuth";
 
 const Alerts = ({ tipe }) => {
-  const { dataAlert, setDataAlert, logOut, setOption } = useAuth();
+  const { dataAlert, setDataAlert, logOut, setOption, setConffetiShow } = useAuth();
+
+  const salir = () => {
+    setDataAlert({
+      icon: "",
+      tittle: "",
+      detalle: "",
+      active: false,
+      tipe: ""
+    });
+
+    setOption({
+      activo: false,
+      nameOption: "",
+      next: false
+    });
+  };
+
+  const cerrarAlert = () => {
+    setConffetiShow(false);
+    setDataAlert({
+      icon: "",
+      tittle: "",
+      detalle: "",
+      active: false,
+      tipe: ""
+    });
+  };
 
   return (
     <View style={styles.containerAlert}>
@@ -27,21 +54,7 @@ const Alerts = ({ tipe }) => {
         <View style={{ display: "flex", flexDirection: "row", gap: 15 }}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => {
-              setDataAlert({
-                icon: "",
-                tittle: "",
-                detalle: "",
-                active: false,
-                tipe: ""
-              });
-
-              setOption({
-                activo: false,
-                nameOption: "",
-                next: false
-              });
-            }}
+            onPress={dataAlert.tipe === "validation" ? cerrarAlert : salir}
           >
             <Text style={styles.textBtn}>
               {dataAlert.tipe === "question" ? "Cancelar" : "Aceptar"}
