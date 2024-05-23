@@ -10,11 +10,11 @@ import { AntDesign } from "@expo/vector-icons";
 
 import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import ComponentOnGame from "./ComponentOnGame";
 import useAuth from "../Hooks/useAuth";
 import Alerts from "./Alerts";
 import fondo_number_2 from "../assets/juego_numero_start.jpg";
 import { Card } from "react-native-paper";
+import NumerosOnGame from "./NumerosOnGame";
 
 const OrdenarNumeros = ({ setOrdenarNumeros }) => {
   const { dataAlert, setDataAlert, logOut, setOption } = useAuth();
@@ -47,7 +47,7 @@ const OrdenarNumeros = ({ setOrdenarNumeros }) => {
             style={{...styles.game}}
           >
             {mostrarGame ? (
-              <ComponentOnGame setMostrarGame={setMostrarGame} />
+              <NumerosOnGame setMostrarGame={setMostrarGame} />
             ) : (
               <>
               <TouchableOpacity

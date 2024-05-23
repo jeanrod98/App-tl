@@ -7,6 +7,7 @@ import {
 } from "react-native";
 
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
+import { FontAwesome6 } from '@expo/vector-icons';
 
 import useAuth from "../Hooks/useAuth";
 
@@ -43,11 +44,19 @@ const Alerts = ({ tipe }) => {
   return (
     <View style={styles.containerAlert}>
       <View style={styles.card}>
-        {dataAlert.icon === "success" ? (
+        {dataAlert.icon === "success" && 
           <AntDesign name="checkcircle" size={32} color="green" />
-        ) : (
+        }
+        {dataAlert.icon === "error" && 
           <MaterialIcons name="error" size={32} color="orange" />
-        )}
+        }
+        {dataAlert.icon === "danger" && 
+          // <MaterialIcons name="error" size={32} color="orange" />
+          <MaterialIcons name="dangerous" size={32} color="red" />
+        }
+        {dataAlert.icon === "sad" &&
+          <FontAwesome6 name="face-sad-cry" size={32} color="red" />
+        }
         <Text style={styles.tittle}>{dataAlert.tittle}</Text>
         <Text style={styles.description}>{dataAlert.detalle}</Text>
 
