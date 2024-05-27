@@ -61,7 +61,7 @@ const Alfabeto = () => {
               setOrdenarNumeros(true);
             }}
           >
-            <Text style={styles.txtSubmenu}>Ordena los números</Text>
+            <Text style={styles.txtSubmenu}>Escoge la letra</Text>
           </TouchableOpacity>
             
           {/* <TouchableOpacity

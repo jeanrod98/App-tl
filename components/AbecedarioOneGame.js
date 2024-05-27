@@ -206,10 +206,10 @@ const AbecedarioOneGame = () => {
             <Text style={{ fontWeight: "700" }}>La letra escogida es: </Text>
             <TouchableOpacity>
               <Card style={{...styles.card}}>
-                <Card.Content>
+                {/* <Card.Content> */}
                   <Text style={{ fontSize: 12, fontWeight: "700" }}>{letraElegidaUno}</Text>
                   {/* <Text variant="titleLarge">Card title</Text> */}
-                </Card.Content>
+                {/* </Card.Content> */}
               </Card>
             </TouchableOpacity>
           </View>
@@ -221,12 +221,12 @@ const AbecedarioOneGame = () => {
                 onPress={() => seleccionarCard(value, "T1")}
               >
                 <Card style={styles.card}>
-                  <Card.Content>
+                  {/* <Card.Content> */}
                     <Text style={{ fontSize: 12, fontWeight: "700" }}>
                       {value}
                     </Text>
                     {/* <Text variant="titleLarge">Card title</Text> */}
-                  </Card.Content>
+                  {/* </Card.Content> */}
                 </Card>
               </TouchableOpacity>
             ))}
@@ -247,10 +247,10 @@ const AbecedarioOneGame = () => {
             <Text style={{ fontWeight: "700" }}>La letra escogida es: </Text>
             <TouchableOpacity>
               <Card style={styles.card}>
-                <Card.Content>
+                {/* <Card.Content> */}
                   <Text style={{ fontSize: 12, fontWeight: "700" }}>{letraElegidaDos}</Text>
                   {/* <Text variant="titleLarge">Card title</Text> */}
-                </Card.Content>
+                {/* </Card.Content> */}
               </Card>
             </TouchableOpacity>
           </View>
@@ -263,12 +263,12 @@ const AbecedarioOneGame = () => {
                   onPress={() => seleccionarCard(value, "T2")}
                 >
                   <Card style={styles.card}>
-                    <Card.Content>
+                    {/* <Card.Content> */}
                       <Text style={{ fontSize: 12, fontWeight: "700" }}>
                         {value}
                       </Text>
                       {/* <Text variant="titleLarge">Card title</Text> */}
-                    </Card.Content>
+                    {/* </Card.Content> */}
                   </Card>
                 </TouchableOpacity>
               ))}
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     width: "100%",
     backgroundColor: "#8c9eff",
-    padding: 10,
+    padding: 6,
     justifyContent: "space-between",
     marginTop: 10,
     borderRadius: 10,
@@ -369,8 +369,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   card: {
-    width: 46,
-    height: 46,
+    width: 35,
+    height: 35,
     borderRadius: 0,
     padding: 0,
     display: "flex",

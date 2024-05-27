@@ -1,3 +1,4 @@
+
 import {
     Dimensions,
     StyleSheet,
@@ -13,23 +14,24 @@ import {
   import ComponentOnGame from "./NumerosOnGame";
   import useAuth from "../Hooks/useAuth";
   import Alerts from "./Alerts";
-  import fondo_number_2 from "../assets/juego_abc.jpg";
+  import fondo_number_2 from "../assets/color_fondo_2.jpg";
   import { Card } from "react-native-paper";
 import AbecedarioOneGame from "./AbecedarioOneGame";
+import ColoresOneGame from "./ColoresOneGame";
 
 
-const EscogeParesABC = ({ setOrdenarNumeros }) => {
+const ColoresElegirObjetos = ({ setEscogerObjetos }) => {
     const { dataAlert, setDataAlert, logOut, setOption } = useAuth();
 
   const [mostrarGame, setMostrarGame] = useState(false);
 
     return ( 
-        <View style={styles.containerOrdenarNumeros}>
+        <View style={styles.containerEscogerObjetos}>
       <View style={{...styles.container, backgroundColor: mostrarGame ? "rgba(255, 255, 255, .9)" : "rgba(255, 255, 255, 1)"}}>
         <TouchableOpacity
           style={styles.btnClose}
           onPress={() => {
-            setOrdenarNumeros(false);
+            setEscogerObjetos(false);
           }}
         >
           <AntDesign name="closecircle" size={32} color="red" />
@@ -37,7 +39,7 @@ const EscogeParesABC = ({ setOrdenarNumeros }) => {
         <View style={{...styles.contenido}}>
           <View style={styles.header}>
             <Text style={styles.txtHeader}>
-              Escoge las letras parecidas
+            Escoge la figura que representa el color
             </Text>
             {/* <Text style={styles.txtHeader}>00 : 00 : 00</Text> */}
           </View>
@@ -45,11 +47,11 @@ const EscogeParesABC = ({ setOrdenarNumeros }) => {
           <ImageBackground
             source={mostrarGame ? "" : fondo_number_2}
             resizeMode="contain"
-            imageStyle={{ opacity: 1 }}
+            imageStyle={{ opacity: 1, }}
             style={{...styles.game}}
           >
             {mostrarGame ? (
-              <AbecedarioOneGame />
+              <ColoresOneGame />
             ) : (
               <>
               <TouchableOpacity
@@ -77,12 +79,12 @@ const EscogeParesABC = ({ setOrdenarNumeros }) => {
      );
 }
  
-export default EscogeParesABC;
+export default ColoresElegirObjetos;
 
 let { height, width } = Dimensions.get("screen");
 
 const styles = StyleSheet.create({
-  containerOrdenarNumeros: {
+  containerEscogerObjetos: {
     position: "absolute",
     top: -50,
     height: height < 500 ? height - 52 : width - 52,
@@ -96,9 +98,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "rgba(255, 255, 255, .9)",
     width: "96%",
-    // height: "90%",
+    // height: height < 500 ? height - 65 : width - 65,
     padding: "2%",
-    paddingVertical: "3%",
   },
   card: {
     width: 80,
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
   },
   contenido: {
     display: "flex",
-    gap: 10,
+    gap: 20,
   },
   header: {
     display: "flex",
