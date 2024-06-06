@@ -11,10 +11,14 @@ import { FontAwesome6 } from '@expo/vector-icons';
 
 import useAuth from "../Hooks/useAuth";
 
+
+
 const Alerts = ({ tipe }) => {
   const { dataAlert, setDataAlert, logOut, setOption, setConffetiShow } = useAuth();
 
   const salir = () => {
+
+
     setDataAlert({
       icon: "",
       tittle: "",

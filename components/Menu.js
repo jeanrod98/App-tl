@@ -22,6 +22,9 @@ import musica from "../assets/musica.png";
 import Alerts from "./Alerts";
 import { useState } from "react";
 
+import * as Speech from 'expo-speech';
+
+
 const Menu = () => {
   const { setAuth, logOut, cargando, auth, dataAlert, option, setOption } = useAuth();
 
@@ -30,6 +33,9 @@ const Menu = () => {
   const seleccionarOpcion = (option) => {
     // console.log(option);
     // PREGUNTAR POR CADA CASO
+// console.log(option);
+    Speech.speak(option);
+
 
     if(option === "ALFABETO"){
       setOption({
@@ -67,7 +73,7 @@ const Menu = () => {
         nameOption: "ANIMALES",
         next: false
       });
-    } else if (option === "NUMEROS") {
+    } else if (option === "NÚMEROS") {
       setOption({
         activo: true,
         nameOption: "NUMEROS",
@@ -137,7 +143,7 @@ const Menu = () => {
               </TouchableOpacity>
             </View>
             <View style={{...styles.card, borderColor: option.activo === true && option.nameOption === "NUMEROS" ? "red" : "#fff", borderWidth: 3,  }}>
-              <TouchableOpacity onPress={() => seleccionarOpcion("NUMEROS")}>
+              <TouchableOpacity onPress={() => seleccionarOpcion("NÚMEROS")}>
                 <Image source={numeros} style={styles.img} />
                 <Text style={styles.txt}>NÚMEROS DEL 1 AL 10</Text>
               </TouchableOpacity>

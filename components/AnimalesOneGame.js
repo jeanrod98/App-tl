@@ -41,9 +41,9 @@ import sonido_cerdo from "../assets/sounds/cerdo.mp3";
 import { Fontisto } from "@expo/vector-icons";
 import { Audio } from 'expo-av';
 
+import * as Speech from 'expo-speech';
 
-
-const AnimalesOneGame = () => {
+const AnimalesOneGame = ({ dinamica}) => {
   const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
 
   const [arregloNumeros, setArregloNumeros] = useState([]);
@@ -57,6 +57,9 @@ const AnimalesOneGame = () => {
   }, []);
 
   const generarColorAleatorio = async () => {
+    Speech.speak(dinamica);
+    Speech.speak("¿Qué animal es?");
+
     let arregloNumeros = [
       { nombre: "PERRO", source_1: img_perro, audio: sonido_perro },
       { nombre: "GATO", source_1: img_gato,  audio: sonido_gato },

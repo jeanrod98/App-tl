@@ -53,7 +53,7 @@ const EscogerInstrumento = ({ setEscogerObjetos }) => {
             style={{...styles.game}}
           >
             {mostrarGame ? (
-              <InstrumentosOneGame />
+              <InstrumentosOneGame dinamica={"Escoge el instrumento que sale en la figura"}/>
             ) : (
               <>
               <TouchableOpacity

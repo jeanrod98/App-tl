@@ -4,11 +4,15 @@ import { AntDesign } from "@expo/vector-icons";
 import useAuth from "../Hooks/useAuth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import * as Speech from 'expo-speech';
+
 const FooterApp = ({ ruta, name, data }) => {
   const { registrarUsuario, login, logOut, auth, setInicio, option, setOption, setDataAlert } = useAuth();
 
   const handleNex = async () => {
    
+   
+
     if (ruta === "/siguiente") {
 
       setInicio("false");
@@ -34,6 +38,7 @@ const FooterApp = ({ ruta, name, data }) => {
           detalle: "Debes elegir una opción del menú para continuar!",
           active: true,
         });
+        Speech.speak("Debes elegir una opción del menú para continuar!");
 
         return
         

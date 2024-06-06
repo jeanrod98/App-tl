@@ -57,7 +57,7 @@ const FigurasEscoger = ({ setEscogerObjetos }) => {
             style={{ ...styles.game }}
           >
             {mostrarGame ? (
-              <FigurasOneGame />
+              <FigurasOneGame dinamica={"Escoge la figura que se parece a la imagen"} />
             ) : (
               <>
                 <TouchableOpacity

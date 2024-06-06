@@ -51,7 +51,7 @@ const ColoresElegirObjetos = ({ setEscogerObjetos }) => {
             style={{...styles.game}}
           >
             {mostrarGame ? (
-              <ColoresOneGame />
+              <ColoresOneGame dinamica={"Escoge la figura que representa el color"} />
             ) : (
               <>
               <TouchableOpacity

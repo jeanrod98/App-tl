@@ -52,7 +52,7 @@ const EscogeVocal = ({ setEscogeLaVocal }) => {
             style={{...styles.game}}
           >
             {mostrarGame ? (
-              <VocalOneGame />
+              <VocalOneGame dinamica={"Escoge la vocal correcta"} />
             ) : (
               <>
               <TouchableOpacity

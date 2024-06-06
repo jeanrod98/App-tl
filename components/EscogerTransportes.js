@@ -51,7 +51,7 @@ const EscogerTransportes = ({ setOrdenarNumeros }) => {
             style={{...styles.game}}
           >
             {mostrarGame ? (
-              <TrnsportesOneGame />
+              <TrnsportesOneGame dinamica={"Escoge los medios de transporte que se parecen"} />
             ) : (
               <>
               <TouchableOpacity

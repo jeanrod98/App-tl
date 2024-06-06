@@ -3,16 +3,20 @@ import useAuth from "../Hooks/useAuth";
 import { AntDesign } from "@expo/vector-icons";
 import Alerts from "./Alerts";
 
+import * as Speech from 'expo-speech';
+
 const NavBarUser = () => {
   const { auth, logOut, dataAlert, setDataAlert } = useAuth();
 
 //   console.log(auth);
   const salir = () => {
+    Speech.speak("¿Estás seguro de salir o cerrar la sesión?");
+
     setDataAlert({
       icon: "error",
       tipe: "question",
       tittle: "Salir del menú",
-      detalle: "Estas seguro de salir o cerrar la sesión?",
+      detalle: "¿Estás seguro de salir o cerrar la sesión?",
       active: true,
     });
   };

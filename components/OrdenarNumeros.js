@@ -47,7 +47,7 @@ const OrdenarNumeros = ({ setOrdenarNumeros }) => {
             style={{...styles.game}}
           >
             {mostrarGame ? (
-              <NumerosOnGame setMostrarGame={setMostrarGame} />
+              <NumerosOnGame dinamica={"Ordena los números de menor a mayor"} setMostrarGame={setMostrarGame} />
             ) : (
               <>
               <TouchableOpacity

@@ -38,8 +38,10 @@ import circulo from "../assets/circulo.jpg";
 import rectangulo from "../assets/rectangulo.jpg";
 import triangulo from "../assets/triangulo.jpg";
 
+import * as Speech from 'expo-speech';
 
-const FigurasOneGame = () => {
+
+const FigurasOneGame = ({ dinamica }) => {
   const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
 
   const [arregloNumeros, setArregloNumeros] = useState([]);
@@ -54,11 +56,14 @@ const FigurasOneGame = () => {
   const confettiRef = useRef(null);
 
   useEffect(() => {
+    Speech.speak(dinamica);
+
     generarFiguraAleatorio();
   }, []);
 
   
   const generarFiguraAleatorio = async () => {
+    
 
     let arregloFiguras = [
       { nombre: "CUADRADO", source: cuadrado_1 },
@@ -77,18 +82,11 @@ const FigurasOneGame = () => {
     ];
 
     const objeto_principal = await extraerElemento(arregloFiguras);
-    console.log(objeto_principal);
+    // console.log(objeto_principal);
     setFiguraCard(objeto_principal);
 
-    // const arregloLimpio = await arregloFiguras.filter(
-    //   (arr) => arr.nombre !== objeto_principal.nombre
-    // );
-    // // console.log(arregloLimpio);
-    // const objeto_secundario = await extraerElemento(arregloLimpio);
-
-    // const arrFinal = [objeto_secundario, objeto_principal];
-    // setObjetos(shuffle(arrFinal));
-    // console.log(objetos);
+    Speech.speak(`La figura es un ${objeto_principal.nombre}?`);
+    
   };
 
   const shuffle = (array) => {
@@ -117,6 +115,7 @@ const FigurasOneGame = () => {
         active: true,
         tipe: "validation",
       });
+    Speech.speak(`Esa no era la figura correcta`);
       
       setBotones(false);
 

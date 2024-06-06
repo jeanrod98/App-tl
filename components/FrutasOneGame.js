@@ -32,7 +32,10 @@ import pinia from "../assets/pinia.jpg";
 import naranja from "../assets/naranja.jpg";
 import mandarina from "../assets/mandarina.jpg";
 
-const FrutasOneGame = () => {
+import * as Speech from 'expo-speech';
+
+
+const FrutasOneGame = ({ dinamica }) => {
   const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
 
   const [arregloFrutas, setArregloFrutas] = useState([]);
@@ -40,9 +43,12 @@ const FrutasOneGame = () => {
 
   useEffect(() => {
     barajearArreglo();
+    
+
   }, []);
 
   const barajearArreglo = async () => {
+    Speech.speak(dinamica);
     setBordeFilaUno("");
     setBordeFilaDos("");
 
@@ -94,6 +100,9 @@ const FrutasOneGame = () => {
   const [turno, setTurno] = useState(1);
 
   const seleccionarCard = (value, fila) => {
+    
+    Speech.speak(value.nombre);
+
     if (turno === 1) {
       setBordeFilaUno(value.key);
       setTurno(2);
@@ -117,6 +126,9 @@ const FrutasOneGame = () => {
         active: true,
         tipe: "validation",
       });
+
+      Speech.speak("Debes elegir dos frutas iguales.");
+
       return;
     }
 
@@ -130,6 +142,8 @@ const FrutasOneGame = () => {
         active: true,
         tipe: "validation",
       });
+      Speech.speak("Ups!, las frutas seleccionadas no son iguales, intentalo de nuevo.");
+
       return;
     }
 
@@ -161,6 +175,8 @@ const FrutasOneGame = () => {
           active: true,
           tipe: "validation",
         });
+        Speech.speak("Has logrado encontrar todos los pares de frutas. Sigue así y llegarás lejos!.");
+
       }
     }
   };

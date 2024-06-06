@@ -53,7 +53,7 @@ const AnimalesElegir = ({ setEscogerObjetos }) => {
             style={{...styles.game}}
           >
             {mostrarGame ? (
-              <AnimalesOneGame />
+              <AnimalesOneGame dinamica={"Escoge la opción correcta"} />
             ) : (
               <>
               <TouchableOpacity

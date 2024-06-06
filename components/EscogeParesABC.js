@@ -49,7 +49,7 @@ const EscogeParesABC = ({ setOrdenarNumeros }) => {
             style={{...styles.game}}
           >
             {mostrarGame ? (
-              <AbecedarioOneGame />
+              <AbecedarioOneGame dinamica={"Escoge las letras parecidas"}/>
             ) : (
               <>
               <TouchableOpacity

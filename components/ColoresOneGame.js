@@ -31,7 +31,10 @@ import color_rojo from "../assets/color_rojo.png";
 import color_rosado from "../assets/color_rosado.png";
 import color_verde from "../assets/color_verde.png";
 
-const ColoresOneGame = () => {
+import * as Speech from 'expo-speech';
+
+
+const ColoresOneGame = ({ dinamica }) => {
   const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
 
   const [arregloNumeros, setArregloNumeros] = useState([]);
@@ -41,11 +44,13 @@ const ColoresOneGame = () => {
   const confettiRef = useRef(null);
 
   useEffect(() => {
+    Speech.speak(dinamica);
   
     generarColorAleatorio();
   }, []);
 
   const generarColorAleatorio = async () => {
+
     let arregloNumeros = [
       { color: "purple", nombre: "MORADO", source: color_morado },
       { color: "red", nombre: "ROJO", source: color_rojo },
@@ -70,6 +75,8 @@ const ColoresOneGame = () => {
     const arrFinal = [objeto_secundario, objeto_principal]
     setObjetos(shuffle(arrFinal))
     // console.log(objetos);
+    Speech.speak(`La figura de color ${objeto_principal.nombre}`);
+
 
   };
 
@@ -104,6 +111,9 @@ const ColoresOneGame = () => {
           active: true,
           tipe: "validation",
         });
+        Speech.speak(`Esa no era la imagen correcta`);
+        Speech.speak(`Lo intentaremos en la próxima ocación.`);
+
         // cambiar figuras
         generarColorAleatorio();
         setBotones(false);
@@ -135,6 +145,8 @@ const ColoresOneGame = () => {
         active: true,
         tipe: "validation",
       });
+      Speech.speak(`Debes agregar 10 números.`);
+
       return;
     }
     let arregloNumeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -157,6 +169,8 @@ const ColoresOneGame = () => {
         active: true,
         tipe: "validation",
       });
+      Speech.speak(`Has logrado ordenar los números del 1 al 10. Sigue así y llegarás lejos!.`);
+
     } else {
       setDataAlert({
         icon: "danger",
@@ -165,6 +179,8 @@ const ColoresOneGame = () => {
         active: true,
         tipe: "validation",
       });
+      Speech.speak(`Ups! Los números no se encuentran ordenados.`);
+
     }
   };
 

@@ -16,6 +16,8 @@ import Alerts from "./Alerts";
 import useAuth from "../Hooks/useAuth";
 import Loading from "./Loading";
 
+import * as Speech from 'expo-speech';
+
 const MenuLogin = () => {
 
     const [mostrarRegistro, setMostrarRegistro] = useState(false);
@@ -48,9 +50,12 @@ const MenuLogin = () => {
             <TouchableOpacity
             style={{...styles.boton, backgroundColor: mostrarLogin ? "#303F9F" : "#C5CAE9"}}
             onPress={(e) => {
+                Speech.speak("INICIAR SESIÓN");
+
                 setMostrarRegistro(false)
                 setMostrarLogin(true)
                 setNameOpcion("INGRESAR")
+
             }}
             >
             <Text style={styles.text}>{"INICIAR SESIÓN"}</Text>
@@ -59,6 +64,8 @@ const MenuLogin = () => {
             <TouchableOpacity
             style={{...styles.boton, backgroundColor: mostrarRegistro ? "#303F9F" : "#C5CAE9"}}
             onPress={(e) => {
+                Speech.speak("REGISTRARSE");
+
                 setMostrarLogin(false)
                 setMostrarRegistro(true)
                 setNameOpcion("REGISTRAR")
@@ -71,6 +78,8 @@ const MenuLogin = () => {
             <TouchableOpacity
             style={{...styles.botonSinConexion, backgroundColor: "#C5CAE9"}}
             onPress={(text) => {
+                Speech.speak("CONTINUAR SIN CONEXIÓN");
+
                 setMostrarLogin(true)
                 setMostrarRegistro(false)
                 setAuth({

@@ -52,7 +52,7 @@ const EscogerFrutas = ({ setOrdenarNumeros }) => {
             style={{...styles.game}}
           >
             {mostrarGame ? (
-              <FrutasOneGame />
+              <FrutasOneGame dinamica={"Identifica las frutas que son iguales"} />
             ) : (
               <>
               <TouchableOpacity

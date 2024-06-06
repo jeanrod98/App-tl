@@ -11,7 +11,9 @@ import Alerts from "./Alerts";
 import conffeti from "../assets/confeti.json"
 import LottieView from 'lottie-react-native';
 
-const NumerosOnGame = () => {
+import * as Speech from 'expo-speech';
+
+const NumerosOnGame = ({ dinamica }) => {
 
   const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
 
@@ -20,6 +22,14 @@ const NumerosOnGame = () => {
   const confettiRef = useRef(null);
   
   useEffect(() => {
+    
+    prepararNumeros();
+  }, []);
+
+  const prepararNumeros = () => {
+    Speech.speak(dinamica);
+    Speech.speak("Selecciona un número");
+
     let arregloNumeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     // barajea el arreglo
@@ -33,8 +43,8 @@ const NumerosOnGame = () => {
     };
 
     setArregloNumeros(shuffle(arregloNumeros));
-  }, []);
-
+    setResultNumeros([]);
+  }
 
   const ubicarNumero = (values) => {
     // console.log(values);
@@ -68,7 +78,9 @@ const NumerosOnGame = () => {
         detalle: "Debes agregar 10 números.",
         active: true,
         tipe: "validation",
-      })
+      });
+      Speech.speak("Debes agregar 10 números.");
+
       return
     };
     let arregloNumeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -94,6 +106,8 @@ const NumerosOnGame = () => {
         active: true,
         tipe: "validation",
       });
+      Speech.speak("Has logrado ordenar los números del 1 al 10. Sigue así y llegarás lejos!.");
+
       
     }else{
       setDataAlert({
@@ -103,6 +117,8 @@ const NumerosOnGame = () => {
         active: true,
         tipe: "validation",
       });
+      Speech.speak("Ups! Los números no se encuentran ordenados.");
+
     };
   };
   return (
@@ -159,9 +175,7 @@ const NumerosOnGame = () => {
 
       <TouchableOpacity
                 style={styles.btnReload}
-                onPress={() => {
-                  setResultNumeros([]);
-                }}
+                onPress={() => prepararNumeros()}
               >
                 {/* <FontAwesome name="stop" size={24} color="#5c6bc0" /> */}
                 <Ionicons name="reload-circle" size={24} color="#5c6bc0" />

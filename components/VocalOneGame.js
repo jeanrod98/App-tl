@@ -42,7 +42,12 @@
   import img_unia from "../assets/img_unia.png";
   import img_uno from "../assets/img_uno.png";
   
-  const VocalOneGame = () => {
+
+  import * as Speech from 'expo-speech';
+
+
+
+  const VocalOneGame = ({ dinamica }) => {
     const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
   
     const [arregloNumeros, setArregloNumeros] = useState([]);
@@ -57,9 +62,10 @@
     }, []);
   
     const generarObjetosAleatorio = async () => {
+      Speech.speak(dinamica);
 
         let arregloImagenes = [
-            { nombre: "A", sources: [{img: img_avion, name: "Avión"}, {img: img_arania, name: "Araña"}, {img: img_arbol, name: "Arbol"}] },
+            { nombre: "A", sources: [{img: img_avion, name: "Avión"}, {img: img_arania, name: "Araña"}, {img: img_arbol, name: "Árbol"}] },
             { nombre: "E", sources: [{img: img_elefante, name: "Elefante"}, {img: img_estrella, name: "Estrella"}, {img: img_escoba, name: "Escoba"}] },
             { nombre: "I", sources: [{img: img_iguana, name: "Iguana"}, {img: img_isla, name: "Isla"}, {img: img_iman, name: "Imán"}] },
             { nombre: "O", sources: [{img: img_ojo, name: "Ojo"}, {img: img_oso, name: "Oso"}, {img: img_oreja, name: "Oreja"}] },
@@ -89,6 +95,8 @@
       setObjetos(shuffle(arrFinal))
       // console.log(objetos);
   
+      Speech.speak(`¿Con qué vocal se escribe ${source_principal?.name}?`);
+
     };
   
     const shuffle = (array) => {
@@ -105,25 +113,36 @@
         ];
     }
   
-  
+    const [ vocalSeleccionada, setVocalSeleccionada ] = useState({});
+
+  const seleccionarCard = (objeto) => {
+    setVocalSeleccionada(objeto);
+    // console.log(objeto);
+    Speech.speak(objeto.key);
+
+  }
   
     const [ botones, setBotones ] = useState(false);
-    const seleccionarCard = (objeto) => {
+    const validarCard = () => {
     //   console.log(objeto);
     //   console.log(imgCard);
       setBotones(true);
   
       
       // !validar que existan los 10 numeros
-      if (objeto.key !== imgCard.key) {
+      if (vocalSeleccionada.key !== imgCard.key) {
   
           setDataAlert({
             icon: "sad",
             tittle: "Esa no era la vocal correcta",
-            detalle: "Esa vocal no es la correcta para esta imagen, intentalo con la otra opción.",
+            detalle: "Esa vocal no es la correcta para esta imagen, inténtalo con la otra opción.",
             active: true,
             tipe: "validation",
           });
+
+          // Speech.speak("Esa no era la vocal correcta.");
+          Speech.speak("Esa vocal no es la correcta para esta imagen, inténtalo con la otra opción.");
+
           // cambiar figuras
         //   generarObjetosAleatorio();
           setBotones(false);
@@ -132,11 +151,13 @@
         }else{
           confettiRef.current?.play(0);
   
+         
   
           setTimeout(() => {
             generarObjetosAleatorio();
   
               setBotones(false);
+              setVocalSeleccionada({});
               
           }, 3000);
         }
@@ -183,7 +204,10 @@
                 {objetos.map((obj, index) => (
                   <TouchableOpacity key={index} onPress={() => seleccionarCard(obj) }
                   disabled={botones}>
-                    <Card style={styles.card}>
+                    <Card style={{...styles.card,
+                      borderColor: vocalSeleccionada.key === obj.key ? "red" : "#000",
+                      borderWidth: vocalSeleccionada.key === obj.key ? 1 : 0,
+                    }}>
                       {/* <Card.Content> */}
                             <Text>{obj?.key}</Text>
                         
@@ -217,6 +241,7 @@
               style={styles.btnReload}
               onPress={() => {
                 generarObjetosAleatorio();
+                setVocalSeleccionada({});
               }}
             >
               {/* <FontAwesome name="stop" size={24} color="#5c6bc0" /> */}
@@ -224,13 +249,13 @@
               <Text>Cambiar</Text>
             </TouchableOpacity>
   
-            {/* <TouchableOpacity
+            <TouchableOpacity
               style={styles.btnValidar}
-              onPress={() => validarResultados()}
+              onPress={() => validarCard()}
             >
               <AntDesign name="checkcircle" size={24} color="green" />
               <Text>Revisar</Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
               {/* <Text>{`Aciertos: 3/10`}</Text> */}
   
   

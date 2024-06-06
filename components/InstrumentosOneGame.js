@@ -40,9 +40,9 @@ import {
   import instrumento_acordeon from "../assets/acordeon_2.jpg";
   import instrumento_arpa from "../assets/arpa_2.jpg";
 
+  import * as Speech from 'expo-speech';
 
-
-  const InstrumentosOneGame = () => {
+  const InstrumentosOneGame = ({ dinamica }) => {
     const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
   
     const [arregloNumeros, setArregloNumeros] = useState([]);
@@ -52,11 +52,14 @@ import {
     const confettiRef = useRef(null);
   
     useEffect(() => {
+    Speech.speak(dinamica);
     
       generarColorAleatorio();
     }, []);
   
     const generarColorAleatorio = async () => {
+    Speech.speak("¿Qué instrumento sale en la imagen?");
+
       let arregloNumeros = [
         {  nombre: "GUITARRA", source_1: img_guitarra, source_2: instrumento_guitarra },
         { nombre: "PIANO", source_1: img_piano, source_2: instrumento_piano },
@@ -114,9 +117,11 @@ import {
             active: true,
             tipe: "validation",
           });
+          Speech.speak("Esa no era la imagen correcta");
           // cambiar figuras
           generarColorAleatorio();
           setBotones(false);
+          
   
           return;
         }else{

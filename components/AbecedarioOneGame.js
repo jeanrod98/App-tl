@@ -18,7 +18,11 @@ import useAuth from "../Hooks/useAuth";
 import conffeti from "../assets/confeti.json";
 import LottieView from "lottie-react-native";
 
-const AbecedarioOneGame = () => {
+import * as Speech from 'expo-speech';
+
+
+
+const AbecedarioOneGame = ({ dinamica }) => {
   const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
 
   const [arregloAbecedario, setArregloAbecedario] = useState([]);
@@ -30,6 +34,8 @@ const AbecedarioOneGame = () => {
   }, []);
 
   const barajearArreglo = async () => {
+    Speech.speak(dinamica);
+
     let arregloAbecedario = [
       "A",
       "B",
@@ -113,6 +119,9 @@ const AbecedarioOneGame = () => {
 
   const seleccionarCard = (value, tablero) => {
 
+    Speech.speak(`Escogiste la letra ${value}`);
+
+
     if (tablero === "T1") {
         setLetraElegidaUno(value)
     } else {
@@ -135,6 +144,9 @@ const AbecedarioOneGame = () => {
         active: true,
         tipe: "validation",
       });
+
+    Speech.speak(`Debes elegir una letra de cada tablero.`);
+
       return;
     };
 
@@ -143,10 +155,12 @@ const AbecedarioOneGame = () => {
         setDataAlert({
         icon: "sad",
         tittle: "Letras distintas",
-        detalle: "Ups!, las letras seleccionadas no son iguales, intentalo de nuevo.",
+        detalle: "Ups!, las letras seleccionadas no son iguales, inténtalo de nuevo.",
         active: true,
         tipe: "validation",
         });
+        Speech.speak(`Ups!, las letras seleccionadas no son iguales, inténtalo de nuevo.`);
+
         return;
     };
 
@@ -179,6 +193,9 @@ const AbecedarioOneGame = () => {
                 active: true,
                 tipe: "validation",
             });
+
+            Speech.speak(`Has logrado encontrar todos los pares del abecedario. Sigue así y llegarás lejos!.`);
+
 
            
         }

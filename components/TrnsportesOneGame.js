@@ -43,7 +43,10 @@ import tren_2 from "../assets/tren_2.jpg";
 import barco_2 from "../assets/barco_2.jpg";
 import barco_1 from "../assets/barco_1.jpg";
 
-const TrnsportesOneGame = () => {
+import * as Speech from 'expo-speech';
+
+
+const TrnsportesOneGame = ({ dinamica }) => {
   const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
 
   const [arregloAbecedario, setArregloAbecedario] = useState([]);
@@ -55,6 +58,7 @@ const TrnsportesOneGame = () => {
   }, []);
 
   const barajearArreglo = async () => {
+    Speech.speak(dinamica);
 
     setBordeFilaUno("");
     setBordeFilaDos("");
@@ -102,6 +106,7 @@ const TrnsportesOneGame = () => {
   const [bordeFilaDos, setBordeFilaDos] = useState("");
 
   const seleccionarCard = (value, fila) => {
+    Speech.speak(value.nombre);
     
     if ( fila === "T1") {
         setBordeFilaUno(value.nombre);
@@ -123,6 +128,8 @@ const TrnsportesOneGame = () => {
         active: true,
         tipe: "validation",
       });
+      Speech.speak("Debes elegir dos transportes parecidos.");
+
       return;
     }
 
@@ -132,10 +139,12 @@ const TrnsportesOneGame = () => {
         icon: "sad",
         tittle: "Transportes distintos",
         detalle:
-          "Ups!, los transportes seleccionados no son iguales, intentalo de nuevo.",
+          "Ups!, los transportes seleccionados no son iguales, inténtalo de nuevo.",
         active: true,
         tipe: "validation",
       });
+      Speech.speak("Ups!, los transportes seleccionados no son iguales, inténtalo de nuevo.");
+
       return;
     }
 
@@ -169,6 +178,9 @@ const TrnsportesOneGame = () => {
           active: true,
           tipe: "validation",
         });
+        Speech.speak("Has logrado encontrar todos los pares de los transportes. Sigue así y llegarás lejos!.");
+
+
       }
     }
   };
