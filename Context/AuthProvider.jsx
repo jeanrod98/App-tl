@@ -125,17 +125,19 @@ const AuthProvider = ({ children }) => {
       // console.log("cargando...");
 
       const { data } = await clienteAxios.post("/registro-usuario", datos);
-      // console.log(data);
+      console.log(data);
 
       if (data) {
         // * Alert
         setDataAlert({
           icon: "success",
-          tittle: "ERROR DE AUTENTICACIÓN",
-          detalle: e.response.data.msg,
+          tittle: "Registro de usuario",
+          detalle: "El usuario se registró con éxito!",
           active: true,
           tipe: "info",
         });
+
+        return true;
       }
     } catch (e) {
       // console.log(e);

@@ -3,27 +3,115 @@ import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import useAuth from "../Hooks/useAuth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons";
 
-import * as Speech from 'expo-speech';
+import * as Speech from "expo-speech";
 
-const FooterApp = ({ ruta, name, data }) => {
-  const { registrarUsuario, login, logOut, auth, setInicio, option, setOption, setDataAlert } = useAuth();
+const FooterApp = ({ ruta, name, data, setDataForm }) => {
+  const {
+    registrarUsuario,
+    login,
+    logOut,
+    auth,
+    setInicio,
+    option,
+    setOption,
+    setDataAlert,
+  } = useAuth();
 
   const handleNex = async () => {
-   
-   
+    const expresionCorreo = /^[^@]+@[^@]+\.[a-zA-Z]{2,}$/;
 
     if (ruta === "/siguiente") {
-
       setInicio("false");
       await AsyncStorage.setItem("welcome", "false");
-
     } else if (ruta === "REGISTRAR") {
-      await registrarUsuario(data);
+      // ! Validar registro
+      if (
+        data.correo === "" ||
+        data.password === "" ||
+        data.nombres === "" ||
+        data.rptPassword === ""
+      ) {
+        setDataAlert({
+          icon: "error",
+          tittle: "Registro de usuario",
+          detalle: "Todos los campos son obligatorios!",
+          active: true,
+          tipe: "validation",
+        });
+        Speech.speak("Todos los campos son obligatorios!");
+        return;
+      }
+      // ! Validar registro correo
+
+      // validar el formato de correo
+      if (!expresionCorreo.test(data.correo)) {
+        setDataAlert({
+          icon: "error",
+          tittle: "Registro de usuario",
+          detalle: "El formato del correo no es el correcto!",
+          active: true,
+          tipe: "validation",
+        });
+        Speech.speak("El formato del correo no es el correcto!");
+        return;
+      }
+
+      console.log(data);
+      if (data.rptPassword !== data.password) {
+        setDataAlert({
+          icon: "error",
+          tittle: "Registro de usuario",
+          detalle: "Las contraseña no coinciden.",
+          active: true,
+          tipe: "validation",
+        });
+        Speech.speak("Las contraseña no coinciden.");
+        return;
+      }
+
+      const res = await registrarUsuario(data);
+
+      // console.log(res);
+      if (res)
+        setDataForm({
+          nombres: "",
+          correo: "",
+          password: "",
+          rptPassword: "",
+        });
       // Validar Campos del formulario
-      console.log("Registrando");
+      // console.log("Registrando");
     } else if (ruta === "INGRESAR") {
-        console.log("Inicio de sesion");
+      // ! Validar Login
+      if (data.correo === "" || data.password === "") {
+        setDataAlert({
+          icon: "error",
+          tittle: "Inicio de Sesión",
+          detalle: "Todos los campos son obligatorios!",
+          active: true,
+          tipe: "validation",
+        });
+        Speech.speak("Todos los campos son obligatorios!");
+        return;
+      }
+      // ! Validar Login correo
+
+      // validar el formato de correo
+      if (!expresionCorreo.test(data.correo)) {
+        setDataAlert({
+          icon: "error",
+          tittle: "Inicio de Sesión",
+          detalle: "El formato del correo no es el correcto!",
+          active: true,
+          tipe: "validation",
+        });
+        Speech.speak("El formato del correo no es el correcto!");
+        return;
+      }
+
+      // console.log("Inicio de sesion");
 
       await login(data.correo, data.password);
     } else if (ruta === "/menu") {
@@ -31,7 +119,7 @@ const FooterApp = ({ ruta, name, data }) => {
       // console.log(option.active);
       // validar que se haya elegido una opcion del menu
       if (option.activo === false) {
-        // ! alerta 
+        // ! alerta
         setDataAlert({
           tipe: "error",
           tittle: "ELIGE UNA OPCIÓN",
@@ -40,47 +128,54 @@ const FooterApp = ({ ruta, name, data }) => {
         });
         Speech.speak("Debes elegir una opción del menú para continuar!");
 
-        return
-        
+        return;
       }
 
-      setOption({...option, next: true})
-
+      setOption({ ...option, next: true });
     }
   };
 
   const mostrarAyuda = () => {
     alert("Mostrar Ayuda");
   };
+
+  const mostrarSettings = () => {
+    alert("Mostrar Configuracion");
+  };
+
   return (
     <View style={styles.container}>
-      <AntDesign
-        name="questioncircle"
-        size={24}
-        color="#fff"
-        onPress={mostrarAyuda}
-      />
-      
+      <View style={{ display: "flex", flexDirection: "row", gap: 20 }}>
+        <TouchableOpacity onPress={mostrarAyuda}>
+          <AntDesign
+            name="questioncircle"
+            size={24}
+            color="#fff"
+            
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={mostrarSettings}>
+          <Ionicons name="settings" size={26} color="#fff" />
+        </TouchableOpacity>
+      </View>
 
       {ruta === "/menu" && (
         <Text style={{ color: "#fff", fontSize: 16 }}>
           ELIGE UNA OPCIÓN PARA CONTINUAR!
         </Text>
       )}
-      <View style={{ display: "flex", flexDirection: "row", gap: 10}}>
+      <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
+        <TouchableOpacity style={styles.boton} onPress={handleNex}>
+          <Text style={styles.text}>{name}</Text>
+        </TouchableOpacity>
 
-
-      <TouchableOpacity style={styles.boton} onPress={handleNex}>
-        <Text style={styles.text}>{name}</Text>
-      </TouchableOpacity>
-
-      {/* {ruta === "/menu" && (
+        {/* {ruta === "/menu" && (
         <TouchableOpacity style={{...styles.boton, backgroundColor: "#FC5151"}} onPress={logOut}>
           <Text style={{...styles.text, color: "#fff"}}>{auth?._id !== 1 ? "Cerrar Sesion" : "Salir"}</Text>
         </TouchableOpacity>
       )} */}
       </View>
-      
     </View>
   );
 };

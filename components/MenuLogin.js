@@ -112,7 +112,7 @@ const MenuLogin = () => {
         
         
       </View>
-      <FooterApp ruta={nameOpcion} name={nameOpcion} data={dataForm} />
+      <FooterApp ruta={nameOpcion} name={nameOpcion} data={dataForm} setDataForm={setDataForm} />
       { dataAlert.active && <Alerts/> }
       { cargando && <Loading/> }
       
