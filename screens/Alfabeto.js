@@ -13,12 +13,13 @@ import { useEffect, useState } from "react";
 import fondo_number from "../assets/juego_abc_start.jpg"
 import OrdenarNumeros from "../components/OrdenarNumeros";
 import EscogeParesABC from "../components/EscogeParesABC";
+import AbecedarioAprender from "../components/AbecedarioAprender";
 
 const Alfabeto = () => {
   const { dataAlert, setDataAlert, logOut, setOption, option } = useAuth();
     
     const [ ordenarNumeros, setOrdenarNumeros ] = useState(false);
-    const [ escogerNumeros, setEscogerNumeros ] = useState(false);
+    const [ verAprender, setVerAprender ] = useState(false);
     const [ encontrarNumeros, setEncontrarNumeros ] = useState(false);
 
 
@@ -56,35 +57,26 @@ const Alfabeto = () => {
           <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
-              setEscogerNumeros(false);
+              setVerAprender(false);
               setEncontrarNumeros(false);
               setOrdenarNumeros(true);
             }}
           >
-            <Text style={styles.txtSubmenu}>Escoge la letra</Text>
+            <Text style={styles.txtSubmenu}>Realizar prueba</Text>
           </TouchableOpacity>
             
-          {/* <TouchableOpacity
-            style={styles.botonSubMenu}
-            onPress={() => {
-              setOrdenarNumeros(false);
-              setEncontrarNumeros(false);
-              setEscogerNumeros(true);
-
-            }}
-          >
-            <Text style={styles.txtSubmenu}>Escoge los pares</Text>
-          </TouchableOpacity>
           <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
               setOrdenarNumeros(false);
-              setEscogerNumeros(false);
-              setEncontrarNumeros(true);
+              setEncontrarNumeros(false);
+              setVerAprender(true);
+
             }}
           >
-            <Text style={styles.txtSubmenu}>Encuentra los números</Text>
-          </TouchableOpacity> */}
+            <Text style={styles.txtSubmenu}>Aprender el Alfabeto</Text>
+          </TouchableOpacity>
+        
             
             
           </View>
@@ -92,7 +84,7 @@ const Alfabeto = () => {
             ordenarNumeros && <EscogeParesABC setOrdenarNumeros={setOrdenarNumeros}/>
           }
           {
-            escogerNumeros && <Text>Escoge los pares</Text>
+            verAprender && <AbecedarioAprender setVerAprender={setVerAprender}/>
           }
           {
             encontrarNumeros && <Text>Encuentra los números</Text>
