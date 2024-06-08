@@ -24,33 +24,33 @@ const AbecedarioAprender = ({ setVerAprender }) => {
   const [mostrarGame, setMostrarGame] = useState(false);
 
   const [alfabeto, setAlfabeto] = useState([
-    { minuscula: "a", letra: "A"},
-    { minuscula: "b", letra: "B"},
-    { minuscula: "c", letra: "C"},
-    { minuscula: "d", letra: "D"},
-    { minuscula: "e", letra: "E"},
-    { minuscula: "f", letra: "F"},
-    { minuscula: "g", letra: "G"},
-    { minuscula: "h", letra: "H"},
-    { minuscula: "i", letra: "I"},
-    { minuscula: "j", letra: "J"},
-    { minuscula: "k", letra: "K"},
-    { minuscula: "l", letra: "L"},
-    { minuscula: "m", letra: "M"},
-    { minuscula: "n", letra: "N"},
-    { minuscula: "ñ", letra: "Ñ"},
-    { minuscula: "o", letra: "O"},
-    { minuscula: "p", letra: "P"},
-    { minuscula: "q", letra: "Q"},
-    { minuscula: "r", letra: "R"},
-    { minuscula: "s", letra: "S"},
-    { minuscula: "t", letra: "T"},
-    { minuscula: "u", letra: "U"},
-    { minuscula: "v", letra: "V"},
-    { minuscula: "w", letra: "W"},
-    { minuscula: "x", letra: "X"},
-    { minuscula: "y", letra: "Y"},
-    { minuscula: "z", letra: "Z"},
+    { minuscula: "a", letra: "A", palabras: ["Avión","Árbol", "Amarillo"] },
+    { minuscula: "b", letra: "B", palabras: ["Burro","Barco", "Balón"]},
+    { minuscula: "c", letra: "C", palabras: ["Casa","Camisa", "Canción"]},
+    { minuscula: "d", letra: "D", palabras: ["Dedo","Dado", "Diente"]},
+    { minuscula: "e", letra: "E", palabras: ["Enano","Esmeralda", "Edificio"]},
+    { minuscula: "f", letra: "F", palabras: ["Foca","Foco", "Fideo"]},
+    { minuscula: "g", letra: "G", palabras: ["Gota","Gallo", "Guante"]},
+    { minuscula: "h", letra: "H", palabras: ["Hielo","Hierro", "Helado"]},
+    { minuscula: "i", letra: "I", palabras: ["Iguana","Indio", "Isla"]},
+    { minuscula: "j", letra: "J", palabras: ["Juego","Jarabe", "Jamón"]},
+    { minuscula: "k", letra: "K", palabras: ["Karate","Kimono", "Kiwi"]},
+    { minuscula: "l", letra: "L", palabras: ["León","Limón", "Lucas"]},
+    { minuscula: "m", letra: "M", palabras: ["Mamá","Mimo", "María"]},
+    { minuscula: "n", letra: "N", palabras: ["Niño","Naranja", "Ninja"]},
+    { minuscula: "ñ", letra: "Ñ", palabras: ["Ñandú","Ñaño", "Ñato"]},
+    { minuscula: "o", letra: "O", palabras: ["Oso","Ojo", "Oreja"]},
+    { minuscula: "p", letra: "P", palabras: ["Pato","Papá", "Perro"]},
+    { minuscula: "q", letra: "Q", palabras: ["Queso","Química", "Quijote"]},
+    { minuscula: "r", letra: "R", palabras: ["Ratón","Rico", "Reno"]},
+    { minuscula: "s", letra: "S", palabras: ["Sandia","Serpiente", "Silencio"]},
+    { minuscula: "t", letra: "T", palabras: ["Tigre","Timón", "Tarea"]},
+    { minuscula: "u", letra: "U", palabras: ["Uva","Uña", "Unicornio"]},
+    { minuscula: "v", letra: "V", palabras: ["Vaso","Viento", "Venado"]},
+    { minuscula: "w", letra: "W", palabras: ["Wifi","Waffle", "Wendy"]},
+    { minuscula: "x", letra: "X", palabras: ["Xavier","Xilófono", "Xenón"]},
+    { minuscula: "y", letra: "Y", palabras: ["Yegua","Yoyo", "Yuca"]},
+    { minuscula: "z", letra: "Z", palabras: ["Zapato","Zorrillo", "Zanahoria"]},
   ]);
 
   const [letraSeleccionada, setLetraSeleccionada] = useState({})
@@ -79,7 +79,7 @@ const AbecedarioAprender = ({ setVerAprender }) => {
         <View style={{ ...styles.contenido }}>
           <View style={styles.header}>
             <Text style={styles.txtHeader}>
-              Escoge una letras para aprender
+              Escoge una letra para aprenderla
             </Text>
             {/* <Text style={styles.txtHeader}>00 : 00 : 00</Text> */}
           </View>
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     borderRadius: 8
   },
   txtHeader: {
-    fontSize: 18,
+    fontSize: 20,
     // textAlign: "center",
     fontWeight: "700",
   },

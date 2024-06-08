@@ -31,6 +31,7 @@ import {
     const confettiRef = useRef(null);
 
     useEffect(() => {
+        Speech.speak("Presiona las palabras para escuchar como suenan")
         Speech.speak(`Elegiste la letra ${letraSeleccionada.letra}`);
     }, []);
   
@@ -52,9 +53,31 @@ import {
         </TouchableOpacity>
 
           <View style={styles.detalles}>
-            <View style={{ display: "flex", flexDirection: "row", alignItems: "flex-end"}}>
-                <Text style={styles.text}>{letraSeleccionada.letra}</Text>
-                <Text style={styles.textMinuscula}>{letraSeleccionada.minuscula}</Text>
+          <Text style={{ fontSize: 16, fontWeight: "700"}}>{"Presiona las palabras para escuchar como suenan"}</Text>
+
+            <View >
+            <TouchableOpacity  style={{ display: "flex", flexDirection: "row", alignItems: "flex-end"}}
+                    onPress={() => Speech.speak(`${letraSeleccionada.letra}`)}>
+                      <Text style={styles.text}>{letraSeleccionada.letra}</Text>
+                      <Text style={styles.textMinuscula}>{letraSeleccionada.minuscula}</Text>
+                    </TouchableOpacity>
+                
+            </View>
+            <View style={{ display: "flex", flexDirection: "row", gap: 20, }}>
+              {
+                letraSeleccionada.palabras.map((palabra, index) => (
+                  <View key={index}>
+                    <TouchableOpacity style={styles.btnText} 
+                    onPress={() => Speech.speak(`${letraSeleccionada.letra} de ${palabra}`)}>
+                      <Text>
+                        {palabra}
+                      </Text>
+                    </TouchableOpacity>
+
+                  </View>
+
+                ))
+              }
             </View>
           
 
@@ -100,7 +123,7 @@ import {
       display: "flex",
     //   flexDirection: "row",
   
-      backgroundColor: "rgba(255, 255, 255, .7)",
+      backgroundColor: "rgba(255, 255, 255, .8)",
       width: "100%",
       height: "100%",
     //   height: height < 500 ? height - 150 : width - 150,
@@ -119,6 +142,7 @@ import {
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
+      gap: 30,
 
 
     },
@@ -133,5 +157,12 @@ import {
 
 
     },
+    btnText: {
+      backgroundColor: "#8c9eff",
+      paddingVertical: 4,
+      paddingHorizontal: 20,
+      borderRadius: 8,
+
+    }
   });
   
