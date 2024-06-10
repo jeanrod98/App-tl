@@ -16,12 +16,14 @@ import OrdenarNumeros from "../components/OrdenarNumeros";
 import EscogeParesABC from "../components/EscogeParesABC";
 import EscogerTransportes from "../components/EscogerTransportes";
 import EscogerFrutas from "../components/EscogerFrutas";
+import FrutasAprender from "../components/FrutasAprender";
 
 const Frutas = () => {
   const { dataAlert, setDataAlert, logOut, setOption, option } = useAuth();
     
     const [ ordenarNumeros, setOrdenarNumeros ] = useState(false);
-    const [ escogerNumeros, setEscogerNumeros ] = useState(false);
+    const [ verAprender, setVerAprender ] = useState(false);
+
     const [ encontrarNumeros, setEncontrarNumeros ] = useState(false);
 
 
@@ -59,7 +61,7 @@ const Frutas = () => {
           <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
-              setEscogerNumeros(false);
+              setVerAprender(false);
               setEncontrarNumeros(false);
               setOrdenarNumeros(true);
             }}
@@ -67,18 +69,18 @@ const Frutas = () => {
             <Text style={styles.txtSubmenu}>Escoge las frutas</Text>
           </TouchableOpacity>
             
-          {/* <TouchableOpacity
+          <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
               setOrdenarNumeros(false);
               setEncontrarNumeros(false);
-              setEscogerNumeros(true);
+              setVerAprender(true);
 
             }}
           >
-            <Text style={styles.txtSubmenu}>Escoge los pares</Text>
+            <Text style={styles.txtSubmenu}>Aprender las Frutas</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
               setOrdenarNumeros(false);
@@ -95,8 +97,8 @@ const Frutas = () => {
             ordenarNumeros && <EscogerFrutas setOrdenarNumeros={setOrdenarNumeros}/>
           }
           {
-            escogerNumeros && <Text>Escoge los pares</Text>
-          }
+              verAprender && <FrutasAprender setVerAprender={setVerAprender}/>
+            }
           {
             encontrarNumeros && <Text>Encuentra los números</Text>
           }

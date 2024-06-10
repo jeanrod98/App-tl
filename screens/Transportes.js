@@ -15,13 +15,15 @@
   import OrdenarNumeros from "../components/OrdenarNumeros";
   import EscogeParesABC from "../components/EscogeParesABC";
 import EscogerTransportes from "../components/EscogerTransportes";
+import TransporteAprender from "../components/TransporteAprender";
   
   const Transportes = () => {
     const { dataAlert, setDataAlert, logOut, setOption, option } = useAuth();
       
       const [ ordenarNumeros, setOrdenarNumeros ] = useState(false);
-      const [ escogerNumeros, setEscogerNumeros ] = useState(false);
+      
       const [ encontrarNumeros, setEncontrarNumeros ] = useState(false);
+      const [ verAprender, setVerAprender ] = useState(false);
   
   
       useEffect(() => {
@@ -58,7 +60,7 @@ import EscogerTransportes from "../components/EscogerTransportes";
             <TouchableOpacity
               style={styles.botonSubMenu}
               onPress={() => {
-                setEscogerNumeros(false);
+                setVerAprender(false);
                 setEncontrarNumeros(false);
                 setOrdenarNumeros(true);
               }}
@@ -66,18 +68,18 @@ import EscogerTransportes from "../components/EscogerTransportes";
               <Text style={styles.txtSubmenu}>Escoge el transporte</Text>
             </TouchableOpacity>
               
-            {/* <TouchableOpacity
+            <TouchableOpacity
               style={styles.botonSubMenu}
               onPress={() => {
                 setOrdenarNumeros(false);
                 setEncontrarNumeros(false);
-                setEscogerNumeros(true);
+                setVerAprender(true);
   
               }}
             >
-              <Text style={styles.txtSubmenu}>Escoge los pares</Text>
+              <Text style={styles.txtSubmenu}>Aprender los Transportes</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.botonSubMenu}
               onPress={() => {
                 setOrdenarNumeros(false);
@@ -94,7 +96,7 @@ import EscogerTransportes from "../components/EscogerTransportes";
               ordenarNumeros && <EscogerTransportes setOrdenarNumeros={setOrdenarNumeros}/>
             }
             {
-              escogerNumeros && <Text>Escoge los pares</Text>
+              verAprender && <TransporteAprender setVerAprender={setVerAprender}/>
             }
             {
               encontrarNumeros && <Text>Encuentra los números</Text>
