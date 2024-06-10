@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 
 import fondo_number from "../assets/colores_fondo_1.jpg"
 import ColoresElegirObjetos from "../components/ColoresElegirObjetos";
+import ColorAprender from "../components/ColorAprender";
   
   const Colores = () => {
   
@@ -19,7 +20,7 @@ import ColoresElegirObjetos from "../components/ColoresElegirObjetos";
     const { dataAlert, setDataAlert, logOut, setOption, option } = useAuth();
     
     const [ escogerObjetos, setEscogerObjetos ] = useState(false);
-    const [ escogerNumeros, setEscogerNumeros ] = useState(false);
+    const [ verAprender, setVerAprender ] = useState(false);
     const [ encontrarNumeros, setEncontrarNumeros ] = useState(false);
 
 
@@ -57,7 +58,7 @@ import ColoresElegirObjetos from "../components/ColoresElegirObjetos";
           <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
-              setEscogerNumeros(false);
+              setVerAprender(false);
               setEncontrarNumeros(false);
               setEscogerObjetos(true);
             }}
@@ -65,18 +66,18 @@ import ColoresElegirObjetos from "../components/ColoresElegirObjetos";
             <Text style={styles.txtSubmenu}>Escoge el color</Text>
           </TouchableOpacity>
             
-          {/* <TouchableOpacity
+          <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
-              setOrdenarNumeros(false);
+              setEscogerObjetos(false);
               setEncontrarNumeros(false);
-              setEscogerNumeros(true);
+              setVerAprender(true);
 
             }}
           >
-            <Text style={styles.txtSubmenu}>Escoge los pares</Text>
+            <Text style={styles.txtSubmenu}>Aprender los Colores</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
               setOrdenarNumeros(false);
@@ -85,15 +86,15 @@ import ColoresElegirObjetos from "../components/ColoresElegirObjetos";
             }}
           >
             <Text style={styles.txtSubmenu}>Encuentra los números</Text>
-          </TouchableOpacity> */}
-            
+          </TouchableOpacity>
+             */}
             
           </View>
           {
             escogerObjetos && <ColoresElegirObjetos setEscogerObjetos={setEscogerObjetos}/>
           }
           {
-            escogerNumeros && <Text>Escoge los pares</Text>
+            verAprender && <ColorAprender setVerAprender={setVerAprender}/>
           }
           {
             encontrarNumeros && <Text>Encuentra los números</Text>

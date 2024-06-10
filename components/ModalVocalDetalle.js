@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   View,
   ImageBackground,
-  Image,
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -21,10 +20,7 @@ import LottieView from "lottie-react-native";
 
 import * as Speech from "expo-speech";
 
-const ModalTransporteDetalle = ({
-  opcionSeleccionada,
-  setOpcionSeleccionada,
-}) => {
+const ModalVocalDetalle = ({ letraSeleccionada, setLetraSeleccionada }) => {
   const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
 
   const [arregloAbecedario, setArregloAbecedario] = useState([]);
@@ -32,8 +28,8 @@ const ModalTransporteDetalle = ({
   const confettiRef = useRef(null);
 
   useEffect(() => {
-    Speech.speak(`Elegiste el transporte ${opcionSeleccionada.nombre}`);
-    Speech.speak("Presiona el transporte para escuchar su nombre");
+    Speech.speak("Presiona las palabras para escuchar como suenan");
+    Speech.speak(`Elegiste la vocal ${letraSeleccionada.letra}`);
   }, []);
 
   return (
@@ -42,7 +38,7 @@ const ModalTransporteDetalle = ({
         <TouchableOpacity
           style={styles.btnClose}
           onPress={() => {
-            setOpcionSeleccionada({});
+            setLetraSeleccionada({});
             Speech.stop();
           }}
         >
@@ -50,14 +46,15 @@ const ModalTransporteDetalle = ({
         </TouchableOpacity>
 
         <View style={styles.detalles}>
-          {/* <Text style={{ fontSize: 16, fontWeight: "700"}}>{"Presiona el transporte para escuchar su nombre"}</Text> */}
+          {/* <Text style={{ fontSize: 16, fontWeight: "700"}}>{"Presiona las palabras para escuchar como suenan"}</Text> */}
 
           <View style={styles.header}>
             <Text style={styles.txtHeader}>
-              Presiona el transporte para escuchar su nombre
+              Presiona las palabras para escuchar como suenan
             </Text>
             {/* <Text style={styles.txtHeader}>00 : 00 : 00</Text> */}
           </View>
+
           <View>
             <TouchableOpacity
               style={{
@@ -65,35 +62,26 @@ const ModalTransporteDetalle = ({
                 flexDirection: "row",
                 alignItems: "flex-end",
               }}
-              onPress={() => Speech.speak(`${opcionSeleccionada.nombre}`)}
+              onPress={() => Speech.speak(`${letraSeleccionada.letra}`)}
             >
-              <Image
-                style={{ ...styles.imgCard, width: 100, height: 100 }}
-                source={opcionSeleccionada.source}
-              />
+              <Text style={styles.text}>{letraSeleccionada.letra}</Text>
+              <Text style={styles.textMinuscula}>
+                {letraSeleccionada.minuscula}
+              </Text>
             </TouchableOpacity>
           </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: 20,
-              backgroundColor: "transparent",
-            }}
-          >
-            {opcionSeleccionada.imagenes.map((obj, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.btnText}
-                onPress={() => Speech.speak(`${opcionSeleccionada.nombre}`)}
-              >
-                <Card style={styles.card}>
-                  <Image style={styles.imgCard} source={obj} />
-                  <Text style={{ textAlign: "center" }}>
-                    {opcionSeleccionada.nombre}
-                  </Text>
-                </Card>
-              </TouchableOpacity>
+          <View style={{ display: "flex", flexDirection: "row", gap: 20 }}>
+            {letraSeleccionada.palabras.map((palabra, index) => (
+              <View key={index}>
+                <TouchableOpacity
+                  style={styles.btnText}
+                  onPress={() =>
+                    Speech.speak(`${letraSeleccionada.letra} de ${palabra}`)
+                  }
+                >
+                  <Text>{palabra}</Text>
+                </TouchableOpacity>
+              </View>
             ))}
           </View>
         </View>
@@ -110,7 +98,7 @@ const ModalTransporteDetalle = ({
   );
 };
 
-export default ModalTransporteDetalle;
+export default ModalVocalDetalle;
 
 let { height, width } = Dimensions.get("screen");
 
@@ -155,7 +143,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    gap: 0,
+    gap: 20,
   },
   text: {
     fontSize: 62,
@@ -166,28 +154,11 @@ const styles = StyleSheet.create({
     //   backgroundColor: "red",
   },
   btnText: {
-    backgroundColor: "rgba(255, 255, 255, 1)",
-
+    backgroundColor: "#8c9eff",
+    paddingVertical: 4,
+    paddingHorizontal: 20,
     borderRadius: 8,
   },
-  imgCard: {
-    width: 100,
-    height: 100,
-    resizeMode: "contain",
-  },
-
-  card: {
-    width: 110,
-    height: 90,
-    padding: 0,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    // borderRadius: "50%",
-    // backgroundColor: "#8c9eff",
-    backgroundColor: "rgba(255, 255, 255, 1)",
-  },
-
   header: {
     display: "flex",
     flexDirection: "row",

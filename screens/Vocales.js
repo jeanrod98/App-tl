@@ -15,12 +15,13 @@
   import OrdenarNumeros from "../components/OrdenarNumeros";
   import EscogeParesABC from "../components/EscogeParesABC";
 import EscogeVocal from "../components/EscogeVocal";
+import VocalesAprender from "../components/VocalesAprender";
   
   const Vocales = () => {
     const { dataAlert, setDataAlert, logOut, setOption, option } = useAuth();
       
       const [ escogeLaVocal, setEscogeLaVocal ] = useState(false);
-      const [ escogerNumeros, setEscogerNumeros ] = useState(false);
+      const [ verAprender, setVerAprender ] = useState(false);
       const [ encontrarNumeros, setEncontrarNumeros ] = useState(false);
   
   
@@ -58,7 +59,7 @@ import EscogeVocal from "../components/EscogeVocal";
             <TouchableOpacity
               style={styles.botonSubMenu}
               onPress={() => {
-                setEscogerNumeros(false);
+                setVerAprender(false);
                 setEncontrarNumeros(false);
                 setEscogeLaVocal(true);
               }}
@@ -66,18 +67,18 @@ import EscogeVocal from "../components/EscogeVocal";
               <Text style={styles.txtSubmenu}>Escoge la vocal</Text>
             </TouchableOpacity>
               
-            {/* <TouchableOpacity
+            <TouchableOpacity
               style={styles.botonSubMenu}
               onPress={() => {
-                setOrdenarNumeros(false);
+                setEscogeLaVocal(false);
                 setEncontrarNumeros(false);
-                setEscogerNumeros(true);
+                setVerAprender(true);
   
               }}
             >
-              <Text style={styles.txtSubmenu}>Escoge los pares</Text>
+              <Text style={styles.txtSubmenu}>Aprender las Vocales</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.botonSubMenu}
               onPress={() => {
                 setOrdenarNumeros(false);
@@ -94,7 +95,7 @@ import EscogeVocal from "../components/EscogeVocal";
               escogeLaVocal && <EscogeVocal setEscogeLaVocal={setEscogeLaVocal}/>
             }
             {
-              escogerNumeros && <Text>Escoge los pares</Text>
+               verAprender && <VocalesAprender setVerAprender={setVerAprender}/>
             }
             {
               encontrarNumeros && <Text>Encuentra los números</Text>
