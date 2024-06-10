@@ -15,33 +15,46 @@ import {
   import ComponentOnGame from "./NumerosOnGame";
   import useAuth from "../Hooks/useAuth";
   import Alerts from "./Alerts";
-  import fondo_number_2 from "../assets/color_fondo_2.jpg";
+  import fondo_number_2 from "../assets/juego_vocales_2.jpg";
   import { Card } from "react-native-paper";
   import AbecedarioOneGame from "./AbecedarioOneGame";
   import ModalAlfabetoDetalles from "./ModalAlfabetoDetalles";
 import ModalVocalDetalle from "./ModalVocalDetalle";
-import ModalColorDetalle from "./ModalColorDetalle";
+import ModalNumerosDetalle from "./ModalNumerosDetalle";
+
+import uno from "../assets/uno.jpg";
+import dos from "../assets/dos.jpg";
+import tres from "../assets/tres.jpg";
+import cuatro from "../assets/cuatro.jpg";
+import cinco from "../assets/cinco.jpg";
+
+import seis from "../assets/seis.jpg";
+import siete from "../assets/siete.jpg";
+import ocho from "../assets/ocho.jpg";
+import nueve from "../assets/nueve.jpg";
+import diez from "../assets/diez.jpg";
+
   
-  const ColorAprender = ({ setVerAprender }) => {
+  const NumerosAprender = ({ setVerAprender }) => {
     const { dataAlert, setDataAlert, logOut, setOption } = useAuth();
   
     const [mostrarGame, setMostrarGame] = useState(false);
   
-    const [colores, setColores] = useState([
-        { color: "purple", nombre: "MORADO",  palabras: []},
-        { color: "red", nombre: "ROJO",  palabras: []},
-        { color: "blue", nombre: "AZUL",  palabras: []},
-        { color: "green", nombre: "VERDE",  palabras: []},
-        { color: "yellow", nombre: "AMARILLO",  palabras: []},
-        { color: "pink", nombre: "ROSADO",  palabras: []},
-        { color: "grey", nombre: "GRIS",  palabras: []},
-        { color: "white", nombre: "BLANCO",  palabras: []},
-        { color: "black", nombre: "NEGRO",  palabras: []},
-        { color: "orange", nombre: "NARANJA",  palabras: []},
+    const [numeros, setNumeros] = useState([
+      { escritura: "Uno", numero: "1", source: uno },
+      { escritura: "Dos", numero: "2", source: dos},
+      { escritura: "Tres", numero: "3", source: tres},
+      { escritura: "Cuatro", numero: "4", source: cuatro},
+      { escritura: "Cinco", numero: "5", source: cinco},
+      { escritura: "Seis", numero: "6", source: seis},
+      { escritura: "Siete", numero: "7", source: siete},
+      { escritura: "Ocho", numero: "8", source: ocho},
+      { escritura: "Nueve", numero: "9", source: nueve},
+      { escritura: "Diez", numero: "10", source: diez},
       
     ]);
   
-    const [colorSeleccionada, setColorSeleccionada] = useState({})
+    const [NumeroSeleccionada, setNumeroSeleccionada] = useState({})
   
     return (
       <View style={styles.containerOrdenarNumeros}>
@@ -67,18 +80,18 @@ import ModalColorDetalle from "./ModalColorDetalle";
           <View style={{ ...styles.contenido }}>
             <View style={styles.header}>
               <Text style={styles.txtHeader}>
-                Escoge un color para aprenderlo
+                Escoge un número para aprenderlo
               </Text>
               {/* <Text style={styles.txtHeader}>00 : 00 : 00</Text> */}
             </View>
   
             <View style={{ ...styles.game }}>
-              {colores.map((color, index) => (
-                <TouchableOpacity key={index} onPress={() => setColorSeleccionada(color)}>
-                  <Card style={{...styles.card, backgroundColor: color.color}}>
+              {numeros.map((num, index) => (
+                <TouchableOpacity key={index} onPress={() => setNumeroSeleccionada(num)}>
+                  <Card style={styles.card}>
                     {/* <Card.Content> */}
-                    <Text style={{ fontSize: 12, fontWeight: "700", color: color.nombre === "BLANCO" || color.nombre === "AMARILLO" ? "#242424" : "#f9f9f9"  }}>
-                      {color.nombre}
+                    <Text style={{ fontSize: 18, fontWeight: "700", color: "#242424" }}>
+                      {num.numero}
                     </Text>
                     {/* <Text variant="titleLarge">Card title</Text> */}
                     {/* </Card.Content> */}
@@ -90,13 +103,13 @@ import ModalColorDetalle from "./ModalColorDetalle";
         </ImageBackground>
         {dataAlert.active && <Alerts />}
         {
-          colorSeleccionada.nombre && <ModalColorDetalle setColorSeleccionada={setColorSeleccionada} colorSeleccionada={colorSeleccionada}/>
+          NumeroSeleccionada.numero && <ModalNumerosDetalle setNumeroSeleccionada={setNumeroSeleccionada} NumeroSeleccionada={NumeroSeleccionada}/>
         }
       </View>
     );
   };
   
-  export default ColorAprender;
+  export default NumerosAprender;
   
   let { height, width } = Dimensions.get("screen");
   

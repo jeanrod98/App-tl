@@ -14,6 +14,7 @@ import musica_fondo_1 from "../assets/animales_juego_2.jpg";
 import ColoresElegirObjetos from "../components/ColoresElegirObjetos";
 import EscogerInstrumento from "../components/EscogerInstrumento";
 import AnimalesElegir from "../components/AnimalesElegir";
+import AnimalesAprender from "../components/AnimalesAprender";
   
   const Animales = () => {
   
@@ -21,7 +22,7 @@ import AnimalesElegir from "../components/AnimalesElegir";
     const { dataAlert, setDataAlert, logOut, setOption, option } = useAuth();
     
     const [ escogerObjetos, setEscogerObjetos ] = useState(false);
-    const [ escogerNumeros, setEscogerNumeros ] = useState(false);
+    const [ verAprender, setVerAprender ] = useState(false);
     const [ encontrarNumeros, setEncontrarNumeros ] = useState(false);
 
 
@@ -59,7 +60,7 @@ import AnimalesElegir from "../components/AnimalesElegir";
           <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
-              setEscogerNumeros(false);
+              setVerAprender(false);
               setEncontrarNumeros(false);
               setEscogerObjetos(true);
             }}
@@ -67,18 +68,18 @@ import AnimalesElegir from "../components/AnimalesElegir";
             <Text style={styles.txtSubmenu}>Escoge el animal</Text>
           </TouchableOpacity>
             
-          {/* <TouchableOpacity
+          <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
-              setOrdenarNumeros(false);
+              setEscogerObjetos(false);
               setEncontrarNumeros(false);
-              setEscogerNumeros(true);
+              setVerAprender(true);
 
             }}
           >
-            <Text style={styles.txtSubmenu}>Escoge los pares</Text>
+            <Text style={styles.txtSubmenu}>Aprender los animales</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
               setOrdenarNumeros(false);
@@ -95,7 +96,7 @@ import AnimalesElegir from "../components/AnimalesElegir";
             escogerObjetos && <AnimalesElegir setEscogerObjetos={setEscogerObjetos}/>
           }
           {
-            escogerNumeros && <Text>Escoge los pares</Text>
+            verAprender && <AnimalesAprender setVerAprender={setVerAprender}/>
           }
           {
             encontrarNumeros && <Text>Encuentra los números</Text>
