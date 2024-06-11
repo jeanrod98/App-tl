@@ -13,12 +13,13 @@ import { useEffect, useState } from "react";
 import fondo_number from "../assets/juego_figuras.jpg";
 import ColoresElegirObjetos from "../components/ColoresElegirObjetos";
 import FigurasEscoger from "../components/FigurasEscoger";
+import FigurasAprender from "../components/FigurasAprender";
 
 const Figuras = () => {
   const { dataAlert, setDataAlert, logOut, setOption, option } = useAuth();
 
   const [escogerObjetos, setEscogerObjetos] = useState(false);
-  const [escogerNumeros, setEscogerNumeros] = useState(false);
+  const [ verAprender, setVerAprender ] = useState(false);
   const [encontrarNumeros, setEncontrarNumeros] = useState(false);
 
   useEffect(() => {
@@ -56,7 +57,7 @@ const Figuras = () => {
           <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
-              setEscogerNumeros(false);
+              setVerAprender(false);
               setEncontrarNumeros(false);
               setEscogerObjetos(true);
             }}
@@ -64,18 +65,18 @@ const Figuras = () => {
             <Text style={styles.txtSubmenu}>Escoge la figura</Text>
           </TouchableOpacity>
 
-          {/* <TouchableOpacity
+          <TouchableOpacity
               style={styles.botonSubMenu}
               onPress={() => {
-                setOrdenarNumeros(false);
+                setEscogerObjetos(false);
                 setEncontrarNumeros(false);
-                setEscogerNumeros(true);
+                setVerAprender(true);
   
               }}
             >
-              <Text style={styles.txtSubmenu}>Escoge los pares</Text>
+              <Text style={styles.txtSubmenu}>Aprender las figuras</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.botonSubMenu}
               onPress={() => {
                 setOrdenarNumeros(false);
@@ -89,7 +90,7 @@ const Figuras = () => {
         {escogerObjetos && (
           <FigurasEscoger setEscogerObjetos={setEscogerObjetos} />
         )}
-        {escogerNumeros && <Text>Escoge los pares</Text>}
+        { verAprender && <FigurasAprender setVerAprender={setVerAprender}/>}
         {encontrarNumeros && <Text>Encuentra los números</Text>}
       </ImageBackground>
     </View>

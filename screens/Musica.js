@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import musica_fondo_1 from "../assets/musica_fondo_1.jpg";
 import ColoresElegirObjetos from "../components/ColoresElegirObjetos";
 import EscogerInstrumento from "../components/EscogerInstrumento";
+import MusicaAprender from "../components/MusicaAprender";
   
   const Musica = () => {
   
@@ -20,7 +21,7 @@ import EscogerInstrumento from "../components/EscogerInstrumento";
     const { dataAlert, setDataAlert, logOut, setOption, option } = useAuth();
     
     const [ escogerObjetos, setEscogerObjetos ] = useState(false);
-    const [ escogerNumeros, setEscogerNumeros ] = useState(false);
+    const [ verAprender, setVerAprender ] = useState(false);
     const [ encontrarNumeros, setEncontrarNumeros ] = useState(false);
 
 
@@ -58,7 +59,7 @@ import EscogerInstrumento from "../components/EscogerInstrumento";
           <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
-              setEscogerNumeros(false);
+              setVerAprender(false);
               setEncontrarNumeros(false);
               setEscogerObjetos(true);
             }}
@@ -66,18 +67,18 @@ import EscogerInstrumento from "../components/EscogerInstrumento";
             <Text style={styles.txtSubmenu}>Escoge el instrumento musical</Text>
           </TouchableOpacity>
             
-          {/* <TouchableOpacity
+          <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
-              setOrdenarNumeros(false);
+              setEscogerObjetos(false);
               setEncontrarNumeros(false);
-              setEscogerNumeros(true);
+              setVerAprender(true);
 
             }}
           >
-            <Text style={styles.txtSubmenu}>Escoge los pares</Text>
+            <Text style={styles.txtSubmenu}>Aprender los instrumentos musicales</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.botonSubMenu}
             onPress={() => {
               setOrdenarNumeros(false);
@@ -94,7 +95,7 @@ import EscogerInstrumento from "../components/EscogerInstrumento";
             escogerObjetos && <EscogerInstrumento setEscogerObjetos={setEscogerObjetos}/>
           }
           {
-            escogerNumeros && <Text>Escoge los pares</Text>
+            verAprender && <MusicaAprender setVerAprender={setVerAprender}/>
           }
           {
             encontrarNumeros && <Text>Encuentra los números</Text>

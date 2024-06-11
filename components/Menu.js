@@ -237,6 +237,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#536dfe",
     display: "flex",
     justifyContent: "space-between",
+    // alignItems: "space-between",
+
 
     // elevation: 5
   },
@@ -246,7 +248,11 @@ const styles = StyleSheet.create({
   },
   txt: {
     color: "#fff",
-    fontSize: 14,
+    fontSize: 12,
     textAlign: "center",
+    // backgroundColor: "red",
+    height: "20%",
+    
+
   },
 });
