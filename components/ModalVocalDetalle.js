@@ -21,15 +21,18 @@ import LottieView from "lottie-react-native";
 import * as Speech from "expo-speech";
 
 const ModalVocalDetalle = ({ letraSeleccionada, setLetraSeleccionada }) => {
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
+  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
 
   const [arregloAbecedario, setArregloAbecedario] = useState([]);
   const [arregloAbecedarioTwo, setArregloAbecedarioTwo] = useState([]);
   const confettiRef = useRef(null);
 
   useEffect(() => {
-    Speech.speak("Presiona las palabras para escuchar como suenan");
-    Speech.speak(`Elegiste la vocal ${letraSeleccionada.letra}`);
+    if (sonido) {
+      Speech.speak("Presiona las palabras para escuchar como suenan");
+      Speech.speak(`Elegiste la vocal ${letraSeleccionada.letra}`);
+    }
+    
   }, []);
 
   return (
@@ -39,7 +42,7 @@ const ModalVocalDetalle = ({ letraSeleccionada, setLetraSeleccionada }) => {
           style={styles.btnClose}
           onPress={() => {
             setLetraSeleccionada({});
-            Speech.stop();
+            if (sonido) Speech.stop();
           }}
         >
           <AntDesign name="closecircle" size={32} color="red" />
@@ -62,7 +65,7 @@ const ModalVocalDetalle = ({ letraSeleccionada, setLetraSeleccionada }) => {
                 flexDirection: "row",
                 alignItems: "flex-end",
               }}
-              onPress={() => Speech.speak(`${letraSeleccionada.letra}`)}
+              onPress={() => {if (sonido) Speech.speak(`${letraSeleccionada.letra}`)}}
             >
               <Text style={styles.text}>{letraSeleccionada.letra}</Text>
               <Text style={styles.textMinuscula}>
@@ -76,7 +79,7 @@ const ModalVocalDetalle = ({ letraSeleccionada, setLetraSeleccionada }) => {
                 <TouchableOpacity
                   style={styles.btnText}
                   onPress={() =>
-                    Speech.speak(`${letraSeleccionada.letra} de ${palabra}`)
+                    { if (sonido) Speech.speak(`${letraSeleccionada.letra} de ${palabra}`)}
                   }
                 >
                   <Text>{palabra}</Text>

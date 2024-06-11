@@ -22,15 +22,18 @@ import LottieView from "lottie-react-native";
 import * as Speech from "expo-speech";
 
 const ModalFrutasDetalle = ({ opcionSeleccionada, setOpcionSeleccionada }) => {
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
+  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
 
   const [arregloAbecedario, setArregloAbecedario] = useState([]);
   const [arregloAbecedarioTwo, setArregloAbecedarioTwo] = useState([]);
   const confettiRef = useRef(null);
 
   useEffect(() => {
-    Speech.speak(`Elegiste la fruta ${opcionSeleccionada.nombre}`);
-    Speech.speak("Presiona la fruta para escuchar su nombre");
+    if (sonido) {
+      Speech.speak(`Elegiste la fruta ${opcionSeleccionada.nombre}`);
+      Speech.speak("Presiona la fruta para escuchar su nombre");
+    }
+    
   }, []);
 
   return (
@@ -40,7 +43,7 @@ const ModalFrutasDetalle = ({ opcionSeleccionada, setOpcionSeleccionada }) => {
           style={styles.btnClose}
           onPress={() => {
             setOpcionSeleccionada({});
-            Speech.stop();
+            if (sonido) Speech.stop();
           }}
         >
           <AntDesign name="closecircle" size={32} color="red" />
@@ -61,7 +64,7 @@ const ModalFrutasDetalle = ({ opcionSeleccionada, setOpcionSeleccionada }) => {
                 flexDirection: "row",
                 alignItems: "flex-end",
               }}
-              onPress={() => Speech.speak(`${opcionSeleccionada.nombre}`)}
+              onPress={() => {if (sonido) Speech.speak(`${opcionSeleccionada.nombre}`)}}
             >
               <Image
                 style={{ ...styles.imgCard, width: 100, height: 100 }}
@@ -81,7 +84,7 @@ const ModalFrutasDetalle = ({ opcionSeleccionada, setOpcionSeleccionada }) => {
               <TouchableOpacity
                 key={index}
                 style={styles.btnText}
-                onPress={() => Speech.speak(`${obj}`)}
+                onPress={() => {if (sonido) Speech.speak(`${obj}`)}}
               >
                 <Card
                   style={{

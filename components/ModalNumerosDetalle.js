@@ -23,15 +23,18 @@ import {
   import * as Speech from "expo-speech";
   
   const ModalNumerosDetalle = ({ NumeroSeleccionada, setNumeroSeleccionada }) => {
-    const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
+    const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
   
     const [arregloAbecedario, setArregloAbecedario] = useState([]);
     const [arregloAbecedarioTwo, setArregloAbecedarioTwo] = useState([]);
     const confettiRef = useRef(null);
   
     useEffect(() => {
-      Speech.speak("Presiona el número para escuchar como suena");
-      Speech.speak(`Elegiste el número ${NumeroSeleccionada.numero}`);
+      if (sonido) {
+        Speech.speak("Presiona el número para escuchar como suena");
+        Speech.speak(`Elegiste el número ${NumeroSeleccionada.numero}`);
+      }
+      
     }, []);
   
     return (
@@ -41,7 +44,7 @@ import {
             style={styles.btnClose}
             onPress={() => {
                 setNumeroSeleccionada({});
-              Speech.stop();
+                if (sonido) Speech.stop();
             }}
           >
             <AntDesign name="closecircle" size={32} color="red" />
@@ -65,7 +68,7 @@ import {
                   alignItems: "flex-end",
                   gap: 20
                 }}
-                onPress={() => Speech.speak(`${NumeroSeleccionada.numero}`)}
+                onPress={() => {if (sonido) Speech.speak(`${NumeroSeleccionada.numero}`)}}
               >
                 <Text style={styles.text}>{NumeroSeleccionada.numero}</Text>
                 <Text style={{...styles.text}}>{"="}</Text>

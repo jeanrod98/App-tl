@@ -23,7 +23,7 @@ import * as Speech from 'expo-speech';
 
 
 const AbecedarioOneGame = ({ dinamica }) => {
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
+  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
 
   const [arregloAbecedario, setArregloAbecedario] = useState([]);
   const [arregloAbecedarioTwo, setArregloAbecedarioTwo] = useState([]);
@@ -34,7 +34,11 @@ const AbecedarioOneGame = ({ dinamica }) => {
   }, []);
 
   const barajearArreglo = async () => {
-    Speech.speak(dinamica);
+
+    if (sonido) {
+      Speech.speak(dinamica);
+    }
+   
 
     let arregloAbecedario = [
       "A",
@@ -119,7 +123,10 @@ const AbecedarioOneGame = ({ dinamica }) => {
 
   const seleccionarCard = (value, tablero) => {
 
-    Speech.speak(`Escogiste la letra ${value}`);
+    if (sonido) {
+      Speech.speak(`Escogiste la letra ${value}`);
+    }
+    
 
 
     if (tablero === "T1") {
@@ -145,7 +152,8 @@ const AbecedarioOneGame = ({ dinamica }) => {
         tipe: "validation",
       });
 
-    Speech.speak(`Debes elegir una letra de cada tablero.`);
+      
+      if (sonido) Speech.speak(`Debes elegir una letra de cada tablero.`);
 
       return;
     };
@@ -159,7 +167,7 @@ const AbecedarioOneGame = ({ dinamica }) => {
         active: true,
         tipe: "validation",
         });
-        Speech.speak(`Ups!, las letras seleccionadas no son iguales, inténtalo de nuevo.`);
+        if (sonido) Speech.speak(`Ups!, las letras seleccionadas no son iguales, inténtalo de nuevo.`);
 
         return;
     };
@@ -194,7 +202,7 @@ const AbecedarioOneGame = ({ dinamica }) => {
                 tipe: "validation",
             });
 
-            Speech.speak(`Has logrado encontrar todos los pares del abecedario. Sigue así y llegarás lejos!.`);
+            if (sonido) Speech.speak(`Has logrado encontrar todos los pares del abecedario. Sigue así y llegarás lejos!.`);
 
 
            

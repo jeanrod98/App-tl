@@ -47,7 +47,7 @@ import * as Speech from 'expo-speech';
 
 
 const TrnsportesOneGame = ({ dinamica }) => {
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
+  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
 
   const [arregloAbecedario, setArregloAbecedario] = useState([]);
   const [arregloAbecedarioTwo, setArregloAbecedarioTwo] = useState([]);
@@ -58,7 +58,11 @@ const TrnsportesOneGame = ({ dinamica }) => {
   }, []);
 
   const barajearArreglo = async () => {
-    Speech.speak(dinamica);
+
+    if (sonido) {
+      Speech.speak(dinamica);
+    }
+    
 
     setBordeFilaUno("");
     setBordeFilaDos("");
@@ -106,7 +110,7 @@ const TrnsportesOneGame = ({ dinamica }) => {
   const [bordeFilaDos, setBordeFilaDos] = useState("");
 
   const seleccionarCard = (value, fila) => {
-    Speech.speak(value.nombre);
+    if (sonido) {Speech.speak(value.nombre);}
     
     if ( fila === "T1") {
         setBordeFilaUno(value.nombre);
@@ -128,7 +132,7 @@ const TrnsportesOneGame = ({ dinamica }) => {
         active: true,
         tipe: "validation",
       });
-      Speech.speak("Debes elegir dos transportes parecidos.");
+      if (sonido) Speech.speak("Debes elegir dos transportes parecidos.");
 
       return;
     }
@@ -143,7 +147,7 @@ const TrnsportesOneGame = ({ dinamica }) => {
         active: true,
         tipe: "validation",
       });
-      Speech.speak("Ups!, los transportes seleccionados no son iguales, inténtalo de nuevo.");
+      if (sonido) Speech.speak("Ups!, los transportes seleccionados no son iguales, inténtalo de nuevo.");
 
       return;
     }
@@ -178,7 +182,7 @@ const TrnsportesOneGame = ({ dinamica }) => {
           active: true,
           tipe: "validation",
         });
-        Speech.speak("Has logrado encontrar todos los pares de los transportes. Sigue así y llegarás lejos!.");
+        if (sonido) Speech.speak("Has logrado encontrar todos los pares de los transportes. Sigue así y llegarás lejos!.");
 
 
       }

@@ -25,7 +25,7 @@ const MenuLogin = () => {
     const [nameOpcion, setNameOpcion] = useState("INGRESAR");
 
 
-    const { dataAlert, cargando, setAuth, setCargando, inicio } = useAuth();
+    const { dataAlert, cargando, setAuth, setCargando, inicio, sonido } = useAuth();
     
 
     const [dataForm, setDataForm] = useState({
@@ -50,7 +50,9 @@ const MenuLogin = () => {
             <TouchableOpacity
             style={{...styles.boton, backgroundColor: mostrarLogin ? "#303F9F" : "#C5CAE9"}}
             onPress={(e) => {
+              if (sonido) {
                 Speech.speak("INICIAR SESIÓN");
+              }
 
                 setMostrarRegistro(false)
                 setMostrarLogin(true)
@@ -64,7 +66,9 @@ const MenuLogin = () => {
             <TouchableOpacity
             style={{...styles.boton, backgroundColor: mostrarRegistro ? "#303F9F" : "#C5CAE9"}}
             onPress={(e) => {
+              if (sonido) {
                 Speech.speak("REGISTRARSE");
+              }
 
                 setMostrarLogin(false)
                 setMostrarRegistro(true)
@@ -78,7 +82,9 @@ const MenuLogin = () => {
             <TouchableOpacity
             style={{...styles.botonSinConexion, backgroundColor: "#C5CAE9"}}
             onPress={(text) => {
+              if (sonido) {
                 Speech.speak("CONTINUAR SIN CONEXIÓN");
+              }
 
                 setMostrarLogin(true)
                 setMostrarRegistro(false)

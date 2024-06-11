@@ -11,17 +11,12 @@ import {
   } from "react-native";
   import { AntDesign } from "@expo/vector-icons";
   
-  import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
   import { useEffect, useState } from "react";
-  import ComponentOnGame from "./NumerosOnGame";
   import useAuth from "../Hooks/useAuth";
   import Alerts from "./Alerts";
   import fondo_number_2 from "../assets/musica_fondo_2.jpg";
   import { Card } from "react-native-paper";
-  import AbecedarioOneGame from "./AbecedarioOneGame";
-  import ModalAlfabetoDetalles from "./ModalAlfabetoDetalles";
-  import ModalTransporteDetalle from "./ModalTransporteDetalle";
-  
+
 
   import img_guitarra from "../assets/guitarra.jpg";
   import img_piano from "../assets/piano.jpg";
@@ -71,8 +66,6 @@ import {
 
 
 
-
-import ModalAnimalesDetalle from "./ModalAnimalesDetalle";
 import ModalMusicaDetalle from "./ModalMusicaDetalle";
   
   const MusicaAprender = ({ setVerAprender }) => {

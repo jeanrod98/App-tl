@@ -25,15 +25,18 @@ const ModalTransporteDetalle = ({
   opcionSeleccionada,
   setOpcionSeleccionada,
 }) => {
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
+  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
 
   const [arregloAbecedario, setArregloAbecedario] = useState([]);
   const [arregloAbecedarioTwo, setArregloAbecedarioTwo] = useState([]);
   const confettiRef = useRef(null);
 
   useEffect(() => {
-    Speech.speak(`Elegiste el transporte ${opcionSeleccionada.nombre}`);
-    Speech.speak("Presiona el transporte para escuchar su nombre");
+    if (sonido) {
+      Speech.speak(`Elegiste el transporte ${opcionSeleccionada.nombre}`);
+      Speech.speak("Presiona el transporte para escuchar su nombre");
+    }
+    
   }, []);
 
   return (
@@ -43,7 +46,7 @@ const ModalTransporteDetalle = ({
           style={styles.btnClose}
           onPress={() => {
             setOpcionSeleccionada({});
-            Speech.stop();
+            if (sonido) Speech.stop();
           }}
         >
           <AntDesign name="closecircle" size={32} color="red" />
@@ -65,7 +68,7 @@ const ModalTransporteDetalle = ({
                 flexDirection: "row",
                 alignItems: "flex-end",
               }}
-              onPress={() => Speech.speak(`${opcionSeleccionada.nombre}`)}
+              onPress={() => {if (sonido) Speech.speak(`${opcionSeleccionada.nombre}`)}}
             >
               <Image
                 style={{ ...styles.imgCard, width: 100, height: 100 }}
@@ -85,7 +88,7 @@ const ModalTransporteDetalle = ({
               <TouchableOpacity
                 key={index}
                 style={styles.btnText}
-                onPress={() => Speech.speak(`${opcionSeleccionada.nombre}`)}
+                onPress={() => {if (sonido) Speech.speak(`${opcionSeleccionada.nombre}`)}}
               >
                 <Card style={styles.card}>
                   <Image style={styles.imgCard} source={obj} />

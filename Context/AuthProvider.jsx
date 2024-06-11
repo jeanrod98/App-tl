@@ -11,6 +11,7 @@ const AuthProvider = ({ children }) => {
   const [cargando, setCargando] = useState(false);
 
   const [inicio, setInicio] = useState("true");
+  const [sonido, setSonido] = useState(true);
 
   const [dataAlert, setDataAlert] = useState({
     icon: "",
@@ -172,6 +173,8 @@ const AuthProvider = ({ children }) => {
         registrarUsuario,
         login,
         logOut,
+        sonido, 
+        setSonido
       }}
     >
       {children}

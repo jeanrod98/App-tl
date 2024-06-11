@@ -36,7 +36,7 @@ import * as Speech from 'expo-speech';
 
 
 const FrutasOneGame = ({ dinamica }) => {
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
+  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
 
   const [arregloFrutas, setArregloFrutas] = useState([]);
   const confettiRef = useRef(null);
@@ -48,7 +48,11 @@ const FrutasOneGame = ({ dinamica }) => {
   }, []);
 
   const barajearArreglo = async () => {
-    Speech.speak(dinamica);
+
+    if (sonido) {
+      Speech.speak(dinamica);
+
+    }
     setBordeFilaUno("");
     setBordeFilaDos("");
 
@@ -101,7 +105,7 @@ const FrutasOneGame = ({ dinamica }) => {
 
   const seleccionarCard = (value, fila) => {
     
-    Speech.speak(value.nombre);
+    if (sonido) { Speech.speak(value.nombre); }
 
     if (turno === 1) {
       setBordeFilaUno(value.key);
@@ -127,7 +131,7 @@ const FrutasOneGame = ({ dinamica }) => {
         tipe: "validation",
       });
 
-      Speech.speak("Debes elegir dos frutas iguales.");
+      if (sonido) Speech.speak("Debes elegir dos frutas iguales.");
 
       return;
     }
@@ -142,7 +146,7 @@ const FrutasOneGame = ({ dinamica }) => {
         active: true,
         tipe: "validation",
       });
-      Speech.speak("Ups!, las frutas seleccionadas no son iguales, intentalo de nuevo.");
+      if (sonido) Speech.speak("Ups!, las frutas seleccionadas no son iguales, intentalo de nuevo.");
 
       return;
     }
@@ -175,7 +179,7 @@ const FrutasOneGame = ({ dinamica }) => {
           active: true,
           tipe: "validation",
         });
-        Speech.speak("Has logrado encontrar todos los pares de frutas. Sigue así y llegarás lejos!.");
+        if (sonido) Speech.speak("Has logrado encontrar todos los pares de frutas. Sigue así y llegarás lejos!.");
 
       }
     }

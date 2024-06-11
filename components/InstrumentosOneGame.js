@@ -43,7 +43,7 @@ import {
   import * as Speech from 'expo-speech';
 
   const InstrumentosOneGame = ({ dinamica }) => {
-    const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
+    const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
   
     const [arregloNumeros, setArregloNumeros] = useState([]);
     const [resultNumeros, setResultNumeros] = useState([]);
@@ -52,13 +52,16 @@ import {
     const confettiRef = useRef(null);
   
     useEffect(() => {
-    Speech.speak(dinamica);
+      if (sonido) {
+        Speech.speak(dinamica);
+
+      }
     
       generarColorAleatorio();
     }, []);
   
     const generarColorAleatorio = async () => {
-    Speech.speak("¿Qué instrumento sale en la imagen?");
+      if (sonido) { Speech.speak("¿Qué instrumento sale en la imagen?");}
 
       let arregloNumeros = [
         {  nombre: "GUITARRA", source_1: img_guitarra, source_2: instrumento_guitarra },
@@ -117,7 +120,9 @@ import {
             active: true,
             tipe: "validation",
           });
-          Speech.speak("Esa no era la imagen correcta");
+          if (sonido) {
+            Speech.speak("Esa no era la imagen correcta");
+          } 
           // cambiar figuras
           generarColorAleatorio();
           setBotones(false);

@@ -42,7 +42,7 @@ import * as Speech from 'expo-speech';
 
 
 const FigurasOneGame = ({ dinamica }) => {
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
+  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
 
   const [arregloNumeros, setArregloNumeros] = useState([]);
   const [resultNumeros, setResultNumeros] = useState([]);
@@ -56,7 +56,9 @@ const FigurasOneGame = ({ dinamica }) => {
   const confettiRef = useRef(null);
 
   useEffect(() => {
-    Speech.speak(dinamica);
+    if (sonido) {
+      Speech.speak(dinamica); 
+    }
 
     generarFiguraAleatorio();
   }, []);
@@ -85,7 +87,7 @@ const FigurasOneGame = ({ dinamica }) => {
     // console.log(objeto_principal);
     setFiguraCard(objeto_principal);
 
-    Speech.speak(`La figura es un ${objeto_principal.nombre}?`);
+    if (sonido) Speech.speak(`La figura es un ${objeto_principal.nombre}?`);
     
   };
 
@@ -115,7 +117,9 @@ const FigurasOneGame = ({ dinamica }) => {
         active: true,
         tipe: "validation",
       });
-    Speech.speak(`Esa no era la figura correcta`);
+      if (sonido) {
+        Speech.speak(`Esa no era la figura correcta`);
+      }
       
       setBotones(false);
 

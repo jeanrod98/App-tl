@@ -29,15 +29,18 @@ import {
     opcionSeleccionada,
     setOpcionSeleccionada,
   }) => {
-    const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
+    const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
   
     const [arregloAbecedario, setArregloAbecedario] = useState([]);
     const [arregloAbecedarioTwo, setArregloAbecedarioTwo] = useState([]);
     const confettiRef = useRef(null);
   
     useEffect(() => {
-      Speech.speak(`Elegiste ${opcionSeleccionada.nombre}`);
-      Speech.speak(`Presiona el instrumento para escuchar su sonido`);
+      if (sonido) {
+        Speech.speak(`Elegiste ${opcionSeleccionada.nombre}`);
+        Speech.speak(`Presiona el instrumento para escuchar su sonido`);
+      }
+      
     }, []);
   
     const reproducirSonido = async () => {
@@ -59,7 +62,7 @@ import {
             style={styles.btnClose}
             onPress={() => {
               setOpcionSeleccionada({});
-              Speech.stop();
+              if (sonido) Speech.stop();
             }}
           >
             <AntDesign name="closecircle" size={32} color="red" />
@@ -81,7 +84,7 @@ import {
                   flexDirection: "row",
                   alignItems: "flex-end",
                 }}
-                onPress={() => Speech.speak(`${opcionSeleccionada.nombre}`)}
+                onPress={() => {if (sonido) Speech.speak(`${opcionSeleccionada.nombre}`)}}
               >
                 <Image
                   style={{ ...styles.imgCard, width: 80, height: 80 }}

@@ -48,7 +48,7 @@
 
 
   const VocalOneGame = ({ dinamica }) => {
-    const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
+    const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
   
     const [arregloNumeros, setArregloNumeros] = useState([]);
     const [resultNumeros, setResultNumeros] = useState([]);
@@ -62,7 +62,10 @@
     }, []);
   
     const generarObjetosAleatorio = async () => {
-      Speech.speak(dinamica);
+      if (sonido) {
+        Speech.speak(dinamica);
+
+      }
 
         let arregloImagenes = [
             { nombre: "A", sources: [{img: img_avion, name: "Avión"}, {img: img_arania, name: "Araña"}, {img: img_arbol, name: "Árbol"}] },
@@ -95,7 +98,7 @@
       setObjetos(shuffle(arrFinal))
       // console.log(objetos);
   
-      Speech.speak(`¿Con qué vocal se escribe ${source_principal?.name}?`);
+      if (sonido) Speech.speak(`¿Con qué vocal se escribe ${source_principal?.name}?`);
 
     };
   
@@ -118,7 +121,7 @@
   const seleccionarCard = (objeto) => {
     setVocalSeleccionada(objeto);
     // console.log(objeto);
-    Speech.speak(objeto.key);
+    if (sonido) Speech.speak(objeto.key);
 
   }
   
@@ -141,7 +144,7 @@
           });
 
           // Speech.speak("Esa no era la vocal correcta.");
-          Speech.speak("Esa vocal no es la correcta para esta imagen, inténtalo con la otra opción.");
+          if (sonido) {Speech.speak("Esa vocal no es la correcta para esta imagen, inténtalo con la otra opción.");}
 
           // cambiar figuras
         //   generarObjetosAleatorio();

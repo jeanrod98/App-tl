@@ -15,7 +15,7 @@ import * as Speech from 'expo-speech';
 
 const NumerosOnGame = ({ dinamica }) => {
 
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
+  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
 
   const [arregloNumeros, setArregloNumeros] = useState([]);
   const [resultNumeros, setResultNumeros] = useState([]);
@@ -27,8 +27,12 @@ const NumerosOnGame = ({ dinamica }) => {
   }, []);
 
   const prepararNumeros = () => {
-    Speech.speak(dinamica);
-    Speech.speak("Selecciona un número");
+
+    if (sonido) {
+      Speech.speak(dinamica);
+      Speech.speak("Selecciona un número");
+    }
+    
 
     let arregloNumeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -79,7 +83,7 @@ const NumerosOnGame = ({ dinamica }) => {
         active: true,
         tipe: "validation",
       });
-      Speech.speak("Debes agregar 10 números.");
+      if (sonido) Speech.speak("Debes agregar 10 números.");
 
       return
     };
@@ -106,7 +110,7 @@ const NumerosOnGame = ({ dinamica }) => {
         active: true,
         tipe: "validation",
       });
-      Speech.speak("Has logrado ordenar los números del 1 al 10. Sigue así y llegarás lejos!.");
+      if (sonido) Speech.speak("Has logrado ordenar los números del 1 al 10. Sigue así y llegarás lejos!.");
 
       
     }else{
@@ -117,7 +121,7 @@ const NumerosOnGame = ({ dinamica }) => {
         active: true,
         tipe: "validation",
       });
-      Speech.speak("Ups! Los números no se encuentran ordenados.");
+      if (sonido) Speech.speak("Ups! Los números no se encuentran ordenados.");
 
     };
   };

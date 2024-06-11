@@ -1,11 +1,13 @@
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 
-import { AntDesign } from "@expo/vector-icons";
+import { Entypo  } from "@expo/vector-icons";
 import useAuth from "../Hooks/useAuth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 
 import * as Speech from "expo-speech";
+import { useState } from "react";
+import Config from "../screens/Config";
 
 const FooterApp = ({ ruta, name, data, setDataForm }) => {
   const {
@@ -17,6 +19,8 @@ const FooterApp = ({ ruta, name, data, setDataForm }) => {
     option,
     setOption,
     setDataAlert,
+    sonido, 
+    setSonido
   } = useAuth();
 
   const handleNex = async () => {
@@ -40,7 +44,8 @@ const FooterApp = ({ ruta, name, data, setDataForm }) => {
           active: true,
           tipe: "validation",
         });
-        Speech.speak("Todos los campos son obligatorios!");
+        if (sonido) Speech.speak("Todos los campos son obligatorios!");
+        
         return;
       }
       // ! Validar registro correo
@@ -54,11 +59,12 @@ const FooterApp = ({ ruta, name, data, setDataForm }) => {
           active: true,
           tipe: "validation",
         });
-        Speech.speak("El formato del correo no es el correcto!");
+        if (sonido) Speech.speak("El formato del correo no es el correcto!");
+        
         return;
       }
 
-      console.log(data);
+      // console.log(data);
       if (data.rptPassword !== data.password) {
         setDataAlert({
           icon: "error",
@@ -67,7 +73,10 @@ const FooterApp = ({ ruta, name, data, setDataForm }) => {
           active: true,
           tipe: "validation",
         });
-        Speech.speak("Las contraseña no coinciden.");
+
+        if (sonido) Speech.speak("Las contraseña no coinciden.");
+
+        
         return;
       }
 
@@ -93,7 +102,9 @@ const FooterApp = ({ ruta, name, data, setDataForm }) => {
           active: true,
           tipe: "validation",
         });
-        Speech.speak("Todos los campos son obligatorios!");
+        if (sonido)  Speech.speak("Todos los campos son obligatorios!");
+
+       
         return;
       }
       // ! Validar Login correo
@@ -107,7 +118,9 @@ const FooterApp = ({ ruta, name, data, setDataForm }) => {
           active: true,
           tipe: "validation",
         });
-        Speech.speak("El formato del correo no es el correcto!");
+        if (sonido)  Speech.speak("El formato del correo no es el correcto!");
+
+        
         return;
       }
 
@@ -126,7 +139,9 @@ const FooterApp = ({ ruta, name, data, setDataForm }) => {
           detalle: "Debes elegir una opción del menú para continuar!",
           active: true,
         });
-        Speech.speak("Debes elegir una opción del menú para continuar!");
+        if (sonido)  Speech.speak("Debes elegir una opción del menú para continuar!");
+
+        
 
         return;
       }
@@ -135,24 +150,41 @@ const FooterApp = ({ ruta, name, data, setDataForm }) => {
     }
   };
 
-  const mostrarAyuda = () => {
-    alert("Mostrar Ayuda");
+  const activarSonido = () => {
+    if (sonido) {
+        setSonido(false);
+    } else{
+      setSonido(true);
+
+    }
+    
   };
 
+  const [ mostrarSetting, setMostrarSetting] = useState(false)
   const mostrarSettings = () => {
-    alert("Mostrar Configuracion");
+    setMostrarSetting(true);
+
   };
 
   return (
+    <>
     <View style={styles.container}>
       <View style={{ display: "flex", flexDirection: "row", gap: 20 }}>
-        <TouchableOpacity onPress={mostrarAyuda}>
-          <AntDesign
-            name="questioncircle"
+        <TouchableOpacity onPress={activarSonido}>
+          {
+            sonido ? <Entypo 
+            name="sound"
+            size={24}
+            color="#fff"
+            
+          /> : <Entypo 
+            name="sound-mute"
             size={24}
             color="#fff"
             
           />
+          }
+          
         </TouchableOpacity>
 
         <TouchableOpacity onPress={mostrarSettings}>
@@ -177,6 +209,10 @@ const FooterApp = ({ ruta, name, data, setDataForm }) => {
       )} */}
       </View>
     </View>
+
+    { mostrarSetting && <Config setMostrarSetting={setMostrarSetting} />}
+    </>
+
   );
 };
 

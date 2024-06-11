@@ -29,15 +29,18 @@ import {
     opcionSeleccionada,
     setOpcionSeleccionada,
   }) => {
-    const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
+    const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido} = useAuth();
   
     const [arregloAbecedario, setArregloAbecedario] = useState([]);
     const [arregloAbecedarioTwo, setArregloAbecedarioTwo] = useState([]);
     const confettiRef = useRef(null);
   
     useEffect(() => {
-      Speech.speak(`Elegiste la figura ${opcionSeleccionada.nombre}`);
-      Speech.speak(`Presiona la imagen para saber lo que es`);
+      if (sonido) {
+        Speech.speak(`Elegiste la figura ${opcionSeleccionada.nombre}`);
+        Speech.speak(`Presiona la imagen para saber lo que es`);
+      }
+      
     }, []);
   
     
@@ -49,7 +52,7 @@ import {
             style={styles.btnClose}
             onPress={() => {
               setOpcionSeleccionada({});
-              Speech.stop();
+              if (sonido) Speech.stop();
             }}
           >
             <AntDesign name="closecircle" size={32} color="red" />
@@ -71,7 +74,7 @@ import {
                   flexDirection: "row",
                   alignItems: "flex-end",
                 }}
-                onPress={() => Speech.speak(`${opcionSeleccionada.nombre}`)}
+                onPress={() => {if (sonido) Speech.speak(`${opcionSeleccionada.nombre}`)}}
               >
                 <Image
                   style={{ ...styles.imgCard, width: 80, height: 80 }}
@@ -91,7 +94,7 @@ import {
                 <TouchableOpacity
                   key={index}
                   style={styles.btnText}
-                  onPress={() => Speech.speak(`${obj.objeto}, tiene la forma de un ${opcionSeleccionada.nombre}`) }
+                  onPress={() => {if (sonido) Speech.speak(`${obj.objeto}, tiene la forma de un ${opcionSeleccionada.nombre}`)} }
                 >
                   <Card style={styles.card}>
                     <Image style={styles.imgCard} source={obj.img} />

@@ -26,7 +26,7 @@ import * as Speech from 'expo-speech';
 
 
 const Menu = () => {
-  const { setAuth, logOut, cargando, auth, dataAlert, option, setOption } = useAuth();
+  const { setAuth, logOut, cargando, auth, dataAlert, option, setOption, sonido } = useAuth();
 
  
 
@@ -34,7 +34,7 @@ const Menu = () => {
     // console.log(option);
     // PREGUNTAR POR CADA CASO
 // console.log(option);
-    Speech.speak(option);
+    if (sonido) {Speech.speak(option);}
 
 
     if(option === "ALFABETO"){

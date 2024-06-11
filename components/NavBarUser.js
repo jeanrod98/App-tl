@@ -6,11 +6,15 @@ import Alerts from "./Alerts";
 import * as Speech from 'expo-speech';
 
 const NavBarUser = () => {
-  const { auth, logOut, dataAlert, setDataAlert } = useAuth();
+  const { auth, logOut, dataAlert, setDataAlert, sonido } = useAuth();
 
 //   console.log(auth);
   const salir = () => {
-    Speech.speak("¿Estás seguro de salir o cerrar la sesión?");
+
+    if (sonido) {
+      Speech.speak("¿Estás seguro de salir o cerrar la sesión?");
+
+    }
 
     setDataAlert({
       icon: "error",

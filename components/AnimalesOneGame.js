@@ -44,7 +44,7 @@ import { Audio } from 'expo-av';
 import * as Speech from 'expo-speech';
 
 const AnimalesOneGame = ({ dinamica}) => {
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
+  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
 
   const [arregloNumeros, setArregloNumeros] = useState([]);
   const [resultNumeros, setResultNumeros] = useState([]);
@@ -57,8 +57,12 @@ const AnimalesOneGame = ({ dinamica}) => {
   }, []);
 
   const generarColorAleatorio = async () => {
-    Speech.speak(dinamica);
-    Speech.speak("¿Qué animal es?");
+
+    if (sonido) {
+      Speech.speak(dinamica);
+      Speech.speak("¿Qué animal es?");
+    }
+    
 
     let arregloNumeros = [
       { nombre: "PERRO", source_1: img_perro, audio: sonido_perro },

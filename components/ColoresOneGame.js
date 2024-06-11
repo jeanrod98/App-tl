@@ -35,7 +35,7 @@ import * as Speech from 'expo-speech';
 
 
 const ColoresOneGame = ({ dinamica }) => {
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow } = useAuth();
+  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
 
   const [arregloNumeros, setArregloNumeros] = useState([]);
   const [resultNumeros, setResultNumeros] = useState([]);
@@ -44,7 +44,10 @@ const ColoresOneGame = ({ dinamica }) => {
   const confettiRef = useRef(null);
 
   useEffect(() => {
-    Speech.speak(dinamica);
+    if (sonido){
+      Speech.speak(dinamica);
+    }
+   
   
     generarColorAleatorio();
   }, []);
@@ -111,8 +114,11 @@ const ColoresOneGame = ({ dinamica }) => {
           active: true,
           tipe: "validation",
         });
-        Speech.speak(`Esa no era la imagen correcta`);
-        Speech.speak(`Lo intentaremos en la próxima ocación.`);
+        if (sonido) {
+          Speech.speak(`Esa no era la imagen correcta`);
+          Speech.speak(`Lo intentaremos en la próxima ocación.`);
+        }
+        
 
         // cambiar figuras
         generarColorAleatorio();
@@ -145,7 +151,7 @@ const ColoresOneGame = ({ dinamica }) => {
         active: true,
         tipe: "validation",
       });
-      Speech.speak(`Debes agregar 10 números.`);
+      if (sonido) Speech.speak(`Debes agregar 10 números.`);
 
       return;
     }
@@ -169,7 +175,7 @@ const ColoresOneGame = ({ dinamica }) => {
         active: true,
         tipe: "validation",
       });
-      Speech.speak(`Has logrado ordenar los números del 1 al 10. Sigue así y llegarás lejos!.`);
+      if (sonido) Speech.speak(`Has logrado ordenar los números del 1 al 10. Sigue así y llegarás lejos!.`);
 
     } else {
       setDataAlert({
@@ -179,7 +185,7 @@ const ColoresOneGame = ({ dinamica }) => {
         active: true,
         tipe: "validation",
       });
-      Speech.speak(`Ups! Los números no se encuentran ordenados.`);
+      if (sonido) Speech.speak(`Ups! Los números no se encuentran ordenados.`);
 
     }
   };
