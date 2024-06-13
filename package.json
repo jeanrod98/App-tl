@@ -15,12 +15,13 @@
     "expo": "^51.0.8",
     "expo-av": "~14.0.5",
     "expo-screen-orientation": "~7.0.5",
+    "expo-speech": "~12.0.2",
     "expo-status-bar": "~1.12.1",
     "lottie-react-native": "^6.7.2",
     "react": "18.2.0",
     "react-native": "0.74.1",
-    "react-native-paper": "^5.12.3",
-    "expo-speech": "~12.0.2"
+    "react-native-dropdown-select-list": "^2.0.5",
+    "react-native-paper": "^5.12.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
