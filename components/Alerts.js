@@ -7,30 +7,38 @@ import {
 } from "react-native";
 
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
-import { FontAwesome6 } from '@expo/vector-icons';
+import { FontAwesome6 } from "@expo/vector-icons";
 
 import useAuth from "../Hooks/useAuth";
 
-
-
 const Alerts = ({ tipe }) => {
-  const { dataAlert, setDataAlert, logOut, setOption, setConffetiShow, auth, actualizarPerfil, cambiarPassword } = useAuth();
+  const {
+    dataAlert,
+    setDataAlert,
+    logOut,
+    setOption,
+    setConffetiShow,
+    auth,
+    actualizarPerfil,
+    cambiarPassword,
+    registrarCliente,
+    actualizarCliente,
+    deleteCliente
+  } = useAuth();
 
   const salir = () => {
-
-
     setDataAlert({
       icon: "",
       tittle: "",
       detalle: "",
       active: false,
-      tipe: ""
+      tipe: "",
     });
 
     setOption({
       activo: false,
       nameOption: "",
-      next: false
+      next: false,
     });
   };
 
@@ -41,48 +49,71 @@ const Alerts = ({ tipe }) => {
       tittle: "",
       detalle: "",
       active: false,
-      tipe: ""
+      tipe: "",
     });
   };
 
   const actualizarInformacionPerfil = async () => {
     cerrarAlert();
     await actualizarPerfil();
-
-  }
+  };
 
   const actualizarPassword = async () => {
     cerrarAlert();
     await cambiarPassword();
+  };
 
-  }
+  const crearCliente = async () => {
+    cerrarAlert();
+    await registrarCliente(dataAlert.cli);
+  };
+  const modificarCliente = async () => {
+    cerrarAlert();
+    await actualizarCliente(dataAlert.cli);
+  };
+
+  const eliminarCliente = async () => {
+    cerrarAlert();
+    await deleteCliente(dataAlert.cli_id);
+  };
 
   return (
     <View style={styles.containerAlert}>
       <View style={styles.card}>
-        {dataAlert.icon === "success" && 
+        {dataAlert.icon === "success" && (
           <AntDesign name="checkcircle" size={32} color="green" />
-        }
-        {dataAlert.icon === "error" && 
+        )}
+        {dataAlert.icon === "error" && (
           <MaterialIcons name="error" size={32} color="orange" />
-        }
-        {dataAlert.icon === "danger" && 
+        )}
+        {dataAlert.icon === "danger" && (
           // <MaterialIcons name="error" size={32} color="orange" />
           <MaterialIcons name="dangerous" size={32} color="red" />
-        }
-        {dataAlert.icon === "sad" &&
+        )}
+        {dataAlert.icon === "sad" && (
           <FontAwesome6 name="face-sad-cry" size={32} color="red" />
-        }
+        )}
         <Text style={styles.tittle}>{dataAlert.tittle}</Text>
         <Text style={styles.description}>{dataAlert.detalle}</Text>
 
         <View style={{ display: "flex", flexDirection: "row", gap: 15 }}>
           <TouchableOpacity
             style={styles.button}
-            onPress={dataAlert.tipe === "validation" || dataAlert.tipe === "actualizar" ? cerrarAlert : salir}
+            onPress={
+              dataAlert.tipe === "validation" || dataAlert.tipe === "actualizar"
+                ? cerrarAlert
+                : salir
+            }
           >
             <Text style={styles.textBtn}>
-              {dataAlert.tipe === "question" || dataAlert.tipe === "actualizar" || dataAlert.tipe === "actualizar-password" ? "Cancelar" : "Aceptar"}
+              {dataAlert.tipe === "question" ||
+              dataAlert.tipe === "actualizar" ||
+              dataAlert.tipe === "actualizar-password" ||
+              dataAlert.tipe === "crear-cliente" ||
+              dataAlert.tipe === "actualizar-cliente" ||
+              dataAlert.tipe === "eliminar-cliente"
+                ? "Cancelar"
+                : "Aceptar"}
             </Text>
           </TouchableOpacity>
 
@@ -95,25 +126,50 @@ const Alerts = ({ tipe }) => {
             </TouchableOpacity>
           )}
 
-          { dataAlert.tipe === 'actualizar' && 
-          <TouchableOpacity
-          style={{ ...styles.button, backgroundColor: "#3ECC57" }}
-          onPress={actualizarInformacionPerfil}
-        >
-          <Text style={{ ...styles.textBtn, color: "#fff" }}>Aceptar</Text>
-        </TouchableOpacity>
-      
-          }
-
-          {
-            dataAlert.tipe === 'actualizar-password' && 
+          {dataAlert.tipe === "actualizar" && (
             <TouchableOpacity
-            style={{ ...styles.button, backgroundColor: "#3ECC57" }}
-            onPress={actualizarPassword}
-          >
-            <Text style={{ ...styles.textBtn, color: "#fff" }}>Aceptar</Text>
-          </TouchableOpacity>
-          }
+              style={{ ...styles.button, backgroundColor: "#3ECC57" }}
+              onPress={actualizarInformacionPerfil}
+            >
+              <Text style={{ ...styles.textBtn, color: "#fff" }}>Aceptar</Text>
+            </TouchableOpacity>
+          )}
+
+          {dataAlert.tipe === "actualizar-password" && (
+            <TouchableOpacity
+              style={{ ...styles.button, backgroundColor: "#3ECC57" }}
+              onPress={actualizarPassword}
+            >
+              <Text style={{ ...styles.textBtn, color: "#fff" }}>Aceptar</Text>
+            </TouchableOpacity>
+          )}
+
+          {dataAlert.tipe === "crear-cliente" && (
+            <TouchableOpacity
+              style={{ ...styles.button, backgroundColor: "#3ECC57" }}
+              onPress={crearCliente}
+            >
+              <Text style={{ ...styles.textBtn, color: "#fff" }}>Aceptar</Text>
+            </TouchableOpacity>
+          )}
+
+          {dataAlert.tipe === "actualizar-cliente" && (
+            <TouchableOpacity
+              style={{ ...styles.button, backgroundColor: "#3ECC57" }}
+              onPress={modificarCliente}
+            >
+              <Text style={{ ...styles.textBtn, color: "#fff" }}>Aceptar</Text>
+            </TouchableOpacity>
+          )}
+
+          {dataAlert.tipe === "eliminar-cliente" && (
+            <TouchableOpacity
+              style={{ ...styles.button, backgroundColor: "#FF504A" }}
+              onPress={eliminarCliente}
+            >
+              <Text style={{ ...styles.textBtn, color: "#fff" }}>Eliminar</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>

@@ -29,29 +29,43 @@ const Cuenta = ({ setMostrar }) => {
 
   
   const [mostrarCambioPassword, setMostrarCambioPassword] = useState(false);
-  const [selected, setSelected] = useState(auth?.tipo_usu);
-  // console.log(auth.tipo_usu);
+  const [selected, setSelected] = useState(auth?.tipo);
+  // console.log(auth.tipo);
 
   const [editar, setEditar] = useState(false);
   const [data, setdata] = useState([
     { key: "1", value: "Regular" },
-    { key: "2", value: "Avanzada" },
+    { key: "2", value: "Terapeuta" },
   ]);
 
   const actualizarInformacion = () => {
     // console.log(usuarioModificado);
     // Validar que el usuario quiera actualizar su informacion
 
-    setDataAlert({
-      icon: "error",
-      tipe: "actualizar",
-      tittle: "Actualizar la información",
-      detalle: "¿Estás seguro de actualizar la información de esta cuenta?",
-      active: true,
-    });
+    if (auth.tipo === "Cliente") {
+      setDataAlert({
+        icon: "error",
+        tipe: "actualizar-cliente",
+        tittle: "Actualizar el cliente?",
+        detalle: "¿Estás seguro de actualizar la información del cliente?",
+        active: true,
+        cli: usuarioModificado,
+        perfil_cli_modificado: true
+      });
+    }else{
+      setDataAlert({
+        icon: "error",
+        tipe: "actualizar",
+        tittle: "Actualizar la información",
+        detalle: "¿Estás seguro de actualizar la información de esta cuenta?",
+        active: true,
+      });
+    }
+
+    
   }
 
-
+// console.log(auth);
 
   return (
     <>
@@ -84,17 +98,17 @@ const Cuenta = ({ setMostrar }) => {
 
             <View style={styles.card}>
               <Text style={styles.label}>Tipo de cuenta:</Text>
-              {editar  ? (
+              {editar && auth?.tipo !== "Cliente"  ? (
                 <SelectList
                   setSelected={(val) =>{ 
                     // console.log(selected);
                     setSelected(val)
-                    setUsaurioModificado({...usuarioModificado, "tipo_usu" : val})
+                    setUsaurioModificado({...usuarioModificado, "tipo" : val})
                   }}
                   data={data}
                   save="value"
                   search={false}
-                  defaultOption={{key: auth?.tipo_usu, value: auth?.tipo_usu }}
+                  defaultOption={{key: auth?.tipo, value: auth?.tipo }}
                   // maxHeight={40}
                   boxStyles={{
                     borderRadius: 0,
@@ -111,7 +125,7 @@ const Cuenta = ({ setMostrar }) => {
                 <TextInput
                   style={styles.input}
                   placeholder="Tipo de cuenta"
-                  value={auth?.tipo_usu}
+                  value={auth?.tipo}
                   editable={false}
                   
                 />
@@ -123,30 +137,30 @@ const Cuenta = ({ setMostrar }) => {
                 style={styles.input}
                 placeholder="Nombre"
                 editable={editar}
-                value={usuarioModificado?.nombres_usu}
-                onChangeText={(text) => setUsaurioModificado({...usuarioModificado, "nombres_usu" : text})}
+                value={usuarioModificado?.nombres}
+                onChangeText={(text) => setUsaurioModificado({...usuarioModificado, "nombres" : text})}
               />
               <Text style={styles.label}>Correo:</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Correo"
                 editable={editar}
-                value={usuarioModificado?.correo_usu}
-                onChangeText={(text) => setUsaurioModificado({...usuarioModificado, "correo_usu" : text})}
+                value={usuarioModificado?.correo}
+                onChangeText={(text) => setUsaurioModificado({...usuarioModificado, "correo" : text})}
 
 
               />
             </View>
 
-            {selected === "Avanzada" && (
+            {selected === "Terapeuta" || auth.tipo === "Cliente" ? (
               <View style={styles.card}>
                 <Text style={styles.label}>Cédula:</Text>
                 <TextInput
                   style={styles.input}
                   placeholder="Cédula"
                   editable={editar}
-                  value={usuarioModificado?.cedula_usu}
-                onChangeText={(text) => setUsaurioModificado({...usuarioModificado, "cedula_usu" : text})}
+                  value={usuarioModificado?.cedula}
+                onChangeText={(text) => setUsaurioModificado({...usuarioModificado, "cedula" : text})}
 
 
                 />
@@ -155,8 +169,8 @@ const Cuenta = ({ setMostrar }) => {
                   style={styles.input}
                   placeholder="Teléfono"
                   editable={editar}
-                  value={usuarioModificado?.telefono_usu}
-                onChangeText={(text) => setUsaurioModificado({...usuarioModificado, "telefono_usu" : text})}
+                  value={usuarioModificado?.telefono}
+                onChangeText={(text) => setUsaurioModificado({...usuarioModificado, "telefono" : text})}
 
 
                 />
@@ -165,13 +179,14 @@ const Cuenta = ({ setMostrar }) => {
                   style={styles.input}
                   placeholder="Dirección"
                   editable={editar}
-                  value={usuarioModificado?.direccion_usu}
-                onChangeText={(text) => setUsaurioModificado({...usuarioModificado, "direccion_usu" : text})}
+                  value={usuarioModificado?.direccion}
+                onChangeText={(text) => setUsaurioModificado({...usuarioModificado, "direccion" : text})}
 
 
                 />
               </View>
-            )}
+            )
+          : null }
             {/* </ScrollView> */}
           </View>
           <View style={{...styles.formBotones, justifyContent: editar ? "space-between" : "flex-end", }}>
@@ -189,7 +204,7 @@ const Cuenta = ({ setMostrar }) => {
                   style={{ ...styles.boton, backgroundColor: "grey" }}
                   onPress={() => {
                     setEditar(false)
-                    setSelected(auth?.tipo_usu)
+                    setSelected(auth?.tipo)
                   }}
                 >
                   <Text style={{...styles.txtBoton, color: "#fff",}}>Salir</Text>

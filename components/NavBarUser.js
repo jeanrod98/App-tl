@@ -27,8 +27,8 @@ const NavBarUser = () => {
   return (
     <View style={styles.container}>
       <View style={styles.datosUsuario}>
-        <Text style={styles.usuario}>{auth?.nombres_usu}</Text>
-        <Text style={styles.tipo}>{auth?.tipo_usu}</Text>
+        <Text style={styles.usuario}>{auth?.nombres}</Text>
+        <Text style={styles.tipo}>{auth?.tipo}</Text>
       </View>
 
       <TouchableOpacity style={styles.boton} onPress={salir}>

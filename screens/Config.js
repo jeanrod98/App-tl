@@ -16,7 +16,7 @@ const Config = ({ setMostrarSetting }) => {
 
   useEffect(() => {
     if (sonido) Speech.speak("CONFIGURACIÓN");
-    console.log(auth);
+    // console.log(auth);
   }, []);
 
   return (
@@ -38,7 +38,7 @@ const Config = ({ setMostrarSetting }) => {
           </View>
 
           <View style={styles.opcionesContenedor}>
-            {auth.tipo_usu && auth?.tipo_usu !== "Invitado" ? (
+            {auth.tipo && auth?.tipo !== "Invitado" ? (
               <TouchableOpacity
                 style={styles.opciones}
                 onPress={() => setMostrar("cuenta")}
@@ -50,7 +50,7 @@ const Config = ({ setMostrarSetting }) => {
           :
           null}
 
-            {auth?.tipo_usu === "Avanzada" && (
+            {auth?.tipo === "Terapeuta" && (
               <>
                 <TouchableOpacity
                   style={styles.opciones}

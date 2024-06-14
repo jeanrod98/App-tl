@@ -16,79 +16,100 @@ import img_fondo from "../assets/fondo_clientes.jpg";
 import { Card } from "react-native-paper";
 
 const Clientes = ({ setMostrar }) => {
-  const { sonido, dataAlert, setDataAlert } = useAuth();
+  const {
+    sonido,
+    dataAlert,
+    setDataAlert,
+    registrarCliente,
+    actualizarCliente,
+    clientes,
+  } = useAuth();
 
-
-  const arr = [
-    {
-      nombre_usu: "Jean Rodriguez",
-      correo_usu: "jcrod@gmail.com",
-      cedula_usu: "1314567738",
-      telefono_usu: "n/a",
-      direccion_usu: "n/a",
-      tipo_usu: "cliente"
-
-    },
-    {
-      nombre_usu: "John Rodriguez",
-      correo_usu: "jcrod@gmail.com",
-      cedula_usu: "n/a",
-      telefono_usu: "n/a",
-      direccion_usu: "n/a",
-      tipo_usu: "cliente"
-
-    },
-    {
-      nombre_usu: "Juan Rodriguez",
-      correo_usu: "jcrod@gmail.com",
-      cedula_usu: "n/a",
-      telefono_usu: "n/a",
-      direccion_usu: "n/a",
-      tipo_usu: "cliente"
-
-    },
-    {
-      nombre_usu: "Jose Rodriguez",
-      correo_usu: "jcrod@gmail.com",
-      cedula_usu: "n/a",
-      telefono_usu: "n/a",
-      direccion_usu: "n/a",
-      tipo_usu: "cliente"
-
-    },
-    {
-      nombre_usu: "Alex Rodriguez",
-      correo_usu: "jcrod@gmail.com",
-      cedula_usu: "n/a",
-      telefono_usu: "n/a",
-      direccion_usu: "n/a",
-      tipo_usu: "cliente"
-
-    },
-  ]
-
-  const [client, setClient] = useState(arr);
+  // Llenar este estado con registros de la bd
+  const [client, setClient] = useState([]);
 
   const [nuevoCliente, setNuevoCliente] = useState({
-      nombre_usu: "",
-      correo_usu: "",
-      cedula_usu: "",
-      telefono_usu: "",
-      direccion_usu: "",
-      tipo_usu: "cliente"
-    });
-
+    nombres: "",
+    correo: "",
+    cedula: "",
+    telefono: "",
+    direccion: "",
+    tipo: "Cliente",
+  });
 
   useEffect(() => {
     if (sonido) Speech.speak("Clientes");
-  }, []);
+    setClient(clientes);
+    // console.log("Actualizado");
+  }, [clientes]);
+
+  const registrarNuevoCliente = async () => {
+    // !Validaciones
+    if (
+      nuevoCliente.cedula === "" ||
+      nuevoCliente.nombres === "" ||
+      nuevoCliente.correo === "" ||
+      nuevoCliente.telefono === "" ||
+      nuevoCliente.direccion === ""
+    ) {
+      setDataAlert({
+        icon: "error",
+        tittle: "Validación",
+        detalle: "Los campos son obligatorios.",
+        active: true,
+        tipe: "validation",
+      });
+
+      return;
+    }
+
+    const expresionCorreo = /^[^@]+@[^@]+\.[a-zA-Z]{2,}$/;
+    // validar el formato de correo
+    if (!expresionCorreo.test(nuevoCliente.correo)) {
+      setDataAlert({
+        icon: "error",
+        tittle: "Validación",
+        detalle: "El formato del correo no es el correcto!",
+        active: true,
+        tipe: "validation",
+      });
+
+      return;
+    }
+
+    if (modificar) {
+      // console.log("Modificando");
+      setDataAlert({
+        icon: "error",
+        tipe: "actualizar-cliente",
+        tittle: "Actualizar el cliente?",
+        detalle: "¿Estás seguro de actualizar la información del cliente?",
+        active: true,
+        cli: nuevoCliente,
+      });
+
+      // console.log(nuevoCliente);
+    } else {
+      // console.log("Registrando");
+      setDataAlert({
+        icon: "error",
+        tipe: "crear-cliente",
+        tittle: "Registro de cliente",
+        detalle: "¿Estás seguro de registrar un nuevo cliente?",
+        active: true,
+        cli: nuevoCliente,
+      });
+
+      // console.log(nuevoCliente);
+    }
+  };
 
   const [registroSelect, setRegistroSelect] = useState("");
   const [modificar, setModificar] = useState(false);
+
   const filtrar = async () => {
     //! Validar que sea una cedula
-    if (registroSelect === '' || registroSelect.length == 0) {
-      
+    if (registroSelect === "" || registroSelect.length == 0) {
       setDataAlert({
         icon: "error",
         tittle: "Validación",
@@ -99,8 +120,23 @@ const Clientes = ({ setMostrar }) => {
       return;
     }
 
-    const res = await client.filter((cli) => cli.cedula_usu === registroSelect);
+    const res = await clientes.filter(
+      (cli) => cli.cedula_cli === registroSelect
+    );
     setClient(res);
+  };
+
+  const eliminarCliente = () => {
+
+    setDataAlert({
+      icon: "error",
+      tipe: "eliminar-cliente",
+      tittle: "Eliminar cliente",
+      detalle: "¿Estás seguro de eliminar este cliente?",
+      active: true,
+      cli_id: nuevoCliente._id,
+    });
+
   };
 
   return (
@@ -144,8 +180,10 @@ const Clientes = ({ setMostrar }) => {
                   style={styles.input}
                   placeholder="Cédula"
                   editable={true}
-                  onChangeText={(text) => setNuevoCliente({...nuevoCliente, "cedula_usu" : text})}
-                  value={nuevoCliente.cedula_usu}
+                  onChangeText={(text) =>
+                    setNuevoCliente({ ...nuevoCliente, cedula: text })
+                  }
+                  value={nuevoCliente.cedula}
                 />
               </View>
 
@@ -155,8 +193,10 @@ const Clientes = ({ setMostrar }) => {
                   style={styles.input}
                   placeholder="Nombres"
                   editable={true}
-                  onChangeText={(text) => setNuevoCliente({...nuevoCliente, "nombre_usu" : text})}
-                  value={nuevoCliente.nombre_usu}
+                  onChangeText={(text) =>
+                    setNuevoCliente({ ...nuevoCliente, nombres: text })
+                  }
+                  value={nuevoCliente.nombres}
                 />
               </View>
 
@@ -166,8 +206,10 @@ const Clientes = ({ setMostrar }) => {
                   style={styles.input}
                   placeholder="Correo"
                   editable={true}
-                  onChangeText={(text) => setNuevoCliente({...nuevoCliente, "correo_usu" : text})}
-                  value={nuevoCliente.correo_usu}
+                  onChangeText={(text) =>
+                    setNuevoCliente({ ...nuevoCliente, correo: text })
+                  }
+                  value={nuevoCliente.correo}
                 />
               </View>
 
@@ -177,8 +219,10 @@ const Clientes = ({ setMostrar }) => {
                   style={styles.input}
                   placeholder="Teléfono"
                   editable={true}
-                  onChangeText={(text) => setNuevoCliente({...nuevoCliente, "telefono_usu" : text})}
-                  value={nuevoCliente.telefono_usu}
+                  onChangeText={(text) =>
+                    setNuevoCliente({ ...nuevoCliente, telefono: text })
+                  }
+                  value={nuevoCliente.telefono}
                 />
               </View>
 
@@ -188,33 +232,52 @@ const Clientes = ({ setMostrar }) => {
                   style={styles.input}
                   placeholder="Dirección"
                   editable={true}
-                  onChangeText={(text) => setNuevoCliente({...nuevoCliente, "direccion_usu" : text})}
-                  value={nuevoCliente.direccion_usu}
+                  onChangeText={(text) =>
+                    setNuevoCliente({ ...nuevoCliente, direccion: text })
+                  }
+                  value={nuevoCliente.direccion}
                 />
               </View>
             </View>
             <View style={styles.formBotones}>
-            <TouchableOpacity onPress={() => {
-              setModificar(false);
-              setNuevoCliente({
-                nombre_usu: "",
-                correo_usu: "",
-                cedula_usu: "",
-                telefono_usu: "",
-                direccion_usu: "",
-                tipo_usu: "cliente"
-              });
-            }} style={{...styles.boton, backgroundColor: "grey"}}>
+              <TouchableOpacity
+                onPress={() => {
+                  setModificar(false);
+                  setNuevoCliente({
+                    nombres: "",
+                    correo: "",
+                    cedula: "",
+                    telefono: "",
+                    direccion: "",
+                    tipo: "Cliente",
+                  });
+                }}
+                style={{ ...styles.boton, backgroundColor: "grey" }}
+              >
                 <Text style={styles.txtBoton}>Nuevo</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.boton}>
-                <Text style={styles.txtBoton}>{modificar ? "Actualizar" : "Guardar"}</Text>
+              <TouchableOpacity
+                style={styles.boton}
+                onPress={() => registrarNuevoCliente()}
+              >
+                <Text style={styles.txtBoton}>
+                  {modificar ? "Actualizar" : "Guardar"}
+                </Text>
               </TouchableOpacity>
+
+              {modificar && (
+                <TouchableOpacity
+                  style={{ ...styles.boton, backgroundColor: "#FF504A" }}
+                  onPress={() => eliminarCliente()}
+                >
+                  <Text style={styles.txtBoton}>Eliminar</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </Card>
         </View>
 
-{/* contenedor lista de clientes  */}
+        {/* contenedor lista de clientes  */}
         <View style={styles.card2}>
           <View style={styles.contenedorLista}>
             {/* <Text style={styles.label}>Buscar cliente por cédula:</Text> */}
@@ -233,21 +296,24 @@ const Clientes = ({ setMostrar }) => {
                   editable={true}
                   onChangeText={(text) => setRegistroSelect(text)}
                   value={registroSelect}
-                  // value={usuario.cedula_usu}
+                  // value={usuario.cedula}
                 />
-                {
-                  registroSelect.length > 0 &&
+                {registroSelect.length > 0 && (
                   <TouchableOpacity
-                  style={{ position: "absolute", top: 8, right: 70, zIndex: 1 }}
-                  onPress={() => {
-                    setRegistroSelect("");
-                    setClient(arr)
-                  }}
-                >
-                  <AntDesign name="closecircle" size={20} color="red" />
-                </TouchableOpacity>
-                }
-               
+                    style={{
+                      position: "absolute",
+                      top: 8,
+                      right: 70,
+                      zIndex: 1,
+                    }}
+                    onPress={() => {
+                      setRegistroSelect("");
+                      setClient(clientes);
+                    }}
+                  >
+                    <AntDesign name="closecircle" size={20} color="red" />
+                  </TouchableOpacity>
+                )}
 
                 <TouchableOpacity
                   onPress={() => filtrar()}
@@ -260,63 +326,76 @@ const Clientes = ({ setMostrar }) => {
             {/* Lista de usuarios clientes  */}
             <ScrollView>
               <View style={styles.lista}>
-
-                {
-                  client.length > 0 ?
+                {client.length > 0 ? (
                   <>
-                  {client.map((cli, index) => (
-                  <Card key={index} style={styles.cardCli}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        setModificar(true)
-                        setNuevoCliente(cli)
-                      }}
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        flexWrap: "wrap",
-                        justifyContent: "space-between",
-                        gap: 10,
-                      }}
-                    >
-                      <View>
-                        <Text style={{ ...styles.label, color: "#fff" }}>
-                          Cédula:{" "}
-                        </Text>
-                        <Text style={{ color: "#fff" }}>{cli.cedula_usu}</Text>
-                      </View>
+                    {client.map((cli, index) => (
+                      <Card key={index} style={styles.cardCli}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            setModificar(true);
+                            setNuevoCliente({
+                              nombres: cli.nombres_cli,
+                              correo: cli.correo_cli,
+                              cedula: cli.cedula_cli,
+                              telefono: cli.telefono_cli,
+                              direccion: cli.direccion_cli,
+                              tipo: cli.tipo_cli,
+                              _id: cli._id,
+                            });
+                          }}
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            flexWrap: "wrap",
+                            justifyContent: "space-between",
+                            gap: 10,
+                          }}
+                        >
+                          <View>
+                            <Text style={{ ...styles.label, color: "#fff" }}>
+                              Cédula:{" "}
+                            </Text>
+                            <Text style={{ color: "#fff" }}>
+                              {cli.cedula_cli}
+                            </Text>
+                          </View>
 
-                      <View>
-                        <Text style={{ ...styles.label, color: "#fff" }}>
-                          Nombres:{" "}
-                        </Text>
-                        <Text style={{ color: "#fff" }}>{cli.nombre_usu}</Text>
-                      </View>
+                          <View>
+                            <Text style={{ ...styles.label, color: "#fff" }}>
+                              Nombres:{" "}
+                            </Text>
+                            <Text style={{ color: "#fff" }}>
+                              {cli.nombres_cli}
+                            </Text>
+                          </View>
 
-                      <View
-                        style={{
-                          width: 40,
-                          backgroundColor: "#fff",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          borderRadius: 6,
-                        }}
-                      >
-                        <AntDesign name="profile" size={24} color="#7986cb" />
-                      </View>
-                    </TouchableOpacity>
-                  </Card>
-                ))}
+                          <View
+                            style={{
+                              width: 40,
+                              backgroundColor: "#fff",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              borderRadius: 6,
+                            }}
+                          >
+                            <AntDesign
+                              name="profile"
+                              size={24}
+                              color="#7986cb"
+                            />
+                          </View>
+                        </TouchableOpacity>
+                      </Card>
+                    ))}
                   </>
-                  :
+                ) : (
                   <View>
-                    <Text style={{ color: "red"}}>
+                    <Text style={{ color: "red" }}>
                       No hay registros para mostrar
                     </Text>
-                    </View>
-                }
-                
+                  </View>
+                )}
               </View>
             </ScrollView>
           </View>
@@ -459,7 +538,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "yellow",
     display: "flex",
     flexDirection: "row",
-    gap: 20,
+    gap: 15,
     width: "100%",
 
     justifyContent: "center",
