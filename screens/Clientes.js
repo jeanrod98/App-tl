@@ -214,6 +214,7 @@ const Clientes = ({ setMostrar }) => {
           </Card>
         </View>
 
+{/* contenedor lista de clientes  */}
         <View style={styles.card2}>
           <View style={styles.contenedorLista}>
             {/* <Text style={styles.label}>Buscar cliente por cédula:</Text> */}
@@ -256,7 +257,7 @@ const Clientes = ({ setMostrar }) => {
                 </TouchableOpacity>
               </View>
             </View>
-            {/* Lista de usuarios  */}
+            {/* Lista de usuarios clientes  */}
             <ScrollView>
               <View style={styles.lista}>
 

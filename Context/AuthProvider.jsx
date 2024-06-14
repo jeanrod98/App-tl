@@ -7,6 +7,8 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({});
+
+  const [usuarioModificado, setUsaurioModificado] = useState(auth);
   const [token, setToken] = useState("");
   const [cargando, setCargando] = useState(false);
 
@@ -53,6 +55,7 @@ const AuthProvider = ({ children }) => {
 
       // console.log(userToken);
       setAuth(data);
+      setUsaurioModificado(data)
       setToken(userToken);
     } catch (e) {
       console.log(e);
@@ -81,6 +84,7 @@ const AuthProvider = ({ children }) => {
 
       // await AsyncStorage.removeItem("welcome");
       setAuth({});
+      setUsaurioModificado({})
     } catch (error) {
       console.log(error);
     }
@@ -100,6 +104,7 @@ const AuthProvider = ({ children }) => {
         // console.log("mostrar menu");
 
         setAuth(data);
+        setUsaurioModificado(data)
         setToken(data.token_session);
         await AsyncStorage.setItem("token", data.token_session);
       }
@@ -153,11 +158,89 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const actualizarPerfil = async () => {
+    try {
+
+     
+      const { data } = await clienteAxios.put(`/profile-update/${auth._id}`, usuarioModificado);
+      console.log(data);
+
+
+      if (data) {
+        // * Alert
+        setAuth(data)
+        setUsaurioModificado(data)
+        setDataAlert({
+          icon: "success",
+          tittle: "Actualización de perfil",
+          detalle: "Los datos del perfil se actualizaron con éxito!",
+          active: true,
+          tipe: "info",
+        });
+
+        return true;
+      }
+    } catch (error) {
+      // ! Alert
+      setDataAlert({
+        icon: "error",
+        tittle: "ERROR DE ACTUALIZACIÓN",
+        detalle: e.response.data.msg,
+        active: true,
+        tipe: "info",
+      });
+    }
+  }
+
+  const cambiarPassword = async () => {
+
+    setCargando(true);
+
+    
+   
+    try {
+
+     
+      const { data } = await clienteAxios.put(`/profile-update-password/${auth._id}`, {
+        password_usu: dataAlert?.passwords?.passActual,
+        nueva_password_usu: dataAlert?.passwords?.pass1
+      });
+      console.log(data);
+
+    
+
+      if (data) {
+        // * Alert
+       
+        
+
+        logOut();
+
+        setTimeout(() => {
+          setCargando(false);
+        }, 3000);
+
+        return true;
+      }
+    } catch (error) {
+      // ! Alert
+      setDataAlert({
+        icon: "error",
+        tittle: "ERROR DE ACTUALIZACIÓN",
+        detalle: error.response.data.msg,
+        active: true,
+        tipe: "info",
+      });
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
         auth,
         setAuth,
+        usuarioModificado, 
+        setUsaurioModificado,
         token,
         setToken,
         dataAlert,
@@ -171,6 +254,8 @@ const AuthProvider = ({ children }) => {
         conffetiShow, 
         setConffetiShow,
         registrarUsuario,
+        actualizarPerfil,
+        cambiarPassword,
         login,
         logOut,
         sonido, 

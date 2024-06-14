@@ -151,7 +151,7 @@ const Menu = () => {
             <View style={{...styles.card, borderColor: option.activo === true && option.nameOption === "FIGURAS" ? "red" : "#fff", borderWidth: 3,  }}>
               <TouchableOpacity onPress={() => seleccionarOpcion("FIGURAS")}>
                 <Image source={figuras} style={styles.img} />
-                <Text style={styles.txt}>FIGURAS GEOMETRICAS</Text>
+                <Text style={styles.txt}>FIGURAS GEOMÉTRICAS</Text>
               </TouchableOpacity>
             </View>
             <View style={{...styles.card, borderColor: option.activo === true && option.nameOption === "MUSICA" ? "red" : "#fff", borderWidth: 3,  }}>

@@ -6,85 +6,84 @@ import Clientes from "./Clientes";
 import Reportes from "./Reportes";
 import AcercaDe from "./AcercaDe";
 import useAuth from "../Hooks/useAuth";
-import * as Speech from 'expo-speech';
-
+import * as Speech from "expo-speech";
 
 const Config = ({ setMostrarSetting }) => {
+  const [mostrar, setMostrar] = useState("");
+  const [user, setUser] = useState(true);
+  const { sonido, auth } = useAuth();
+  // console.log(auth);
 
-    const [ mostrar, setMostrar ] = useState("");
-    const [ user, setUser ] = useState(true);
-    const { sonido } = useAuth();
-    
-    useEffect(() => {
-      if (sonido) Speech.speak("CONFIGURACIÓN");
-    }, []);
+  useEffect(() => {
+    if (sonido) Speech.speak("CONFIGURACIÓN");
+    console.log(auth);
+  }, []);
 
   return (
     <>
-    <View style={styles.config}>
-      <View style={styles.contenedorSetting}>
-        <TouchableOpacity
-          style={styles.btnClose}
-          onPress={() => {
-            setMostrarSetting(false);
-          }}
-        >
-          <AntDesign name="closecircle" size={22} color="red" />
-        </TouchableOpacity>
-        <View style={styles.txtTittle}>
-          <Text style={{ color: "#303F9F", fontSize: 20, fontWeight: "700" }}>
-            CONFIGURACIÓN
-          </Text>
-        </View>
+      <View style={styles.config}>
+        <View style={styles.contenedorSetting}>
+          <TouchableOpacity
+            style={styles.btnClose}
+            onPress={() => {
+              setMostrarSetting(false);
+            }}
+          >
+            <AntDesign name="closecircle" size={22} color="red" />
+          </TouchableOpacity>
+          <View style={styles.txtTittle}>
+            <Text style={{ color: "#303F9F", fontSize: 20, fontWeight: "700" }}>
+              CONFIGURACIÓN
+            </Text>
+          </View>
 
-        <View style={styles.opcionesContenedor}>
-        
-            <TouchableOpacity style={styles.opciones} onPress={() => setMostrar("cuenta")}>
-              <FontAwesome name="user" size={18} color="#303F9F" />
-              <Text style={styles.txtOption}>Cuenta</Text>
-            </TouchableOpacity>
-      
+          <View style={styles.opcionesContenedor}>
+            {auth.tipo_usu && auth?.tipo_usu !== "Invitado" ? (
+              <TouchableOpacity
+                style={styles.opciones}
+                onPress={() => setMostrar("cuenta")}
+              >
+                <FontAwesome name="user" size={18} color="#303F9F" />
+                <Text style={styles.txtOption}>Cuenta</Text>
+              </TouchableOpacity>
+            )
+          :
+          null}
 
-         {
-            user && 
-            <>
-            <TouchableOpacity style={styles.opciones} onPress={() => setMostrar("clientes")}>
-              <FontAwesome name="users" size={18} color="#303F9F" />
-              <Text style={styles.txtOption}>Cliente</Text>
-            </TouchableOpacity>
-       
+            {auth?.tipo_usu === "Avanzada" && (
+              <>
+                <TouchableOpacity
+                  style={styles.opciones}
+                  onPress={() => setMostrar("clientes")}
+                >
+                  <FontAwesome name="users" size={18} color="#303F9F" />
+                  <Text style={styles.txtOption}>Cliente</Text>
+                </TouchableOpacity>
 
-      
-            <TouchableOpacity style={styles.opciones} onPress={() => setMostrar("reportes")}>
-              <Entypo name="pie-chart" size={18} color="#303F9F" />
-              <Text style={styles.txtOption}>Reportes</Text>
-            </TouchableOpacity>
-            </>
-         }
-            
-       
+                <TouchableOpacity
+                  style={styles.opciones}
+                  onPress={() => setMostrar("reportes")}
+                >
+                  <Entypo name="pie-chart" size={18} color="#303F9F" />
+                  <Text style={styles.txtOption}>Reportes</Text>
+                </TouchableOpacity>
+              </>
+            )}
 
-          
-            <TouchableOpacity style={styles.opciones} onPress={() => setMostrar("acerdaDe")}>
+            <TouchableOpacity
+              style={styles.opciones}
+              onPress={() => setMostrar("acerdaDe")}
+            >
               <AntDesign name="questioncircle" size={18} color="#303F9F" />
               <Text style={styles.txtOption}>Acerca de</Text>
             </TouchableOpacity>
-          
+          </View>
         </View>
       </View>
-    </View>
-    {
-        mostrar === "cuenta" && <Cuenta setMostrar={setMostrar}/>
-    }
-    {
-        mostrar === "clientes" && <Clientes setMostrar={setMostrar}/>
-    }
-    {
-        mostrar === "reportes" && <Reportes setMostrar={setMostrar}/>
-    }
-    {
-        mostrar === "acerdaDe" && <AcercaDe setMostrar={setMostrar}/>
-    }
+      {mostrar === "cuenta" && <Cuenta setMostrar={setMostrar} />}
+      {mostrar === "clientes" && <Clientes setMostrar={setMostrar} />}
+      {mostrar === "reportes" && <Reportes setMostrar={setMostrar} />}
+      {mostrar === "acerdaDe" && <AcercaDe setMostrar={setMostrar} />}
     </>
   );
 };

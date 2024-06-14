@@ -14,7 +14,7 @@ import useAuth from "../Hooks/useAuth";
 
 
 const Alerts = ({ tipe }) => {
-  const { dataAlert, setDataAlert, logOut, setOption, setConffetiShow } = useAuth();
+  const { dataAlert, setDataAlert, logOut, setOption, setConffetiShow, auth, actualizarPerfil, cambiarPassword } = useAuth();
 
   const salir = () => {
 
@@ -45,6 +45,18 @@ const Alerts = ({ tipe }) => {
     });
   };
 
+  const actualizarInformacionPerfil = async () => {
+    cerrarAlert();
+    await actualizarPerfil();
+
+  }
+
+  const actualizarPassword = async () => {
+    cerrarAlert();
+    await cambiarPassword();
+
+  }
+
   return (
     <View style={styles.containerAlert}>
       <View style={styles.card}>
@@ -67,10 +79,10 @@ const Alerts = ({ tipe }) => {
         <View style={{ display: "flex", flexDirection: "row", gap: 15 }}>
           <TouchableOpacity
             style={styles.button}
-            onPress={dataAlert.tipe === "validation" ? cerrarAlert : salir}
+            onPress={dataAlert.tipe === "validation" || dataAlert.tipe === "actualizar" ? cerrarAlert : salir}
           >
             <Text style={styles.textBtn}>
-              {dataAlert.tipe === "question" ? "Cancelar" : "Aceptar"}
+              {dataAlert.tipe === "question" || dataAlert.tipe === "actualizar" || dataAlert.tipe === "actualizar-password" ? "Cancelar" : "Aceptar"}
             </Text>
           </TouchableOpacity>
 
@@ -82,6 +94,26 @@ const Alerts = ({ tipe }) => {
               <Text style={{ ...styles.textBtn, color: "#fff" }}>Salir</Text>
             </TouchableOpacity>
           )}
+
+          { dataAlert.tipe === 'actualizar' && 
+          <TouchableOpacity
+          style={{ ...styles.button, backgroundColor: "#3ECC57" }}
+          onPress={actualizarInformacionPerfil}
+        >
+          <Text style={{ ...styles.textBtn, color: "#fff" }}>Aceptar</Text>
+        </TouchableOpacity>
+      
+          }
+
+          {
+            dataAlert.tipe === 'actualizar-password' && 
+            <TouchableOpacity
+            style={{ ...styles.button, backgroundColor: "#3ECC57" }}
+            onPress={actualizarPassword}
+          >
+            <Text style={{ ...styles.textBtn, color: "#fff" }}>Aceptar</Text>
+          </TouchableOpacity>
+          }
         </View>
       </View>
     </View>

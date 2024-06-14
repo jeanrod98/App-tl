@@ -16,30 +16,45 @@ import img_fondo from "../assets/fondo_setting.jpg"
 import { SelectList } from "react-native-dropdown-select-list";
 
 import * as Speech from "expo-speech";
+import ModalCambioPassword from "../components/ModalCambioPassword";
 
 const Cuenta = ({ setMostrar }) => {
-  const { sonido } = useAuth();
-  const [usuario, setUsaurio] = useState({
-    tipo_usu: "Regular",
-    nombre_usu: "Jean Rodriguez",
-    correo_usu: "jcrod@gmail.com",
-    cedula_usu: "n/a",
-    telefono_usu: "n/a",
-    direccion_usu: "n/a",
-  });
+  const { sonido, auth, setDataAlert, usuarioModificado, setUsaurioModificado } = useAuth();
+
+  
 
   useEffect(() => {
     if (sonido) Speech.speak("Cuenta");
   }, []);
 
-  const [selected, setSelected] = useState("Regular");
+  
+  const [mostrarCambioPassword, setMostrarCambioPassword] = useState(false);
+  const [selected, setSelected] = useState(auth?.tipo_usu);
+  // console.log(auth.tipo_usu);
+
   const [editar, setEditar] = useState(false);
   const [data, setdata] = useState([
     { key: "1", value: "Regular" },
     { key: "2", value: "Avanzada" },
   ]);
 
+  const actualizarInformacion = () => {
+    // console.log(usuarioModificado);
+    // Validar que el usuario quiera actualizar su informacion
+
+    setDataAlert({
+      icon: "error",
+      tipe: "actualizar",
+      tittle: "Actualizar la información",
+      detalle: "¿Estás seguro de actualizar la información de esta cuenta?",
+      active: true,
+    });
+  }
+
+
+
   return (
+    <>
     <ImageBackground
     source={img_fondo}
     resizeMode="contain"
@@ -69,13 +84,17 @@ const Cuenta = ({ setMostrar }) => {
 
             <View style={styles.card}>
               <Text style={styles.label}>Tipo de cuenta:</Text>
-              {editar ? (
+              {editar  ? (
                 <SelectList
-                  setSelected={(val) => setSelected(val)}
+                  setSelected={(val) =>{ 
+                    // console.log(selected);
+                    setSelected(val)
+                    setUsaurioModificado({...usuarioModificado, "tipo_usu" : val})
+                  }}
                   data={data}
                   save="value"
                   search={false}
-                  defaultOption={{ key: "1", value: usuario.tipo_usu }}
+                  defaultOption={{key: auth?.tipo_usu, value: auth?.tipo_usu }}
                   // maxHeight={40}
                   boxStyles={{
                     borderRadius: 0,
@@ -91,9 +110,10 @@ const Cuenta = ({ setMostrar }) => {
               ) : (
                 <TextInput
                   style={styles.input}
-                  placeholder="Nombre"
-                  value={usuario.tipo_usu}
+                  placeholder="Tipo de cuenta"
+                  value={auth?.tipo_usu}
                   editable={false}
+                  
                 />
               )}
 
@@ -103,14 +123,17 @@ const Cuenta = ({ setMostrar }) => {
                 style={styles.input}
                 placeholder="Nombre"
                 editable={editar}
-                value={usuario.nombre_usu}
+                value={usuarioModificado?.nombres_usu}
+                onChangeText={(text) => setUsaurioModificado({...usuarioModificado, "nombres_usu" : text})}
               />
               <Text style={styles.label}>Correo:</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Correo"
                 editable={editar}
-                value={usuario.correo_usu}
+                value={usuarioModificado?.correo_usu}
+                onChangeText={(text) => setUsaurioModificado({...usuarioModificado, "correo_usu" : text})}
+
 
               />
             </View>
@@ -122,7 +145,9 @@ const Cuenta = ({ setMostrar }) => {
                   style={styles.input}
                   placeholder="Cédula"
                   editable={editar}
-                  value={usuario.cedula_usu}
+                  value={usuarioModificado?.cedula_usu}
+                onChangeText={(text) => setUsaurioModificado({...usuarioModificado, "cedula_usu" : text})}
+
 
                 />
                 <Text style={styles.label}>Teléfono:</Text>
@@ -130,7 +155,9 @@ const Cuenta = ({ setMostrar }) => {
                   style={styles.input}
                   placeholder="Teléfono"
                   editable={editar}
-                  value={usuario.telefono_usu}
+                  value={usuarioModificado?.telefono_usu}
+                onChangeText={(text) => setUsaurioModificado({...usuarioModificado, "telefono_usu" : text})}
+
 
                 />
                 <Text style={styles.label}>Dirección:</Text>
@@ -138,7 +165,9 @@ const Cuenta = ({ setMostrar }) => {
                   style={styles.input}
                   placeholder="Dirección"
                   editable={editar}
-                  value={usuario.direccion_usu}
+                  value={usuarioModificado?.direccion_usu}
+                onChangeText={(text) => setUsaurioModificado({...usuarioModificado, "direccion_usu" : text})}
+
 
                 />
               </View>
@@ -149,7 +178,7 @@ const Cuenta = ({ setMostrar }) => {
             {editar ? (
               <>
               <View >
-                <TouchableOpacity style={{...styles.boton, width: 160}}>
+                <TouchableOpacity style={{...styles.boton, width: 160}} onPress={() => setMostrarCambioPassword(true)}>
                     <Text style={{...styles.txtBoton, color: "#fff",}}>Cambiar Contraseña</Text>
                 </TouchableOpacity>
               </View>
@@ -160,13 +189,13 @@ const Cuenta = ({ setMostrar }) => {
                   style={{ ...styles.boton, backgroundColor: "grey" }}
                   onPress={() => {
                     setEditar(false)
-                    setSelected("Regular")
+                    setSelected(auth?.tipo_usu)
                   }}
                 >
-                  <Text style={{...styles.txtBoton, color: "#fff",}}>Cancelar</Text>
+                  <Text style={{...styles.txtBoton, color: "#fff",}}>Salir</Text>
                 </TouchableOpacity>
                 
-                <TouchableOpacity style={styles.boton}>
+                <TouchableOpacity style={styles.boton} onPress={() => actualizarInformacion()}>
                   <Text style={{...styles.txtBoton, color: "#fff",}}>Guardar</Text>
                 </TouchableOpacity>
               </View>
@@ -175,7 +204,10 @@ const Cuenta = ({ setMostrar }) => {
             ) : (
               <TouchableOpacity
                 style={styles.boton}
-                onPress={() => setEditar(true)}
+                onPress={() => {
+                  setEditar(true);
+                  // console.log(selected);
+                }}
               >
                 <Text style={{...styles.txtBoton, color: "#fff",}}>Editar</Text>
               </TouchableOpacity>
@@ -184,6 +216,12 @@ const Cuenta = ({ setMostrar }) => {
         </View>
       </View>
     </ImageBackground>
+    {
+      mostrarCambioPassword && <ModalCambioPassword setMostrarCambioPassword={setMostrarCambioPassword}  />
+    }
+    </>
+
+
   );
 };
 
