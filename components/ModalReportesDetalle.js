@@ -1,49 +1,116 @@
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { BarChart, LineChart, PieChart, PopulationPyramid } from "react-native-gifted-charts";
-import { useEffect } from "react";
+import {
+  BarChart,
+  LineChart,
+  PieChart,
+  PopulationPyramid,
+} from "react-native-gifted-charts";
+import { useEffect, useState } from "react";
 import clienteAxios from "../config/axios";
 import useAuth from "../Hooks/useAuth";
-
-
 
 const ModalReportesDetalle = ({
   setMostrarDetalles,
   registro,
   mostrarDetalles,
 }) => {
-
   const { auth } = useAuth();
 
-    
-    const barData = [
-        {value: (5/50 * 10) , intentos: 50, aciertos: 5, label: '1/6/2424', frontColor: '#216E66'},
-        {value: (16/40 * 10), intentos: 40, aciertos: 16, label: '2/6/2424', frontColor: '#BF3140'},
-        {value: (25/45 * 10), intentos: 45, aciertos: 25, label: '3/6/2424', frontColor: '#31BF8E'},
-        {value: (25/32 * 10), intentos: 32, aciertos: 25, label: '4/6/2424', frontColor: '#3133BF'},
-        {value: (60/60 * 10), intentos: 60, aciertos: 60, label: '5/6/2424', frontColor: '#F3451A'},
-        
-      ];
+  useEffect(() => {
+    obtenerDatos();
+  }, []);
 
-      useEffect(() => {
+  const [barData, setBarData] = useState([]);
+  const [tiempos, setTiempos] = useState("");
+  const [aciertos, setAciertos] = useState("");
+  const [intentos, setIntentos] = useState("");
+  const [errores, setErrores] = useState("n/a");
 
-        obtenerDatos();
+  const obtenerDatos = async () => {
+    // console.log(registro?._id);
+    try {
+      const { data } = await clienteAxios.get(`/avance/${registro?._id}`);
+      // console.log(data[0]);
+      let arrayUltimosDetalles = [];
+      let tiemposArr = [];
+      let erroresArr = [];
+      let intentosArr = [];
+      let aciertosArr = [];
 
+      for (let index = 0; index < data.length; index++) {
+        const arregloPrincipal = data[index];
+        // console.log(arregloPrincipal);
+        if (arregloPrincipal.nombreModulo_av == mostrarDetalles.modulo) {
+          // extraer el ultimo registro del array
+          const ultimoDetalle =
+            arregloPrincipal.detalles[data[index]?.detalles.length - 1];
+          ultimoDetalle.label = arregloPrincipal.fecha_av;
+          ultimoDetalle.value = parseFloat(ultimoDetalle.promedio_pro_av);
+          arrayUltimosDetalles.push(ultimoDetalle);
 
-      }, []);
-
-      const obtenerDatos = async () => {
-        console.log(registro?._id);
-        try {
-          const { data } = await clienteAxios.get(`/avance/${registro?._id}`);
-          console.log(data);
-          
-        } catch (error) {
-          console.log(error);
-          
+          //ciclo para extraer los tiempos, errores, aciertos
+          for (
+            let index = 0;
+            index < arregloPrincipal.detalles.length;
+            index++
+          ) {
+            const arregloTiempos = arregloPrincipal.detalles[index];
+            // extraer los tiempos
+            tiemposArr.push(arregloTiempos?.tiempo_modulo_av);
+            erroresArr.push(arregloTiempos?.errores_pro_av);
+            intentosArr.push(arregloTiempos?.intentos_pro_av);
+            aciertosArr.push(arregloTiempos?.aciertos_pro_av);
+          }
         }
       }
+
+      //Enviar los datos a la grafica
+      setBarData(arrayUltimosDetalles);
+
+      //* calcular promedios generales
      
+
+      // console.log(tiempos);
+      // console.log(sumaTiempo / tiempos.length);
+      const sumaTiempo = tiemposArr.reduce(
+        (anterior, actual) => anterior + actual,
+        0
+      );
+      // se agrega el promedio general del tiempo
+      setTiempos(`${sumaTiempo / tiemposArr.length} seg.`);
+
+      const sumaIntentos = intentosArr.reduce(
+        (anterior, actual) => anterior + actual,
+        0
+      );
+      // se agrega el promedio general de los intentos
+      setIntentos(`${sumaIntentos / intentosArr.length}`);
+
+      // Valida si hay errores agregados
+      if (erroresArr.length > 0) {
+        const sumaErrores = erroresArr.reduce(
+          (anterior, actual) => anterior + actual,
+          0
+        );
+        // agrega promedio de errores al estado
+        setErrores(`${sumaErrores / erroresArr.length}`);
+      }
+
+      // Sacar el promedio de aciertos en base a la suma de todos los intentos
+      const sumaAciertos = aciertosArr.reduce(
+        (anterior, actual) => anterior + actual,
+        0
+      );
+      const aciertos = (sumaAciertos/sumaIntentos) * 10;
+      setAciertos(`${aciertos.toFixed(2)} / 10`)
+      // console.log(sumaAciertos);
+
+      // setDatosModulos(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -74,35 +141,35 @@ const ModalReportesDetalle = ({
                 <Text style={{ ...styles.label, color: "#7986cb" }}>
                   Cédula:{" "}
                 </Text>
-                <Text style={styles.label}>{registro?.cedula_usu}</Text>
+                <Text style={styles.label}>{registro?.cedula_cli}</Text>
               </View>
 
               <View style={styles.info}>
                 <Text style={{ ...styles.label, color: "#7986cb" }}>
                   Nombres:{" "}
                 </Text>
-                <Text style={styles.label}>{registro?.nombre_usu}</Text>
+                <Text style={styles.label}>{registro?.nombres_cli}</Text>
               </View>
 
               <View style={styles.info}>
                 <Text style={{ ...styles.label, color: "#7986cb" }}>
                   Correo:{" "}
                 </Text>
-                <Text style={styles.label}>{registro?.correo_usu}</Text>
+                <Text style={styles.label}>{registro?.correo_cli}</Text>
               </View>
 
               <View style={styles.info}>
                 <Text style={{ ...styles.label, color: "#7986cb" }}>
                   Teléfono:{" "}
                 </Text>
-                <Text style={styles.label}>{registro?.telefono_usu}</Text>
+                <Text style={styles.label}>{registro?.telefono_cli}</Text>
               </View>
 
               <View style={styles.info}>
                 <Text style={{ ...styles.label, color: "#7986cb" }}>
                   Dirección:{" "}
                 </Text>
-                <Text style={styles.label}>{registro?.direccion_usu}</Text>
+                <Text style={styles.label}>{registro?.direccion_cli}</Text>
               </View>
             </View>
 
@@ -114,28 +181,28 @@ const ModalReportesDetalle = ({
                 <Text style={{ ...styles.label, color: "#7986cb" }}>
                   Promedio de intentos:{" "}
                 </Text>
-                <Text style={styles.label}>{"20"}</Text>
+                <Text style={styles.label}>{intentos}</Text>
               </View>
 
               <View style={{ ...styles.info, width: "40%" }}>
                 <Text style={{ ...styles.label, color: "#7986cb" }}>
-                  Promedio de aciertos:{" "}
+                  Promedio de módulo:{" "}
                 </Text>
-                <Text style={styles.label}>{"14.2"}</Text>
+                <Text style={styles.label}>{aciertos}</Text>
               </View>
 
               <View style={{ ...styles.info, width: "40%" }}>
                 <Text style={{ ...styles.label, color: "#7986cb" }}>
                   Promedio de errores:{" "}
                 </Text>
-                <Text style={styles.label}>{"8.2"}</Text>
+                <Text style={styles.label}>{errores}</Text>
               </View>
 
               <View style={{ ...styles.info, width: "40%" }}>
                 <Text style={{ ...styles.label, color: "#7986cb" }}>
-                  Tiempo en prueba:{" "}
+                  Tiempo promedio:{" "}
                 </Text>
-                <Text style={styles.label}>{"20 minutos"}</Text>
+                <Text style={styles.label}>{tiempos}</Text>
               </View>
             </View>
           </View>
@@ -144,16 +211,16 @@ const ModalReportesDetalle = ({
             <Text style={styles.txtOption}>Gráfica del módulo:</Text>
             <Text style={{}}>Promedio</Text>
             <View style={{ ...styles.info, width: "100%" }}>
-                <BarChart
-                
+              <BarChart
                 barWidth={35}
                 height={150}
+                width={320}
+                // backgroundColor={"#000"}
                 noOfSections={5}
                 maxValue={10}
-                
                 // yAxisLabelTexts={['0', '5', '10',]}
                 barBorderRadius={4}
-                frontColor="lightgray"
+                frontColor="#4A7BFF"
                 data={barData}
                 yAxisThickness={0}
                 xAxisThickness={0}
@@ -165,47 +232,53 @@ const ModalReportesDetalle = ({
                 endSpacing={10}
                 // textColor={6}
                 renderTooltip={(item, index) => {
-                    
-                    return (
-                      <View
-                        style={{
-                            position: "absolute",
-                          top: 0,
-                          right:  index === 4 || index === 3 ? 5 : -150,
-                          
-                          backgroundColor: '#ffcefe',
-                          paddingHorizontal: 6,
-                          paddingVertical: 4,
-                          borderRadius: 4,
-                          display: "flex",
-                          flexDirection: "row",
-                          width: 110,
-                          flexWrap: "wrap",
-                          columnGap: 10
-                          
-                        }}>
-                            <View>
-                                <Text style={{ fontSize: 12, fontWeight: "700"}}>{`Intentos`}</Text>
-                                <Text style={{ fontSize: 12}}>{item.intentos}</Text>
+                  return (
+                    <View
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        right: index === 4 || index === 3 ? 5 : -150,
 
-                            </View>
-
-                            <View>
-                            
-                            <Text style={{ fontSize: 12, fontWeight: "700"}}>{`Aciertos`}</Text>
-                            <Text style={{ fontSize: 12}}>{item.aciertos}</Text>
-                            </View>
-                            <View>
-
-                            <Text style={{ fontSize: 12, fontWeight: "700"}}>{`Promedio`}</Text>
-                            <Text style={{ fontSize: 12}}>{`${item.value.toFixed(2)} / 10`}</Text>
-                            </View>
-
+                        backgroundColor: "#ffcefe",
+                        paddingHorizontal: 6,
+                        paddingVertical: 4,
+                        borderRadius: 4,
+                        display: "flex",
+                        flexDirection: "row",
+                        width: 110,
+                        flexWrap: "wrap",
+                        columnGap: 10,
+                      }}
+                    >
+                      <View>
+                        <Text
+                          style={{ fontSize: 12, fontWeight: "700" }}
+                        >{`Intentos`}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {item.intentos_pro_av}
+                        </Text>
                       </View>
-                    );
-                  }}
-                  
-                /> 
+
+                      <View>
+                        <Text
+                          style={{ fontSize: 12, fontWeight: "700" }}
+                        >{`Aciertos`}</Text>
+                        <Text style={{ fontSize: 12 }}>
+                          {item.aciertos_pro_av}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text
+                          style={{ fontSize: 12, fontWeight: "700" }}
+                        >{`Promedio`}</Text>
+                        <Text style={{ fontSize: 12 }}>{`${item.value.toFixed(
+                          2
+                        )} / 10`}</Text>
+                      </View>
+                    </View>
+                  );
+                }}
+              />
             </View>
           </View>
         </View>
