@@ -1,6 +1,9 @@
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { BarChart, LineChart, PieChart, PopulationPyramid } from "react-native-gifted-charts";
+import { useEffect } from "react";
+import clienteAxios from "../config/axios";
+import useAuth from "../Hooks/useAuth";
 
 
 
@@ -9,6 +12,8 @@ const ModalReportesDetalle = ({
   registro,
   mostrarDetalles,
 }) => {
+
+  const { auth } = useAuth();
 
     
     const barData = [
@@ -20,6 +25,24 @@ const ModalReportesDetalle = ({
         
       ];
 
+      useEffect(() => {
+
+        obtenerDatos();
+
+
+      }, []);
+
+      const obtenerDatos = async () => {
+        console.log(registro?._id);
+        try {
+          const { data } = await clienteAxios.get(`/avance/${registro?._id}`);
+          console.log(data);
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
      
 
   return (

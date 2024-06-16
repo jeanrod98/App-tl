@@ -18,27 +18,63 @@ import useAuth from "../Hooks/useAuth";
 import conffeti from "../assets/confeti.json";
 import LottieView from "lottie-react-native";
 
-import * as Speech from 'expo-speech';
+import * as Speech from "expo-speech";
+import clienteAxios from "../config/axios";
 
-
-
-const AbecedarioOneGame = ({ dinamica }) => {
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
+const AbecedarioOneGame = ({ 
+  dinamica, 
+  capturarTiempo, 
+  setAciertos, 
+  aciertos, 
+  setErrores,
+  errores,
+  tiempo }) => {
+  const {
+    dataAlert,
+    setDataAlert,
+    conffetiShow,
+    setConffetiShow,
+    sonido,
+    auth,
+  } = useAuth();
 
   const [arregloAbecedario, setArregloAbecedario] = useState([]);
   const [arregloAbecedarioTwo, setArregloAbecedarioTwo] = useState([]);
   const confettiRef = useRef(null);
 
+  
+
   useEffect(() => {
     barajearArreglo();
+
   }, []);
 
-  const barajearArreglo = async () => {
+  const registrarAvance = async () => {
+    try {
+      const { data } = await clienteAxios.post("/avance-registro",
+        {
+          usuario: auth.nombres,
+          modulo: "ALFABETO",
+          fecha_avance: new Date().toLocaleString("EC").split(" ")[0],
+          id_cliente: auth._id,
+          id_terapeuta: auth.terapeuta_cli,
+          aciertos,
+          errores,
+          tiempo,
+        }
+      )
+      console.log(data);
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
 
+  const barajearArreglo = async () => {
     if (sonido) {
       Speech.speak(dinamica);
     }
-   
 
     let arregloAbecedario = [
       "A",
@@ -116,29 +152,20 @@ const AbecedarioOneGame = ({ dinamica }) => {
     return array;
   };
 
-
   const [letraElegidaUno, setLetraElegidaUno] = useState("");
   const [letraElegidaDos, setletraElegidaDos] = useState("");
 
-
   const seleccionarCard = (value, tablero) => {
-
     if (sonido) {
       Speech.speak(`Escogiste la letra ${value}`);
     }
-    
-
 
     if (tablero === "T1") {
-        setLetraElegidaUno(value)
+      setLetraElegidaUno(value);
     } else {
-        setletraElegidaDos(value)
-        
+      setletraElegidaDos(value);
     }
-    
   };
-
-
 
   const validarResultados = async () => {
     // console.log("validando...");
@@ -152,67 +179,79 @@ const AbecedarioOneGame = ({ dinamica }) => {
         tipe: "validation",
       });
 
-      
       if (sonido) Speech.speak(`Debes elegir una letra de cada tablero.`);
 
       return;
-    };
+    }
 
     // !validar que sean iguales las letras
     if (letraElegidaUno !== letraElegidaDos) {
-        setDataAlert({
+      if (auth?.tipo === "Cliente") setErrores(errores + 1);
+
+     
+      // console.log(aciertos);
+      setDataAlert({
         icon: "sad",
         tittle: "Letras distintas",
-        detalle: "Ups!, las letras seleccionadas no son iguales, inténtalo de nuevo.",
+        detalle:
+          "Ups!, las letras seleccionadas no son iguales, inténtalo de nuevo.",
         active: true,
         tipe: "validation",
-        });
-        if (sonido) Speech.speak(`Ups!, las letras seleccionadas no son iguales, inténtalo de nuevo.`);
+      });
+      if (sonido)
+        Speech.speak(
+          `Ups!, las letras seleccionadas no son iguales, inténtalo de nuevo.`
+        );
 
-        return;
-    };
+      return;
+    }
 
-
-
-    // * valida si son iguales le muestra el conffeti 
+    // * valida si son iguales le muestra el conffeti
     if (letraElegidaUno === letraElegidaDos) {
-        // setConffetiShow(true);
+      // setConffetiShow(true);
+      if (auth?.tipo === "Cliente") setAciertos(aciertos+1);
+      // detener el tiempo
+
+      confettiRef.current?.play(0);
+      const newArregloOne = await arregloAbecedario.filter(
+        (letra) => letra !== letraElegidaUno
+      );
+      const newArregloTwo = await arregloAbecedarioTwo.filter(
+        (letra) => letra !== letraElegidaDos
+      );
+      setArregloAbecedario(newArregloOne);
+      setArregloAbecedarioTwo(newArregloTwo);
+      setLetraElegidaUno("");
+      setletraElegidaDos("");
+
+      // * valida que si ya no hay elementos finaliza el juego
+
+      if (newArregloOne.length == 0 || newArregloTwo.length == 0) {
+        // console.log(arregloAbecedario.length);
+
+        // todo: Aqui se termina de capturar los datos
+        if (auth?.tipo === "Cliente") capturarTiempo(false);
+
+        // *Aqui se registran los datos
+        registrarAvance();
+
+        setConffetiShow(true);
         confettiRef.current?.play(0);
-        const newArregloOne = await arregloAbecedario.filter(letra => letra !== letraElegidaUno);
-        const newArregloTwo = await arregloAbecedarioTwo.filter(letra => letra !== letraElegidaDos);
-        setArregloAbecedario(newArregloOne);
-        setArregloAbecedarioTwo(newArregloTwo);
-        setLetraElegidaUno("");
-        setletraElegidaDos("");
+        setDataAlert({
+          icon: "success",
+          tittle: "¡FELICIDADES!",
+          detalle:
+            "Has logrado encontrar todos los pares del abecedario. Sigue así y llegarás lejos!.",
+          active: true,
+          tipe: "validation",
+        });
 
-        
-    
-        // * valida que si ya no hay elementos finaliza el juego
-
-        if(newArregloOne.length == 0 || newArregloTwo.length == 0){
-            // console.log(arregloAbecedario.length);
-            
-            setConffetiShow(true);
-            confettiRef.current?.play(0);
-            setDataAlert({
-                icon: "success",
-                tittle: "¡FELICIDADES!",
-                detalle: "Has logrado encontrar todos los pares del abecedario. Sigue así y llegarás lejos!.",
-                active: true,
-                tipe: "validation",
-            });
-
-            if (sonido) Speech.speak(`Has logrado encontrar todos los pares del abecedario. Sigue así y llegarás lejos!.`);
-
-
-           
-        }
-
-    };
-
-    
-    
-   
+        if (sonido)
+          Speech.speak(
+            `Has logrado encontrar todos los pares del abecedario. Sigue así y llegarás lejos!.`
+          );
+      }
+    }
   };
   return (
     <>
@@ -230,10 +269,12 @@ const AbecedarioOneGame = ({ dinamica }) => {
           >
             <Text style={{ fontWeight: "700" }}>La letra escogida es: </Text>
             <TouchableOpacity>
-              <Card style={{...styles.card}}>
+              <Card style={{ ...styles.card }}>
                 {/* <Card.Content> */}
-                  <Text style={{ fontSize: 12, fontWeight: "700" }}>{letraElegidaUno}</Text>
-                  {/* <Text variant="titleLarge">Card title</Text> */}
+                <Text style={{ fontSize: 12, fontWeight: "700" }}>
+                  {letraElegidaUno}
+                </Text>
+                {/* <Text variant="titleLarge">Card title</Text> */}
                 {/* </Card.Content> */}
               </Card>
             </TouchableOpacity>
@@ -247,10 +288,10 @@ const AbecedarioOneGame = ({ dinamica }) => {
               >
                 <Card style={styles.card}>
                   {/* <Card.Content> */}
-                    <Text style={{ fontSize: 12, fontWeight: "700" }}>
-                      {value}
-                    </Text>
-                    {/* <Text variant="titleLarge">Card title</Text> */}
+                  <Text style={{ fontSize: 12, fontWeight: "700" }}>
+                    {value}
+                  </Text>
+                  {/* <Text variant="titleLarge">Card title</Text> */}
                   {/* </Card.Content> */}
                 </Card>
               </TouchableOpacity>
@@ -260,7 +301,7 @@ const AbecedarioOneGame = ({ dinamica }) => {
         {/* <Text style={{ fontWeight: "700"}}>Números Ordenados</Text> */}
 
         <View style={styles.contenedorTablero}>
-        <View
+          <View
             style={{
               display: "flex",
               flexDirection: "row",
@@ -273,8 +314,10 @@ const AbecedarioOneGame = ({ dinamica }) => {
             <TouchableOpacity>
               <Card style={styles.card}>
                 {/* <Card.Content> */}
-                  <Text style={{ fontSize: 12, fontWeight: "700" }}>{letraElegidaDos}</Text>
-                  {/* <Text variant="titleLarge">Card title</Text> */}
+                <Text style={{ fontSize: 12, fontWeight: "700" }}>
+                  {letraElegidaDos}
+                </Text>
+                {/* <Text variant="titleLarge">Card title</Text> */}
                 {/* </Card.Content> */}
               </Card>
             </TouchableOpacity>
@@ -289,10 +332,10 @@ const AbecedarioOneGame = ({ dinamica }) => {
                 >
                   <Card style={styles.card}>
                     {/* <Card.Content> */}
-                      <Text style={{ fontSize: 12, fontWeight: "700" }}>
-                        {value}
-                      </Text>
-                      {/* <Text variant="titleLarge">Card title</Text> */}
+                    <Text style={{ fontSize: 12, fontWeight: "700" }}>
+                      {value}
+                    </Text>
+                    {/* <Text variant="titleLarge">Card title</Text> */}
                     {/* </Card.Content> */}
                   </Card>
                 </TouchableOpacity>
@@ -306,8 +349,9 @@ const AbecedarioOneGame = ({ dinamica }) => {
           style={styles.btnReload}
           onPress={() => {
             setLetraElegidaUno("");
-            setletraElegidaDos("")
-            barajearArreglo()}}
+            setletraElegidaDos("");
+            barajearArreglo();
+          }}
         >
           {/* <FontAwesome name="stop" size={24} color="#5c6bc0" /> */}
           <Ionicons name="reload-circle" size={24} color="#5c6bc0" />

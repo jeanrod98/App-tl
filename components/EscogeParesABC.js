@@ -19,9 +19,40 @@ import AbecedarioOneGame from "./AbecedarioOneGame";
 
 
 const EscogeParesABC = ({ setOrdenarNumeros }) => {
-    const { dataAlert, setDataAlert, logOut, setOption } = useAuth();
+    const { dataAlert, setDataAlert, logOut, setOption, auth } = useAuth();
+
+    // Estados para errores y aciertos
+  let [aciertos, setAciertos] = useState(0);
+  let [errores, setErrores] = useState(0);
+  let [tiempo, setTiempo] = useState(0);
 
   const [mostrarGame, setMostrarGame] = useState(false);
+
+
+
+
+  const capturarDatos = () => {
+    console.log("Capturando datos");
+    capturarTiempo();
+  };
+
+  const [idTiempo, setIdTiempo] = useState(0);
+
+  const capturarTiempo = (estado = true) => {
+    let idtimer;
+
+    if (estado === true) {
+      idtimer = setInterval(() => {
+        setTiempo(tiempo++);
+        // console.log(tiempo);
+      }, 1000);
+
+      setIdTiempo(idtimer);
+    } else {
+      clearInterval(idTiempo);
+      // console.log(tiempo);
+    }
+  };
 
     return ( 
         <View style={styles.containerOrdenarNumeros}>
@@ -30,6 +61,10 @@ const EscogeParesABC = ({ setOrdenarNumeros }) => {
           style={styles.btnClose}
           onPress={() => {
             setOrdenarNumeros(false);
+            capturarTiempo(false);
+            setAciertos(0);
+            setErrores(0);
+            setTiempo(0);
           }}
         >
           <AntDesign name="closecircle" size={32} color="red" />
@@ -49,13 +84,22 @@ const EscogeParesABC = ({ setOrdenarNumeros }) => {
             style={{...styles.game}}
           >
             {mostrarGame ? (
-              <AbecedarioOneGame dinamica={"Escoge las letras parecidas"}/>
+              <AbecedarioOneGame 
+              dinamica={"Escoge las letras parecidas"}
+              setAciertos={setAciertos}
+              setErrores={setErrores}
+              capturarTiempo={capturarTiempo}
+              aciertos={aciertos}
+              errores={errores}
+              tiempo={tiempo}
+              />
             ) : (
               <>
               <TouchableOpacity
                       style={styles.btnPlay}
                       onPress={() => {
                         setMostrarGame(true);
+                        if (auth?.tipo === "Cliente") capturarDatos();
                       }}
                     >
                 <Card style={styles.card}>

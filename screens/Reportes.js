@@ -19,7 +19,7 @@ import { Card } from "react-native-paper";
 import ModalReportesDetalle from "../components/ModalReportesDetalle";
 
 const Reportes = ({ setMostrar }) => {
-  const { sonido } = useAuth();
+  const { sonido, clientes } = useAuth();
 
   const [selected, setSelected] = useState("Alfabeto");
 
@@ -33,50 +33,9 @@ const Reportes = ({ setMostrar }) => {
     { key: "2", value: "Avanzada" },
   ]);
 
-  const arr = [
-    {
-      nombre_usu: "Jean Rodriguez",
-      correo_usu: "jcrod@gmail.com",
-      cedula_usu: "1314567738",
-      telefono_usu: "n/a",
-      direccion_usu: "n/a",
-      tipo_usu: "cliente",
-    },
-    {
-      nombre_usu: "John Rodriguez",
-      correo_usu: "jcrod@gmail.com",
-      cedula_usu: "n/a",
-      telefono_usu: "n/a",
-      direccion_usu: "n/a",
-      tipo_usu: "cliente",
-    },
-    {
-      nombre_usu: "Juan Rodriguez",
-      correo_usu: "jcrod@gmail.com",
-      cedula_usu: "n/a",
-      telefono_usu: "n/a",
-      direccion_usu: "n/a",
-      tipo_usu: "cliente",
-    },
-    {
-      nombre_usu: "Jose Rodriguez",
-      correo_usu: "jcrod@gmail.com",
-      cedula_usu: "n/a",
-      telefono_usu: "n/a",
-      direccion_usu: "n/a",
-      tipo_usu: "cliente",
-    },
-    {
-      nombre_usu: "Alex Rodriguez",
-      correo_usu: "jcrod@gmail.com",
-      cedula_usu: "n/a",
-      telefono_usu: "n/a",
-      direccion_usu: "n/a",
-      tipo_usu: "cliente",
-    },
-  ];
 
-  const [client, setClient] = useState(arr);
+
+  const [client, setClient] = useState(clientes);
 
   const [nuevoCliente, setNuevoCliente] = useState({
     nombre_usu: "",
@@ -89,6 +48,7 @@ const Reportes = ({ setMostrar }) => {
 
   useEffect(() => {
     if (sonido) Speech.speak("Reportes");
+    
   }, []);
 
   const [registroSelect, setRegistroSelect] = useState("");
@@ -164,7 +124,7 @@ const Reportes = ({ setMostrar }) => {
                     }}
                     onPress={() => {
                       setRegistroSelect("");
-                      setClient(arr);
+                      setClient(clientes);
                     }}
                   >
                     <AntDesign name="closecircle" size={20} color="red" />
@@ -203,7 +163,7 @@ const Reportes = ({ setMostrar }) => {
                               Cédula:{" "}
                             </Text>
                             <Text style={{ color: "#fff" }}>
-                              {cli.cedula_usu}
+                              {cli.cedula_cli}
                             </Text>
                           </View>
 
@@ -212,7 +172,7 @@ const Reportes = ({ setMostrar }) => {
                               Nombres:{" "}
                             </Text>
                             <Text style={{ color: "#fff" }}>
-                              {cli.nombre_usu}
+                              {cli.nombres_cli}
                             </Text>
                           </View>
 
@@ -252,32 +212,32 @@ const Reportes = ({ setMostrar }) => {
           <View>
             <Text style={styles.txtOption}>Información del cliente</Text>
           </View>
-          {nuevoCliente.nombre_usu ? (
+          {nuevoCliente.nombres_cli ? (
             <>
               <View style={styles.infoCli}>
                 <View style={styles.info}>
                   <Text style={{...styles.label, color: "#7986cb"}}>Cédula: </Text>
-                  <Text style={styles.label}>{nuevoCliente?.cedula_usu}</Text>
+                  <Text style={styles.label}>{nuevoCliente?.cedula_cli}</Text>
                 </View>
 
                 <View style={styles.info}>
                   <Text style={{...styles.label, color: "#7986cb"}}>Nombres: </Text>
-                  <Text style={styles.label}>{nuevoCliente?.nombre_usu}</Text>
+                  <Text style={styles.label}>{nuevoCliente?.nombres_cli}</Text>
                 </View>
 
                 <View style={styles.info}>
                   <Text style={{...styles.label, color: "#7986cb"}}>Correo: </Text>
-                  <Text style={styles.label}>{nuevoCliente?.correo_usu}</Text>
+                  <Text style={styles.label}>{nuevoCliente?.correo_cli}</Text>
                 </View>
 
                 <View style={styles.info}>
                   <Text style={{...styles.label, color: "#7986cb"}}>Teléfono: </Text>
-                  <Text style={styles.label}>{nuevoCliente?.telefono_usu}</Text>
+                  <Text style={styles.label}>{nuevoCliente?.telefono_cli}</Text>
                 </View>
 
                 <View style={styles.info}>
                   <Text style={{...styles.label, color: "#7986cb"}}>Dirección: </Text>
-                  <Text style={styles.label}>{nuevoCliente?.direccion_usu}</Text>
+                  <Text style={styles.label}>{nuevoCliente?.direccion_cli}</Text>
                 </View>
               </View>
 
