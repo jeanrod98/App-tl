@@ -43,6 +43,7 @@ const ModalReportesDetalle = ({
         // console.log(arregloPrincipal);
         if (arregloPrincipal.nombreModulo_av == mostrarDetalles.modulo) {
           // extraer el ultimo registro del array
+          // console.log(arregloPrincipal);
           const ultimoDetalle =
             arregloPrincipal.detalles[data[index]?.detalles.length - 1];
           ultimoDetalle.label = arregloPrincipal.fecha_av;
@@ -95,6 +96,8 @@ const ModalReportesDetalle = ({
         );
         // agrega promedio de errores al estado
         setErrores(`${sumaErrores / erroresArr.length}`);
+      console.log(sumaErrores);
+
       }
 
       // Sacar el promedio de aciertos en base a la suma de todos los intentos
@@ -104,7 +107,6 @@ const ModalReportesDetalle = ({
       );
       const aciertos = (sumaAciertos/sumaIntentos) * 10;
       setAciertos(`${aciertos.toFixed(2)} / 10`)
-      // console.log(sumaAciertos);
 
       // setDatosModulos(data);
     } catch (error) {

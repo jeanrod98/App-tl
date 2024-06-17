@@ -43,11 +43,20 @@ import tren_2 from "../assets/tren_2.jpg";
 import barco_2 from "../assets/barco_2.jpg";
 import barco_1 from "../assets/barco_1.jpg";
 
-import * as Speech from 'expo-speech';
+import * as Speech from "expo-speech";
+import clienteAxios from "../config/axios";
 
-
-const TrnsportesOneGame = ({ dinamica }) => {
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
+const TrnsportesOneGame = ({
+  dinamica,
+  capturarTiempo,
+  setAciertos,
+  aciertos,
+  setErrores,
+  errores,
+  tiempo,
+}) => {
+  const { auth, dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } =
+    useAuth();
 
   const [arregloAbecedario, setArregloAbecedario] = useState([]);
   const [arregloAbecedarioTwo, setArregloAbecedarioTwo] = useState([]);
@@ -57,12 +66,31 @@ const TrnsportesOneGame = ({ dinamica }) => {
     barajearArreglo();
   }, []);
 
-  const barajearArreglo = async () => {
+  const registrarAvance = async () => {
+    try {
+      const { data } = await clienteAxios.post("/avance-registro",
+        {
+          usuario: auth.nombres,
+          modulo: "TRANSPORTES",
+          fecha_avance: new Date().toLocaleString("EC").split(" ")[0],
+          id_cliente: auth._id,
+          id_terapeuta: auth.terapeuta_cli,
+          aciertos,
+          errores,
+          tiempo,
+        }
+      )
+      console.log(data);
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
+  const barajearArreglo = async () => {
     if (sonido) {
       Speech.speak(dinamica);
     }
-    
 
     setBordeFilaUno("");
     setBordeFilaDos("");
@@ -105,19 +133,18 @@ const TrnsportesOneGame = ({ dinamica }) => {
     return array;
   };
 
-  
   const [bordeFilaUno, setBordeFilaUno] = useState("");
   const [bordeFilaDos, setBordeFilaDos] = useState("");
 
   const seleccionarCard = (value, fila) => {
-    if (sonido) {Speech.speak(value.nombre);}
-    
-    if ( fila === "T1") {
-        setBordeFilaUno(value.nombre);
+    if (sonido) {
+      Speech.speak(value.nombre);
+    }
 
-    }else{
-        setBordeFilaDos(value.nombre);
-
+    if (fila === "T1") {
+      setBordeFilaUno(value.nombre);
+    } else {
+      setBordeFilaDos(value.nombre);
     }
   };
 
@@ -139,6 +166,9 @@ const TrnsportesOneGame = ({ dinamica }) => {
 
     // !validar que sean iguales las letras
     if (bordeFilaUno !== bordeFilaDos) {
+
+      if (auth?.tipo === "Cliente") setErrores(errores + 1);
+
       setDataAlert({
         icon: "sad",
         tittle: "Transportes distintos",
@@ -147,7 +177,10 @@ const TrnsportesOneGame = ({ dinamica }) => {
         active: true,
         tipe: "validation",
       });
-      if (sonido) Speech.speak("Ups!, los transportes seleccionados no son iguales, inténtalo de nuevo.");
+      if (sonido)
+        Speech.speak(
+          "Ups!, los transportes seleccionados no son iguales, inténtalo de nuevo."
+        );
 
       return;
     }
@@ -155,6 +188,8 @@ const TrnsportesOneGame = ({ dinamica }) => {
     // * valida si son iguales le muestra el conffeti
     if (bordeFilaUno === bordeFilaDos) {
       // setConffetiShow(true);
+      if (auth?.tipo === "Cliente") setAciertos(aciertos+1);
+
       confettiRef.current?.play(0);
       const newArregloOne = await arregloAbecedario.filter(
         (trasnporte) => trasnporte.nombre !== bordeFilaUno
@@ -172,6 +207,12 @@ const TrnsportesOneGame = ({ dinamica }) => {
       if (newArregloOne.length == 0 || newArregloTwo.length == 0) {
         // console.log(arregloAbecedario.length);
 
+        // todo: Aqui se termina de capturar los datos
+        if (auth?.tipo === "Cliente") capturarTiempo(false);
+
+        // *Aqui se registran los datos
+        registrarAvance();
+
         setConffetiShow(true);
         confettiRef.current?.play(0);
         setDataAlert({
@@ -182,9 +223,10 @@ const TrnsportesOneGame = ({ dinamica }) => {
           active: true,
           tipe: "validation",
         });
-        if (sonido) Speech.speak("Has logrado encontrar todos los pares de los transportes. Sigue así y llegarás lejos!.");
-
-
+        if (sonido)
+          Speech.speak(
+            "Has logrado encontrar todos los pares de los transportes. Sigue así y llegarás lejos!."
+          );
       }
     }
   };
@@ -237,11 +279,14 @@ const TrnsportesOneGame = ({ dinamica }) => {
                   key={index}
                   onPress={() => seleccionarCard(value, "T2")}
                 >
-                  <Card  style={{
-                    ...styles.card,
-                    borderColor: bordeFilaDos == value.nombre ? "red" : "#000",
-                    borderWidth: 2,
-                  }}>
+                  <Card
+                    style={{
+                      ...styles.card,
+                      borderColor:
+                        bordeFilaDos == value.nombre ? "red" : "#000",
+                      borderWidth: 2,
+                    }}
+                  >
                     {/* <Card.Content> */}
                     <Image style={styles.imgCard} source={value?.source} />
                     <Text
@@ -266,7 +311,6 @@ const TrnsportesOneGame = ({ dinamica }) => {
         <TouchableOpacity
           style={styles.btnReload}
           onPress={() => {
-            
             barajearArreglo();
           }}
         >

@@ -12,10 +12,19 @@ import conffeti from "../assets/confeti.json"
 import LottieView from 'lottie-react-native';
 
 import * as Speech from 'expo-speech';
+import clienteAxios from "../config/axios";
 
-const NumerosOnGame = ({ dinamica }) => {
+const NumerosOnGame = ({ 
+  dinamica,
+  capturarTiempo,
+  setAciertos,
+  aciertos,
+  setErrores,
+  errores,
+  tiempo,
+ }) => {
 
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
+  const { auth, dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
 
   const [arregloNumeros, setArregloNumeros] = useState([]);
   const [resultNumeros, setResultNumeros] = useState([]);
@@ -25,6 +34,9 @@ const NumerosOnGame = ({ dinamica }) => {
     
     prepararNumeros();
   }, []);
+
+  
+
 
   const prepararNumeros = () => {
 
@@ -101,6 +113,10 @@ const NumerosOnGame = ({ dinamica }) => {
     
 
     if (count == 10) {
+      if (auth?.tipo === "Cliente") setAciertos(aciertos+1);
+     
+
+
       setConffetiShow(true);
        confettiRef.current?.play(0);
       setDataAlert({
@@ -112,8 +128,11 @@ const NumerosOnGame = ({ dinamica }) => {
       });
       if (sonido) Speech.speak("Has logrado ordenar los números del 1 al 10. Sigue así y llegarás lejos!.");
 
+  
       
     }else{
+      if (auth?.tipo === "Cliente") setErrores(errores + 1);
+
       setDataAlert({
         icon: "danger",
         tittle: "Validación",

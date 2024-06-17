@@ -1,42 +1,79 @@
-
 import {
-    Dimensions,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    ImageBackground,
-  } from "react-native";
-  import { AntDesign } from "@expo/vector-icons";
-  
-  import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
-  import { useEffect, useState } from "react";
-  import ComponentOnGame from "./NumerosOnGame";
-  import useAuth from "../Hooks/useAuth";
-  import Alerts from "./Alerts";
-  import fondo_number_2 from "../assets/juego_transportes_1.jpg";
-  import { Card } from "react-native-paper";
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ImageBackground,
+} from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+
+import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
+import ComponentOnGame from "./NumerosOnGame";
+import useAuth from "../Hooks/useAuth";
+import Alerts from "./Alerts";
+import fondo_number_2 from "../assets/juego_transportes_1.jpg";
+import { Card } from "react-native-paper";
 import AbecedarioOneGame from "./AbecedarioOneGame";
 import TrnsportesOneGame from "./TrnsportesOneGame";
 
-
 const EscogerTransportes = ({ setOrdenarNumeros }) => {
-    const { dataAlert, setDataAlert, logOut, setOption } = useAuth();
+  const { dataAlert, auth, logOut, setOption } = useAuth();
 
   const [mostrarGame, setMostrarGame] = useState(false);
 
-    return ( 
-        <View style={styles.containerOrdenarNumeros}>
-      <View style={{...styles.container, backgroundColor: mostrarGame ? "rgba(255, 255, 255, .9)" : "rgba(255, 255, 255, 1)"}}>
+  // Estados para errores y aciertos
+  let [aciertos, setAciertos] = useState(0);
+  let [errores, setErrores] = useState(0);
+  let [tiempo, setTiempo] = useState(0);
+
+  const capturarDatos = () => {
+    console.log("Capturando datos");
+    capturarTiempo();
+  };
+
+  const [idTiempo, setIdTiempo] = useState(0);
+
+  const capturarTiempo = (estado = true) => {
+    let idtimer;
+
+    if (estado === true) {
+      idtimer = setInterval(() => {
+        setTiempo(tiempo++);
+        // console.log(tiempo);
+      }, 1000);
+
+      setIdTiempo(idtimer);
+    } else {
+      clearInterval(idTiempo);
+      // console.log(tiempo);
+    }
+  };
+
+  return (
+    <View style={styles.containerOrdenarNumeros}>
+      <View
+        style={{
+          ...styles.container,
+          backgroundColor: mostrarGame
+            ? "rgba(255, 255, 255, .9)"
+            : "rgba(255, 255, 255, 1)",
+        }}
+      >
         <TouchableOpacity
           style={styles.btnClose}
           onPress={() => {
             setOrdenarNumeros(false);
+            capturarTiempo(false);
+            setAciertos(0);
+            setErrores(0);
+            setTiempo(0);
           }}
         >
           <AntDesign name="closecircle" size={32} color="red" />
         </TouchableOpacity>
-        <View style={{...styles.contenido}}>
+        <View style={{ ...styles.contenido }}>
           <View style={styles.header}>
             <Text style={styles.txtHeader}>
               Escoge los medios de transporte que se parecen
@@ -48,27 +85,36 @@ const EscogerTransportes = ({ setOrdenarNumeros }) => {
             source={mostrarGame ? "" : fondo_number_2}
             resizeMode="contain"
             imageStyle={{ opacity: 1 }}
-            style={{...styles.game}}
+            style={{ ...styles.game }}
           >
             {mostrarGame ? (
-              <TrnsportesOneGame dinamica={"Escoge los medios de transporte que se parecen"} />
+              <TrnsportesOneGame
+                setAciertos={setAciertos}
+                setErrores={setErrores}
+                capturarTiempo={capturarTiempo}
+                aciertos={aciertos}
+                errores={errores}
+                tiempo={tiempo}
+                dinamica={"Escoge los medios de transporte que se parecen"}
+              />
             ) : (
               <>
-              <TouchableOpacity
-                      style={styles.btnPlay}
-                      onPress={() => {
-                        setMostrarGame(true);
-                      }}
-                    >
-                <Card style={styles.card}>
-                  <Card.Content>
-                    
+                <TouchableOpacity
+                  style={styles.btnPlay}
+                  onPress={() => {
+                    setMostrarGame(true);
+                    if (auth?.tipo === "Cliente") capturarDatos();
+                  }}
+                >
+                  <Card style={styles.card}>
+                    <Card.Content>
                       <FontAwesome5 name="play" size={32} color="#3f51b5" />
-                    <Text style={{ fontSize: 12, fontWeight: "700" }}>Iniciar</Text>
-                  </Card.Content>
-                </Card>
+                      <Text style={{ fontSize: 12, fontWeight: "700" }}>
+                        Iniciar
+                      </Text>
+                    </Card.Content>
+                  </Card>
                 </TouchableOpacity>
-                
               </>
             )}
           </ImageBackground>
@@ -76,9 +122,9 @@ const EscogerTransportes = ({ setOrdenarNumeros }) => {
       </View>
       {dataAlert.active && <Alerts />}
     </View>
-     );
-}
- 
+  );
+};
+
 export default EscogerTransportes;
 
 let { height, width } = Dimensions.get("screen");

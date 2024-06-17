@@ -32,10 +32,19 @@ import color_rosado from "../assets/color_rosado.png";
 import color_verde from "../assets/color_verde.png";
 
 import * as Speech from 'expo-speech';
+import clienteAxios from "../config/axios";
 
 
-const ColoresOneGame = ({ dinamica }) => {
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
+const ColoresOneGame = ({ 
+  dinamica,
+  capturarTiempo,
+  setAciertos,
+  aciertos,
+  setErrores,
+  errores,
+  tiempo,
+ }) => {
+  const { auth, dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
 
   const [arregloNumeros, setArregloNumeros] = useState([]);
   const [resultNumeros, setResultNumeros] = useState([]);
@@ -51,6 +60,9 @@ const ColoresOneGame = ({ dinamica }) => {
   
     generarColorAleatorio();
   }, []);
+
+
+  
 
   const generarColorAleatorio = async () => {
 
@@ -107,6 +119,8 @@ const ColoresOneGame = ({ dinamica }) => {
     // !validar que existan los 10 numeros
     if (objeto.color !== colorCard.color) {
 
+      if (auth?.tipo === "Cliente") setErrores(errores + 1);
+
         setDataAlert({
           icon: "sad",
           tittle: "Esa no era la imagen correcta",
@@ -126,6 +140,12 @@ const ColoresOneGame = ({ dinamica }) => {
 
         return;
       }else{
+
+        // * VALIDAR SI ES CORRECTO Y CAPTURAR ACIERTO
+        if (auth?.tipo === "Cliente") setAciertos(aciertos+1);
+        
+       
+       
         confettiRef.current?.play(0);
 
 
@@ -140,56 +160,7 @@ const ColoresOneGame = ({ dinamica }) => {
 
   }
 
-  const validarResultados = () => {
-    // console.log("validando...");
-    // !validar que existan los 10 numeros
-    if (resultNumeros.length !== 10) {
-      setDataAlert({
-        icon: "danger",
-        tittle: "Validación",
-        detalle: "Debes agregar 10 números.",
-        active: true,
-        tipe: "validation",
-      });
-      if (sonido) Speech.speak(`Debes agregar 10 números.`);
-
-      return;
-    }
-    let arregloNumeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-    let count = 0;
-    for (let index = 0; index < arregloNumeros.length; index++) {
-      const arr1 = arregloNumeros[index];
-      const arr2 = resultNumeros[index];
-      if (arr1 == arr2) count++;
-    }
-
-    if (count == 10) {
-      setConffetiShow(true);
-      confettiRef.current?.play(0);
-      setDataAlert({
-        icon: "success",
-        tittle: "¡FELICIDADES!",
-        detalle:
-          "Has logrado ordenar los números del 1 al 10. Sigue así y llegarás lejos!.",
-        active: true,
-        tipe: "validation",
-      });
-      if (sonido) Speech.speak(`Has logrado ordenar los números del 1 al 10. Sigue así y llegarás lejos!.`);
-
-    } else {
-      setDataAlert({
-        icon: "danger",
-        tittle: "Validación",
-        detalle: "Ups! Los números no se encuentran ordenados.",
-        active: true,
-        tipe: "validation",
-      });
-      if (sonido) Speech.speak(`Ups! Los números no se encuentran ordenados.`);
-
-    }
-  };
-
+  
   return (
     <>
       <View style={styles.contenido}>

@@ -1,35 +1,31 @@
 import {
-    Dimensions,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    ImageBackground,
-  } from "react-native";
-  import { AntDesign } from "@expo/vector-icons";
-  
-  import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
-  import { useEffect, useState } from "react";
-  import ComponentOnGame from "./NumerosOnGame";
-  import useAuth from "../Hooks/useAuth";
-  import Alerts from "./Alerts";
-  import fondo_number_2 from "../assets/juego_abc.jpg";
-  import { Card } from "react-native-paper";
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ImageBackground,
+} from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+
+import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
+import ComponentOnGame from "./NumerosOnGame";
+import useAuth from "../Hooks/useAuth";
+import Alerts from "./Alerts";
+import fondo_number_2 from "../assets/juego_abc.jpg";
+import { Card } from "react-native-paper";
 import AbecedarioOneGame from "./AbecedarioOneGame";
 
-
 const EscogeParesABC = ({ setOrdenarNumeros }) => {
-    const { dataAlert, setDataAlert, logOut, setOption, auth } = useAuth();
-
-    // Estados para errores y aciertos
-  let [aciertos, setAciertos] = useState(0);
-  let [errores, setErrores] = useState(0);
-  let [tiempo, setTiempo] = useState(0);
+  const { dataAlert, setDataAlert, logOut, setOption, auth } = useAuth();
 
   const [mostrarGame, setMostrarGame] = useState(false);
 
-
-
+  // Estados para errores y aciertos
+  let [aciertos, setAciertos] = useState(0);
+  let [errores, setErrores] = useState(0);
+  let [tiempo, setTiempo] = useState(0);
 
   const capturarDatos = () => {
     console.log("Capturando datos");
@@ -54,9 +50,16 @@ const EscogeParesABC = ({ setOrdenarNumeros }) => {
     }
   };
 
-    return ( 
-        <View style={styles.containerOrdenarNumeros}>
-      <View style={{...styles.container, backgroundColor: mostrarGame ? "rgba(255, 255, 255, .9)" : "rgba(255, 255, 255, 1)"}}>
+  return (
+    <View style={styles.containerOrdenarNumeros}>
+      <View
+        style={{
+          ...styles.container,
+          backgroundColor: mostrarGame
+            ? "rgba(255, 255, 255, .9)"
+            : "rgba(255, 255, 255, 1)",
+        }}
+      >
         <TouchableOpacity
           style={styles.btnClose}
           onPress={() => {
@@ -69,11 +72,9 @@ const EscogeParesABC = ({ setOrdenarNumeros }) => {
         >
           <AntDesign name="closecircle" size={32} color="red" />
         </TouchableOpacity>
-        <View style={{...styles.contenido}}>
+        <View style={{ ...styles.contenido }}>
           <View style={styles.header}>
-            <Text style={styles.txtHeader}>
-              Escoge las letras parecidas
-            </Text>
+            <Text style={styles.txtHeader}>Escoge las letras parecidas</Text>
             {/* <Text style={styles.txtHeader}>00 : 00 : 00</Text> */}
           </View>
 
@@ -81,36 +82,36 @@ const EscogeParesABC = ({ setOrdenarNumeros }) => {
             source={mostrarGame ? "" : fondo_number_2}
             resizeMode="contain"
             imageStyle={{ opacity: 1 }}
-            style={{...styles.game}}
+            style={{ ...styles.game }}
           >
             {mostrarGame ? (
-              <AbecedarioOneGame 
-              dinamica={"Escoge las letras parecidas"}
-              setAciertos={setAciertos}
-              setErrores={setErrores}
-              capturarTiempo={capturarTiempo}
-              aciertos={aciertos}
-              errores={errores}
-              tiempo={tiempo}
+              <AbecedarioOneGame
+                dinamica={"Escoge las letras parecidas"}
+                setAciertos={setAciertos}
+                setErrores={setErrores}
+                capturarTiempo={capturarTiempo}
+                aciertos={aciertos}
+                errores={errores}
+                tiempo={tiempo}
               />
             ) : (
               <>
-              <TouchableOpacity
-                      style={styles.btnPlay}
-                      onPress={() => {
-                        setMostrarGame(true);
-                        if (auth?.tipo === "Cliente") capturarDatos();
-                      }}
-                    >
-                <Card style={styles.card}>
-                  <Card.Content>
-                    
+                <TouchableOpacity
+                  style={styles.btnPlay}
+                  onPress={() => {
+                    setMostrarGame(true);
+                    if (auth?.tipo === "Cliente") capturarDatos();
+                  }}
+                >
+                  <Card style={styles.card}>
+                    <Card.Content>
                       <FontAwesome5 name="play" size={32} color="#3f51b5" />
-                    <Text style={{ fontSize: 12, fontWeight: "700" }}>Iniciar</Text>
-                  </Card.Content>
-                </Card>
+                      <Text style={{ fontSize: 12, fontWeight: "700" }}>
+                        Iniciar
+                      </Text>
+                    </Card.Content>
+                  </Card>
                 </TouchableOpacity>
-                
               </>
             )}
           </ImageBackground>
@@ -118,9 +119,9 @@ const EscogeParesABC = ({ setOrdenarNumeros }) => {
       </View>
       {dataAlert.active && <Alerts />}
     </View>
-     );
-}
- 
+  );
+};
+
 export default EscogeParesABC;
 
 let { height, width } = Dimensions.get("screen");

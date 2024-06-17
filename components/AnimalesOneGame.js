@@ -39,12 +39,27 @@ import sonido_lobo from "../assets/sounds/lobo.mp3";
 import sonido_cerdo from "../assets/sounds/cerdo.mp3";
 
 import { Fontisto } from "@expo/vector-icons";
-import { Audio } from 'expo-av';
+import { Audio } from "expo-av";
 
-import * as Speech from 'expo-speech';
+import * as Speech from "expo-speech";
 
-const AnimalesOneGame = ({ dinamica}) => {
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
+const AnimalesOneGame = ({
+  dinamica,
+  capturarTiempo,
+  setAciertos,
+  aciertos,
+  setErrores,
+  errores,
+  tiempo,
+}) => {
+  const {
+    auth,
+    dataAlert,
+    setDataAlert,
+    conffetiShow,
+    setConffetiShow,
+    sonido,
+  } = useAuth();
 
   const [arregloNumeros, setArregloNumeros] = useState([]);
   const [resultNumeros, setResultNumeros] = useState([]);
@@ -57,16 +72,14 @@ const AnimalesOneGame = ({ dinamica}) => {
   }, []);
 
   const generarColorAleatorio = async () => {
-
     if (sonido) {
       Speech.speak(dinamica);
       Speech.speak("¿Qué animal es?");
     }
-    
 
     let arregloNumeros = [
       { nombre: "PERRO", source_1: img_perro, audio: sonido_perro },
-      { nombre: "GATO", source_1: img_gato,  audio: sonido_gato },
+      { nombre: "GATO", source_1: img_gato, audio: sonido_gato },
       { nombre: "LEÓN", source_1: img_leon, audio: sonido_leon },
       { nombre: "VACA", source_1: img_vaca, audio: sonido_vaca },
       { nombre: "CABRA", source_1: img_chivo, audio: sonido_cabra },
@@ -110,6 +123,8 @@ const AnimalesOneGame = ({ dinamica}) => {
 
     // !validar que existan los 10 numeros
     if (objeto.nombre !== colorCard.nombre) {
+      if (auth?.tipo === "Cliente") setErrores(errores + 1);
+
       setDataAlert({
         icon: "sad",
         tittle: "Esa no era la imagen correcta",
@@ -123,6 +138,8 @@ const AnimalesOneGame = ({ dinamica}) => {
 
       return;
     } else {
+      if (auth?.tipo === "Cliente") setAciertos(aciertos + 1);
+
       confettiRef.current?.play(0);
 
       setTimeout(() => {
@@ -133,11 +150,9 @@ const AnimalesOneGame = ({ dinamica}) => {
     }
   };
 
-//   const [sound, setSound] = useState();
+  //   const [sound, setSound] = useState();
 
   const reproducirSonido = async (animal) => {
-   
-
     // console.log('Loading Sound');
     const { sound } = await Audio.Sound.createAsync(animal.audio);
     // setSound(sound);
@@ -146,15 +161,14 @@ const AnimalesOneGame = ({ dinamica}) => {
     await sound.playAsync();
   };
 
-
-//   useEffect(() => {
-//     return sound
-//       ? () => {
-//           console.log('Unloading Sound');
-//           sound.unloadAsync();
-//         }
-//       : undefined;
-//   }, [sound]);
+  //   useEffect(() => {
+  //     return sound
+  //       ? () => {
+  //           console.log('Unloading Sound');
+  //           sound.unloadAsync();
+  //         }
+  //       : undefined;
+  //   }, [sound]);
 
   return (
     <>

@@ -41,8 +41,17 @@ import triangulo from "../assets/triangulo.jpg";
 import * as Speech from 'expo-speech';
 
 
-const FigurasOneGame = ({ dinamica }) => {
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
+const FigurasOneGame = ({ 
+  dinamica,
+  capturarTiempo,
+  setAciertos,
+  aciertos,
+  setErrores,
+  errores,
+  tiempo,
+
+ }) => {
+  const { auth, dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
 
   const [arregloNumeros, setArregloNumeros] = useState([]);
   const [resultNumeros, setResultNumeros] = useState([]);
@@ -63,7 +72,8 @@ const FigurasOneGame = ({ dinamica }) => {
     generarFiguraAleatorio();
   }, []);
 
-  
+
+
   const generarFiguraAleatorio = async () => {
     
 
@@ -110,6 +120,8 @@ const FigurasOneGame = ({ dinamica }) => {
 
     // !validar que existan los 10 numeros
     if (objeto.nombre !== figuraCard.nombre) {
+      if (auth?.tipo === "Cliente") setErrores(errores + 1);
+
       setDataAlert({
         icon: "sad",
         tittle: "Esa no era la figura correcta",
@@ -125,6 +137,10 @@ const FigurasOneGame = ({ dinamica }) => {
 
       return;
     } else {
+      // * VALIDAR SI ES CORRECTO Y CAPTURAR ACIERTO
+      if (auth?.tipo === "Cliente") setAciertos(aciertos+1);
+        
+
       confettiRef.current?.play(0);
 
       setTimeout(() => {

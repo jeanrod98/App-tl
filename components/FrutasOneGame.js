@@ -33,10 +33,20 @@ import naranja from "../assets/naranja.jpg";
 import mandarina from "../assets/mandarina.jpg";
 
 import * as Speech from 'expo-speech';
+import clienteAxios from "../config/axios";
 
 
-const FrutasOneGame = ({ dinamica }) => {
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
+const FrutasOneGame = ({ 
+  dinamica,
+  capturarTiempo,
+  setAciertos,
+  aciertos,
+  setErrores,
+  errores,
+  tiempo,
+
+ }) => {
+  const { auth, dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
 
   const [arregloFrutas, setArregloFrutas] = useState([]);
   const confettiRef = useRef(null);
@@ -46,6 +56,27 @@ const FrutasOneGame = ({ dinamica }) => {
     
 
   }, []);
+
+  const registrarAvance = async () => {
+    try {
+      const { data } = await clienteAxios.post("/avance-registro",
+        {
+          usuario: auth.nombres,
+          modulo: "FRUTAS",
+          fecha_avance: new Date().toLocaleString("EC").split(" ")[0],
+          id_cliente: auth._id,
+          id_terapeuta: auth.terapeuta_cli,
+          aciertos,
+          errores,
+          tiempo,
+        }
+      )
+      console.log(data);
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const barajearArreglo = async () => {
 
@@ -138,6 +169,8 @@ const FrutasOneGame = ({ dinamica }) => {
 
     // !validar que sean iguales las letras
     if (bordeFilaUno.split("_")[0] !== bordeFilaDos.split("_")[0]) {
+      if (auth?.tipo === "Cliente") setErrores(errores + 1);
+      
       setDataAlert({
         icon: "sad",
         tittle: "Frutas distintas",
@@ -154,6 +187,8 @@ const FrutasOneGame = ({ dinamica }) => {
     // * valida si son iguales le muestra el conffeti
     if (bordeFilaUno.split("_")[0] === bordeFilaDos.split("_")[0]) {
       // setConffetiShow(true);
+      if (auth?.tipo === "Cliente") setAciertos(aciertos+1);
+
       confettiRef.current?.play(0);
       const newArregloOne = await arregloFrutas.filter(
         (frutas) => frutas.nombre !== bordeFilaUno.split("_")[0]
@@ -168,6 +203,12 @@ const FrutasOneGame = ({ dinamica }) => {
 
       if (newArregloOne.length == 0) {
         // console.log(arregloAbecedario.length);
+
+        // todo: Aqui se termina de capturar los datos
+        if (auth?.tipo === "Cliente") capturarTiempo(false);
+
+        // *Aqui se registran los datos
+        registrarAvance();
 
         setConffetiShow(true);
         confettiRef.current?.play(0);

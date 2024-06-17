@@ -18,11 +18,58 @@ import { Card } from "react-native-paper";
 import AbecedarioOneGame from "./AbecedarioOneGame";
 import ColoresOneGame from "./ColoresOneGame";
 import FigurasOneGame from "./FigurasOneGame";
+import clienteAxios from "../config/axios";
 
 const FigurasEscoger = ({ setEscogerObjetos }) => {
-  const { dataAlert, setDataAlert, logOut, setOption } = useAuth();
+  const { auth, dataAlert, setDataAlert, logOut, setOption } = useAuth();
 
   const [mostrarGame, setMostrarGame] = useState(false);
+
+  // Estados para errores y aciertos
+  let [aciertos, setAciertos] = useState(0);
+  let [errores, setErrores] = useState(0);
+  let [tiempo, setTiempo] = useState(0);
+
+  const capturarDatos = () => {
+    console.log("Capturando datos");
+    capturarTiempo();
+  };
+
+  const [idTiempo, setIdTiempo] = useState(0);
+
+  const capturarTiempo = (estado = true) => {
+    let idtimer;
+
+    if (estado === true) {
+      idtimer = setInterval(() => {
+        setTiempo(tiempo++);
+        // console.log(tiempo);
+      }, 1000);
+
+      setIdTiempo(idtimer);
+    } else {
+      clearInterval(idTiempo);
+      // console.log(tiempo);
+    }
+  };
+
+  const registrarAvance = async () => {
+    try {
+      const { data } = await clienteAxios.post("/avance-registro", {
+        usuario: auth.nombres,
+        modulo: "FIGURAS GEOMÉTRICAS",
+        fecha_avance: new Date().toLocaleString("EC").split(" ")[0],
+        id_cliente: auth._id,
+        id_terapeuta: auth.terapeuta_cli,
+        aciertos,
+        errores,
+        tiempo,
+      });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View style={styles.containerEscogerObjetos}>
@@ -38,6 +85,15 @@ const FigurasEscoger = ({ setEscogerObjetos }) => {
           style={styles.btnClose}
           onPress={() => {
             setEscogerObjetos(false);
+            if (auth?.tipo === "Cliente") capturarTiempo(false);
+            if (aciertos > 0 || errores > 0) {
+              // todo: Aqui se termina de capturar los datos
+              // *Aqui se registran los datos
+              if (auth?.tipo === "Cliente") registrarAvance();
+            }
+            setAciertos(0);
+            setErrores(0);
+            setTiempo(0);
           }}
         >
           <AntDesign name="closecircle" size={32} color="red" />
@@ -57,13 +113,22 @@ const FigurasEscoger = ({ setEscogerObjetos }) => {
             style={{ ...styles.game }}
           >
             {mostrarGame ? (
-              <FigurasOneGame dinamica={"Escoge la figura que se parece a la imagen"} />
+              <FigurasOneGame
+                setAciertos={setAciertos}
+                setErrores={setErrores}
+                capturarTiempo={capturarTiempo}
+                aciertos={aciertos}
+                errores={errores}
+                tiempo={tiempo}
+                dinamica={"Escoge la figura que se parece a la imagen"}
+              />
             ) : (
               <>
                 <TouchableOpacity
                   style={styles.btnPlay}
                   onPress={() => {
                     setMostrarGame(true);
+                    if (auth?.tipo === "Cliente") capturarDatos();
                   }}
                 >
                   <Card style={styles.card}>
