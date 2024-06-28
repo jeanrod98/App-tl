@@ -67,7 +67,14 @@ import {
               </Text>
               {/* <Text style={styles.txtHeader}>00 : 00 : 00</Text> */}
             </View>
-            <View>
+            <View 
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 20,
+            }}
+            >
               <TouchableOpacity
                 style={{
                   display: "flex",
@@ -81,6 +88,11 @@ import {
                   source={opcionSeleccionada.source}
                 />
               </TouchableOpacity>
+              <Card style={{ ...styles.card, width: 50, height: 50 }}>
+              <Text style={{ fontSize: 20, fontWeight: "700" }}>
+                {opcionSeleccionada.nombre.split("")[0]}
+              </Text>
+            </Card>
             </View>
             <View
               style={{

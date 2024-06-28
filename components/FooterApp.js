@@ -127,27 +127,30 @@ const FooterApp = ({ ruta, name, data, setDataForm }) => {
       // console.log("Inicio de sesion");
 
       await login(data.correo, data.password);
-    } else if (ruta === "/menu") {
-      // console.log("menu");
-      // console.log(option.active);
-      // validar que se haya elegido una opcion del menu
-      if (option.activo === false) {
-        // ! alerta
-        setDataAlert({
-          tipe: "error",
-          tittle: "ELIGE UNA OPCIÓN",
-          detalle: "Debes elegir una opción del menú para continuar!",
-          active: true,
-        });
-        if (sonido)  Speech.speak("Debes elegir una opción del menú para continuar!");
+    } 
+
+    
+    // else if (ruta === "/menu") {
+    //   // console.log("menu");
+    //   // console.log(option.active);
+    //   // validar que se haya elegido una opcion del menu
+    //   if (option.activo === false) {
+    //     // ! alerta
+    //     setDataAlert({
+    //       tipe: "error",
+    //       tittle: "ELIGE UNA OPCIÓN",
+    //       detalle: "Debes elegir una opción del menú para continuar!",
+    //       active: true,
+    //     });
+    //     if (sonido)  Speech.speak("Debes elegir una opción del menú para continuar!");
 
         
 
-        return;
-      }
+    //     return;
+    //   }
 
-      setOption({ ...option, next: true });
-    }
+    //   setOption({ ...option, next: true });
+    // }
   };
 
   const activarSonido = () => {

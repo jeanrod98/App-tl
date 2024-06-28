@@ -34,62 +34,62 @@ const Menu = () => {
     // console.log(option);
     // PREGUNTAR POR CADA CASO
 // console.log(option);
-    if (sonido) {Speech.speak(option);}
+    // if (sonido) {Speech.speak(option);}
 
 
     if(option === "ALFABETO"){
       setOption({
         activo: true,
         nameOption: "ALFABETO",
-        next: false
+        next: true
       });
     } else if (option === "TRANSPORTES") {
       setOption({
         activo: true,
         nameOption: "TRANSPORTES",
-        next: false
+        next: true
       });
     } else if (option === "FRUTAS") {
       setOption({
         activo: true,
         nameOption: "FRUTAS",
-        next: false
+        next: true
       });
     } else if (option === "VOCALES") {
       setOption({
         activo: true,
         nameOption: "VOCALES",
-        next: false
+        next: true
       });
     } else if (option === "COLORES") {
       setOption({
         activo: true,
         nameOption: "COLORES",
-        next: false
+        next: true
       });
     } else if (option === "ANIMALES") {
       setOption({
         activo: true,
         nameOption: "ANIMALES",
-        next: false
+        next: true
       });
     } else if (option === "NÚMEROS") {
       setOption({
         activo: true,
         nameOption: "NUMEROS",
-        next: false
+        next: true
       });
     } else if (option === "FIGURAS") {
       setOption({
         activo: true,
         nameOption: "FIGURAS",
-        next: false
+        next: true
       });
     } else if (option === "MUSICA") {
       setOption({
         activo: true,
         nameOption: "MUSICA",
-        next: false
+        next: true
       });
     }
   

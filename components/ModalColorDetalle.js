@@ -29,6 +29,7 @@ const ModalColorDetalle = ({ colorSeleccionada, setColorSeleccionada }) => {
   const confettiRef = useRef(null);
 
   useEffect(() => {
+    console.log(colorSeleccionada);
     if (sonido) {
       Speech.speak("Presiona la palabra para escuchar el color");
       Speech.speak(`Elegiste el color ${colorSeleccionada.nombre}`);
@@ -61,6 +62,13 @@ const ModalColorDetalle = ({ colorSeleccionada, setColorSeleccionada }) => {
           {/* <Text style={{ fontSize: 16, fontWeight: "700"}}>{"Presiona las palabras para escuchar como suenan"}</Text> */}
 
           <View style={styles.header}>
+            
+          <Card style={{ ...styles.card, width: 50, height: 50 }}>
+              <Text style={{ fontSize: 20, fontWeight: "700" }}>
+                {colorSeleccionada.nombre.split("")[0]}
+              </Text>
+            </Card>
+
             <TouchableOpacity
               onPress={() => {
                 if (sonido) Speech.speak(`${colorSeleccionada.nombre}`);
@@ -177,7 +185,7 @@ const styles = StyleSheet.create({
   },
   header: {
     display: "flex",
-    flexDirection: "row",
+    // flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     //   width: "60%",
@@ -190,5 +198,16 @@ const styles = StyleSheet.create({
     fontSize: 52,
     // textAlign: "center",
     fontWeight: "700",
+  },
+  card: {
+    width: 110,
+    height: 90,
+    padding: 0,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    // borderRadius: "50%",
+    // backgroundColor: "#8c9eff",
+    backgroundColor: "rgba(255, 255, 255, 1)",
   },
 });

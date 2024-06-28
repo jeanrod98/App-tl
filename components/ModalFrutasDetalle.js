@@ -29,6 +29,7 @@ const ModalFrutasDetalle = ({ opcionSeleccionada, setOpcionSeleccionada }) => {
   const confettiRef = useRef(null);
 
   useEffect(() => {
+    // console.log(opcionSeleccionada);
     if (sonido) {
       Speech.speak(`Elegiste la fruta ${opcionSeleccionada.nombre}`);
       Speech.speak("Presiona la fruta para escuchar su nombre");
@@ -57,7 +58,14 @@ const ModalFrutasDetalle = ({ opcionSeleccionada, setOpcionSeleccionada }) => {
             {/* <Text style={styles.txtHeader}>00 : 00 : 00</Text> */}
           </View>
 
-          <View>
+          <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 20,
+          }}
+          >
             <TouchableOpacity
               style={{
                 display: "flex",
@@ -71,6 +79,12 @@ const ModalFrutasDetalle = ({ opcionSeleccionada, setOpcionSeleccionada }) => {
                 source={opcionSeleccionada.source}
               />
             </TouchableOpacity>
+
+            <Card style={{ ...styles.card, width: 50, height: 50 }}>
+              <Text style={{ fontSize: 20, fontWeight: "700" }}>
+                {opcionSeleccionada.imagenes[0]}
+              </Text>
+            </Card>
           </View>
           <View
             style={{

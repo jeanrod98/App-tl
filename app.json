@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "MAVE",
-    "slug": "MAVE",
+    "slug": "app-tl",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

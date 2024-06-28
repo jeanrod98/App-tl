@@ -23,15 +23,7 @@ const Alfabeto = () => {
     const [ encontrarNumeros, setEncontrarNumeros ] = useState(false);
 
 
-    useEffect(() => {
-
-      //Obtener tiempo que lleva en esta opcion
-      obtenerTiempo();
-    }, [])
-  
-    const obtenerTiempo = () => {
-      console.log(12345);
-    }
+    
 
   return (
     <View style={styles.containerAlfabeto}>

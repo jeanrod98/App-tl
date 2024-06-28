@@ -25,18 +25,19 @@ const ModalTransporteDetalle = ({
   opcionSeleccionada,
   setOpcionSeleccionada,
 }) => {
-  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } = useAuth();
+  const { dataAlert, setDataAlert, conffetiShow, setConffetiShow, sonido } =
+    useAuth();
 
   const [arregloAbecedario, setArregloAbecedario] = useState([]);
   const [arregloAbecedarioTwo, setArregloAbecedarioTwo] = useState([]);
   const confettiRef = useRef(null);
 
   useEffect(() => {
+    // console.log(opcionSeleccionada.nombre.split("")[0]);
     if (sonido) {
       Speech.speak(`Elegiste el transporte ${opcionSeleccionada.nombre}`);
       Speech.speak("Presiona el transporte para escuchar su nombre");
     }
-    
   }, []);
 
   return (
@@ -61,20 +62,35 @@ const ModalTransporteDetalle = ({
             </Text>
             {/* <Text style={styles.txtHeader}>00 : 00 : 00</Text> */}
           </View>
-          <View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 20,
+            }}
+          >
             <TouchableOpacity
               style={{
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "flex-end",
               }}
-              onPress={() => {if (sonido) Speech.speak(`${opcionSeleccionada.nombre}`)}}
+              onPress={() => {
+                if (sonido) Speech.speak(`${opcionSeleccionada.nombre}`);
+              }}
             >
               <Image
                 style={{ ...styles.imgCard, width: 100, height: 100 }}
                 source={opcionSeleccionada.source}
               />
             </TouchableOpacity>
+
+            <Card style={{ ...styles.card, width: 50, height: 50 }}>
+              <Text style={{ fontSize: 20, fontWeight: "700" }}>
+                {opcionSeleccionada.nombre.split("")[0]}
+              </Text>
+            </Card>
           </View>
           <View
             style={{
@@ -88,7 +104,9 @@ const ModalTransporteDetalle = ({
               <TouchableOpacity
                 key={index}
                 style={styles.btnText}
-                onPress={() => {if (sonido) Speech.speak(`${opcionSeleccionada.nombre}`)}}
+                onPress={() => {
+                  if (sonido) Speech.speak(`${opcionSeleccionada.nombre}`);
+                }}
               >
                 <Card style={styles.card}>
                   <Image style={styles.imgCard} source={obj} />
