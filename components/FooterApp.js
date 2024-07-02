@@ -169,6 +169,7 @@ const FooterApp = ({ ruta, name, data, setDataForm }) => {
 
   };
 
+
   return (
     <>
     <View style={styles.container}>
@@ -201,9 +202,11 @@ const FooterApp = ({ ruta, name, data, setDataForm }) => {
         </Text>
       )}
       <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
-        <TouchableOpacity style={styles.boton} onPress={handleNex}>
-          <Text style={styles.text}>{name}</Text>
-        </TouchableOpacity>
+       { ruta !== "/menu" &&
+         <TouchableOpacity style={styles.boton} onPress={handleNex}>
+         <Text style={styles.text}>{name}</Text>
+       </TouchableOpacity>
+       }
 
         {/* {ruta === "/menu" && (
         <TouchableOpacity style={{...styles.boton, backgroundColor: "#FC5151"}} onPress={logOut}>

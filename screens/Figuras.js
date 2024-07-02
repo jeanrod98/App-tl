@@ -14,22 +14,18 @@ import fondo_number from "../assets/juego_figuras.jpg";
 import ColoresElegirObjetos from "../components/ColoresElegirObjetos";
 import FigurasEscoger from "../components/FigurasEscoger";
 import FigurasAprender from "../components/FigurasAprender";
+import * as Speech from 'expo-speech';
 
 const Figuras = () => {
   const { dataAlert, setDataAlert, logOut, setOption, option } = useAuth();
 
   const [escogerObjetos, setEscogerObjetos] = useState(false);
-  const [ verAprender, setVerAprender ] = useState(false);
+  const [verAprender, setVerAprender] = useState(false);
   const [encontrarNumeros, setEncontrarNumeros] = useState(false);
 
   useEffect(() => {
-    //Obtener tiempo que lleva en esta opcion
-    obtenerTiempo();
+    Speech.stop();
   }, []);
-
-  const obtenerTiempo = () => {
-    console.log(12345);
-  };
 
   return (
     <View style={styles.containerFiguras}>
@@ -66,17 +62,16 @@ const Figuras = () => {
           </TouchableOpacity>
 
           <TouchableOpacity
-              style={styles.botonSubMenu}
-              onPress={() => {
-                setEscogerObjetos(false);
-                setEncontrarNumeros(false);
-                setVerAprender(true);
-  
-              }}
-            >
-              <Text style={styles.txtSubmenu}>Aprender las figuras</Text>
-            </TouchableOpacity>
-            {/* <TouchableOpacity
+            style={styles.botonSubMenu}
+            onPress={() => {
+              setEscogerObjetos(false);
+              setEncontrarNumeros(false);
+              setVerAprender(true);
+            }}
+          >
+            <Text style={styles.txtSubmenu}>Aprender las figuras</Text>
+          </TouchableOpacity>
+          {/* <TouchableOpacity
               style={styles.botonSubMenu}
               onPress={() => {
                 setOrdenarNumeros(false);
@@ -90,7 +85,7 @@ const Figuras = () => {
         {escogerObjetos && (
           <FigurasEscoger setEscogerObjetos={setEscogerObjetos} />
         )}
-        { verAprender && <FigurasAprender setVerAprender={setVerAprender}/>}
+        {verAprender && <FigurasAprender setVerAprender={setVerAprender} />}
         {encontrarNumeros && <Text>Encuentra los números</Text>}
       </ImageBackground>
     </View>

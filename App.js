@@ -9,6 +9,8 @@ import { AuthProvider } from "./Context/AuthProvider";
 import useAuth from "./Hooks/useAuth";
 import Access from "./components/Access";
 
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
 export default function App() {
   useEffect(() => {
     // Orienta la pantalla de modo horizontal
@@ -22,12 +24,12 @@ export default function App() {
     orientacionHorizontalApp();
   }, []);
 
-
-
   return (
     <AuthProvider>
       <NavigationContainer style={styles.container}>
-        <Access/>
+        <GestureHandlerRootView>
+          <Access />
+        </GestureHandlerRootView>
       </NavigationContainer>
     </AuthProvider>
   );

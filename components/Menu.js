@@ -7,6 +7,7 @@ import {
   Image,
   ScrollView,
   Alert,
+  TouchableWithoutFeedback
 } from "react-native";
 import useAuth from "../Hooks/useAuth";
 import imagen_menu from "../assets/imagen_menu.png";
@@ -23,20 +24,27 @@ import Alerts from "./Alerts";
 import { useState } from "react";
 
 import * as Speech from 'expo-speech';
+import { Gesture, GestureDetector  } from "react-native-gesture-handler";
 
 
 const Menu = () => {
   const { setAuth, logOut, cargando, auth, dataAlert, option, setOption, sonido } = useAuth();
 
+  const [ optionMenu, setOptionMenu] = useState("");
  
 
-  const seleccionarOpcion = (option) => {
-    // console.log(option);
-    // PREGUNTAR POR CADA CASO
-// console.log(option);
-    // if (sonido) {Speech.speak(option);}
+  const seleccionarOpcion = async (option) => {
+    await Speech.stop();
+    Speech.speak(`Has seleccionado ${option}, manten precionado para ingresar`)
+    setOption({
+      activo: true,
+      nameOption: option,
+    });
 
+  };
 
+  const accederOpcion = (option) => {
+    
     if(option === "ALFABETO"){
       setOption({
         activo: true,
@@ -91,9 +99,13 @@ const Menu = () => {
         nameOption: "MUSICA",
         next: true
       });
+      
     }
-  
   };
+
+
+ 
+
   return (
     <View style={styles.contenedorMenu}>
       <View style={styles.menu}>
@@ -106,56 +118,67 @@ const Menu = () => {
         <ScrollView>
           <View style={styles.contenedorCards}>
             <View style={{...styles.card, borderColor: option.activo === true && option.nameOption === "ALFABETO" ? "red" : "#fff", borderWidth: 3,  }}>
-              <TouchableOpacity onPress={() => seleccionarOpcion("ALFABETO")}>
+            
+              <TouchableOpacity onPress={() => seleccionarOpcion("ALFABETO")}
+                onLongPress={() => accederOpcion("ALFABETO")}>
                 <Image source={alfabeto} style={styles.img} />
                 <Text style={styles.txt}>ALFABETO</Text>
               </TouchableOpacity>
+              
             </View>
             <View style={{...styles.card, borderColor: option.activo === true && option.nameOption === "TRANSPORTES" ? "red" : "#fff", borderWidth: 3,  }}>
-              <TouchableOpacity onPress={() => seleccionarOpcion("TRANSPORTES")}>
+              <TouchableOpacity onPress={() => seleccionarOpcion("TRANSPORTES")}
+                onLongPress={() => accederOpcion("TRANSPORTES")}>
                 <Image source={TRANSPORTES} style={styles.img} />
                 <Text style={styles.txt}>TRANSPORTES</Text>
               </TouchableOpacity>
             </View>
 
             <View style={{...styles.card, borderColor: option.activo === true && option.nameOption === "FRUTAS" ? "red" : "#fff", borderWidth: 3,  }}>
-              <TouchableOpacity onPress={() => seleccionarOpcion("FRUTAS")}>
+              <TouchableOpacity onPress={() => seleccionarOpcion("FRUTAS")}
+                onLongPress={() => accederOpcion("FRUTAS")}>
                 <Image source={FRUTAS} style={styles.img} />
                 <Text style={styles.txt}>FRUTAS</Text>
               </TouchableOpacity>
             </View>
             <View style={{...styles.card, borderColor: option.activo === true && option.nameOption === "VOCALES" ? "red" : "#fff", borderWidth: 3,  }}>
-              <TouchableOpacity onPress={() => seleccionarOpcion("VOCALES")}>
+              <TouchableOpacity onPress={() => seleccionarOpcion("VOCALES")}
+                onLongPress={() => accederOpcion("VOCALES")}>
                 <Image source={VOCALES} style={styles.img} />
                 <Text style={styles.txt}>VOCALES</Text>
               </TouchableOpacity>
             </View>
             <View style={{...styles.card, borderColor: option.activo === true && option.nameOption === "COLORES" ? "red" : "#fff", borderWidth: 3,  }}>
-              <TouchableOpacity onPress={() => seleccionarOpcion("COLORES")}>
+              <TouchableOpacity onPress={() => seleccionarOpcion("COLORES")}
+                onLongPress={() => accederOpcion("COLORES")}>
                 <Image source={COLORES} style={styles.img} />
                 <Text style={styles.txt}>COLORES</Text>
               </TouchableOpacity>
             </View>
             <View style={{...styles.card, borderColor: option.activo === true && option.nameOption === "ANIMALES" ? "red" : "#fff", borderWidth: 3,  }}>
-              <TouchableOpacity onPress={() => seleccionarOpcion("ANIMALES")}>
+              <TouchableOpacity onPress={() => seleccionarOpcion("ANIMALES")}
+                onLongPress={() => accederOpcion("ANIMALES")}>
                 <Image source={ANIMALES} style={styles.img} />
                 <Text style={styles.txt}>ANIMALES</Text>
               </TouchableOpacity>
             </View>
-            <View style={{...styles.card, borderColor: option.activo === true && option.nameOption === "NUMEROS" ? "red" : "#fff", borderWidth: 3,  }}>
-              <TouchableOpacity onPress={() => seleccionarOpcion("NÚMEROS")}>
+            <View style={{...styles.card, borderColor: option.activo === true && option.nameOption === "NÚMEROS" ? "red" : "#fff", borderWidth: 3,  }}>
+              <TouchableOpacity onPress={() => seleccionarOpcion("NÚMEROS")}
+                onLongPress={() => accederOpcion("NÚMEROS")}>
                 <Image source={numeros} style={styles.img} />
                 <Text style={styles.txt}>NÚMEROS DEL 1 AL 10</Text>
               </TouchableOpacity>
             </View>
             <View style={{...styles.card, borderColor: option.activo === true && option.nameOption === "FIGURAS" ? "red" : "#fff", borderWidth: 3,  }}>
-              <TouchableOpacity onPress={() => seleccionarOpcion("FIGURAS")}>
+              <TouchableOpacity onPress={() => seleccionarOpcion("FIGURAS")}
+                onLongPress={() => accederOpcion("FIGURAS")}>
                 <Image source={figuras} style={styles.img} />
                 <Text style={styles.txt}>FIGURAS GEOMÉTRICAS</Text>
               </TouchableOpacity>
             </View>
             <View style={{...styles.card, borderColor: option.activo === true && option.nameOption === "MUSICA" ? "red" : "#fff", borderWidth: 3,  }}>
-              <TouchableOpacity onPress={() => seleccionarOpcion("MUSICA")}>
+              <TouchableOpacity onPressIn={() => seleccionarOpcion("MUSICA")}
+                onLongPress={() => accederOpcion("MUSICA")}>
                 <Image source={musica} style={styles.img} />
                 <Text style={styles.txt}>MÚSICA</Text>
               </TouchableOpacity>

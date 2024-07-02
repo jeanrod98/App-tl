@@ -16,6 +16,7 @@
   import EscogeParesABC from "../components/EscogeParesABC";
 import EscogerTransportes from "../components/EscogerTransportes";
 import TransporteAprender from "../components/TransporteAprender";
+import * as Speech from 'expo-speech';
   
   const Transportes = () => {
     const { dataAlert, setDataAlert, logOut, setOption, option } = useAuth();
@@ -27,14 +28,8 @@ import TransporteAprender from "../components/TransporteAprender";
   
   
       useEffect(() => {
-  
-        //Obtener tiempo que lleva en esta opcion
-        obtenerTiempo();
-      }, [])
-    
-      const obtenerTiempo = () => {
-        console.log(12345);
-      }
+        Speech.stop();
+        }, []);
   
     return (
       <View style={styles.containerTransportes}>
