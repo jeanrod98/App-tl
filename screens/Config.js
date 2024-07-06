@@ -15,9 +15,20 @@ const Config = ({ setMostrarSetting }) => {
   // console.log(auth);
 
   useEffect(() => {
-    if (sonido) Speech.speak("CONFIGURACIÓN");
+    if (sonido) {
+      Speech.stop()
+      Speech.speak("CONFIGURACIÓN");
+    }
     // console.log(auth);
   }, []);
+
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+    }
+   
+  }
 
   return (
     <>
@@ -25,9 +36,11 @@ const Config = ({ setMostrarSetting }) => {
         <View style={styles.contenedorSetting}>
           <TouchableOpacity
             style={styles.btnClose}
-            onPress={() => {
+            onLongPress={() => {
+              Speech.stop();
               setMostrarSetting(false);
             }}
+            onPress={() => narrarAccion("Cerrar Ventana")}
           >
             <AntDesign name="closecircle" size={22} color="red" />
           </TouchableOpacity>

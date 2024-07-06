@@ -18,7 +18,7 @@ import VocalesAprender from "../components/VocalesAprender";
 import * as Speech from "expo-speech";
 
 const Vocales = () => {
-  const { dataAlert, setDataAlert, logOut, setOption, option } = useAuth();
+  const { dataAlert, setDataAlert, logOut, setOption, option, sonido } = useAuth();
 
   const [escogeLaVocal, setEscogeLaVocal] = useState(false);
   const [verAprender, setVerAprender] = useState(false);
@@ -27,13 +27,23 @@ const Vocales = () => {
   useEffect(() => {
     Speech.stop();
   }, []);
+
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+    }
+   
+  }
   return (
     <View style={styles.containerVocales}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => {
+          onLongPress={() => {
+            Speech.stop();
             setOption({ ...option, next: false });
           }}
+          onPress={() => narrarAccion("Cerrar Venta")}
         >
           <AntDesign
             style={styles.btnClose}
@@ -50,25 +60,31 @@ const Vocales = () => {
       >
         <View style={styles.opcionesModulo}>
           <TouchableOpacity
+
             style={styles.botonSubMenu}
-            onPress={() => {
+            onLongPress={() => {
+              Speech.stop();
               setVerAprender(false);
               setEncontrarNumeros(false);
               setEscogeLaVocal(true);
             }}
+            onPress={() => narrarAccion("Realizar prueba")}
+
           >
-            <Text style={styles.txtSubmenu}>Escoge la vocal</Text>
+            <Text style={styles.txtSubmenu}>Realizar prueba</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.botonSubMenu}
-            onPress={() => {
+            onLongPress={() => {
+              Speech.stop();
               setEscogeLaVocal(false);
               setEncontrarNumeros(false);
               setVerAprender(true);
             }}
+            onPress={() => narrarAccion("Aprender las Vocales")}
           >
-            <Text style={styles.txtSubmenu}>Aprender las Vocales</Text>
+            <Text style={styles.txtSubmenu}>Aprender las vocales</Text>
           </TouchableOpacity>
           {/* <TouchableOpacity
               style={styles.botonSubMenu}

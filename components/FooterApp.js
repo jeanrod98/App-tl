@@ -6,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 
 import * as Speech from "expo-speech";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Config from "../screens/Config";
 
 const FooterApp = ({ ruta, name, data, setDataForm }) => {
@@ -22,6 +22,10 @@ const FooterApp = ({ ruta, name, data, setDataForm }) => {
     sonido, 
     setSonido
   } = useAuth();
+
+  useEffect(() => {
+    Speech.stop()
+  }, [])
 
   const handleNex = async () => {
     const expresionCorreo = /^[^@]+@[^@]+\.[a-zA-Z]{2,}$/;

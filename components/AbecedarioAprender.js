@@ -17,9 +17,11 @@ import fondo_number_2 from "../assets/juego_abc.jpg";
 import { Card } from "react-native-paper";
 import AbecedarioOneGame from "./AbecedarioOneGame";
 import ModalAlfabetoDetalles from "./ModalAlfabetoDetalles";
+import * as Speech from "expo-speech";
+
 
 const AbecedarioAprender = ({ setVerAprender }) => {
-  const { dataAlert, setDataAlert, logOut, setOption } = useAuth();
+  const { dataAlert, setDataAlert, logOut, setOption, sonido } = useAuth();
 
   const [mostrarGame, setMostrarGame] = useState(false);
 
@@ -55,6 +57,24 @@ const AbecedarioAprender = ({ setVerAprender }) => {
 
   const [letraSeleccionada, setLetraSeleccionada] = useState({})
 
+
+  useEffect(() => {
+    if (sonido) { 
+      // Speech.speak(`Elegiste la letra ${letraSeleccionada.letra}`);
+      Speech.stop();
+      Speech.speak("Escoge una letra para aprenderla");
+    }
+    
+  }, []);
+
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+    }
+   
+  }
+
   return (
     <View style={styles.containerOrdenarNumeros}>
       <ImageBackground
@@ -70,9 +90,11 @@ const AbecedarioAprender = ({ setVerAprender }) => {
       >
         <TouchableOpacity
           style={styles.btnClose}
-          onPress={() => {
+          onLongPress={() => {
+            Speech.stop()
             setVerAprender(false);
           }}
+          onPress={() => narrarAccion("Cerrar Ventana")}
         >
           <AntDesign name="closecircle" size={32} color="red" />
         </TouchableOpacity>
@@ -86,7 +108,9 @@ const AbecedarioAprender = ({ setVerAprender }) => {
 
           <View style={{ ...styles.game }}>
             {alfabeto.map((abc, index) => (
-              <TouchableOpacity key={index} onPress={() => setLetraSeleccionada(abc)}>
+              <TouchableOpacity key={index} onLongPress={() => setLetraSeleccionada(abc)}
+              onPress={() => 
+                narrarAccion(`Letra ${abc.letra}`)}>
                 <Card style={styles.card}>
                   {/* <Card.Content> */}
                   <Text style={{ fontSize: 12, fontWeight: "700", color: "#242424" }}>

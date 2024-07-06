@@ -225,44 +225,20 @@ const FrutasOneGame = ({
       }
     }
   };
+
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}`)
+    }
+   
+  }
+
+
   return (
     <>
       <View style={styles.contenido}>
-        {/* <Text style={{ fontWeight: "700"}}>Selecciona un número</Text> */}
-        {/* <View style={styles.contenedorTablero}>
-            <View style={styles.contenidoCard}>
-              {arregloAbecedario.map((value, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={(text) => seleccionarCard(value, "T1")}
-                >
-                  <Card
-                    style={{
-                      ...styles.card,
-                      borderColor: bordeFilaUno == value.nombre ? "red" : "#000",
-                      borderWidth: 2,
-                    }}
-                  >
-                 
-  
-                    <Image style={styles.imgCard} source={value?.source} />
-                    <Text
-                      style={{
-                        fontWeight: "700",
-                        fontSize: 9,
-                        textAlign: "center",
-                      }}
-                      variant="titleLarge"
-                    >
-                      {value.nombre}
-                    </Text>
-  
-                  </Card>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View> */}
-        {/* <Text style={{ fontWeight: "700"}}>Números Ordenados</Text> */}
+       
 
         <View style={styles.contenedorTablero}>
           <View style={{ ...styles.contenidoCard }}>
@@ -305,9 +281,10 @@ const FrutasOneGame = ({
           <View style={styles.controles}>
             <TouchableOpacity
               style={styles.btnReload}
-              onPress={() => {
+              onLongPress={() => {
                 barajearArreglo();
               }}
+              onPress={() => narrarAccion("Reiniciar")}
             >
               {/* <FontAwesome name="stop" size={24} color="#5c6bc0" /> */}
               <Ionicons name="reload-circle" size={24} color="#5c6bc0" />
@@ -316,7 +293,8 @@ const FrutasOneGame = ({
 
             <TouchableOpacity
               style={styles.btnValidar}
-              onPress={() => validarResultados()}
+              onLongPress={() => validarResultados()}
+              onPress={() => narrarAccion("Revisar")}
             >
               <AntDesign name="checkcircle" size={24} color="green" />
               <Text>Revisar</Text>

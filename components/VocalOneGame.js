@@ -170,6 +170,7 @@ const VocalOneGame = ({
   const validarCard = () => {
     //   console.log(objeto);
     //   console.log(imgCard);
+    Speech.stop();
     setBotones(true);
 
     // !validar que existan los 10 numeros
@@ -210,6 +211,14 @@ const VocalOneGame = ({
       }, 3000);
     }
   };
+
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}`)
+    }
+   
+  }
 
   return (
     <>
@@ -295,10 +304,12 @@ const VocalOneGame = ({
         <View style={styles.controles}>
           <TouchableOpacity
             style={styles.btnReload}
-            onPress={() => {
+            onLongPress={() => {
+              Speech.stop();
               generarObjetosAleatorio();
               setVocalSeleccionada({});
             }}
+            onPress={() => narrarAccion("Cambiar")}
           >
             {/* <FontAwesome name="stop" size={24} color="#5c6bc0" /> */}
             <Ionicons name="reload-circle" size={24} color="#5c6bc0" />
@@ -307,7 +318,8 @@ const VocalOneGame = ({
 
           <TouchableOpacity
             style={styles.btnValidar}
-            onPress={() => validarCard()}
+            onLongPress={() => validarCard()}
+            onPress={() => narrarAccion("Revisar")}
           >
             <AntDesign name="checkcircle" size={24} color="green" />
             <Text>Revisar</Text>

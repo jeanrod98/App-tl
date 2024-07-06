@@ -45,6 +45,7 @@ const AbecedarioOneGame = ({
   
 
   useEffect(() => {
+    Speech.stop()
     barajearArreglo();
 
   }, []);
@@ -253,6 +254,17 @@ const AbecedarioOneGame = ({
       }
     }
   };
+
+
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}`)
+    }
+   
+  }
+
+
   return (
     <>
       <View style={styles.contenido}>
@@ -347,11 +359,12 @@ const AbecedarioOneGame = ({
       <View style={styles.controles}>
         <TouchableOpacity
           style={styles.btnReload}
-          onPress={() => {
+          onLongPress={() => {
             setLetraElegidaUno("");
             setletraElegidaDos("");
             barajearArreglo();
           }}
+          onPress={() => narrarAccion("Reiniciar")}
         >
           {/* <FontAwesome name="stop" size={24} color="#5c6bc0" /> */}
           <Ionicons name="reload-circle" size={24} color="#5c6bc0" />
@@ -360,7 +373,8 @@ const AbecedarioOneGame = ({
 
         <TouchableOpacity
           style={styles.btnValidar}
-          onPress={() => validarResultados()}
+          onLongPress={() => validarResultados()}
+          onPress={() => narrarAccion("Revisar")}
         >
           <AntDesign name="checkcircle" size={24} color="green" />
           <Text>Revisar</Text>

@@ -17,7 +17,7 @@ import AbecedarioAprender from "../components/AbecedarioAprender";
 import * as Speech from "expo-speech";
 
 const Alfabeto = () => {
-  const { dataAlert, setDataAlert, logOut, setOption, option } = useAuth();
+  const { dataAlert, setDataAlert, logOut, setOption, option, sonido } = useAuth();
 
   const [ordenarNumeros, setOrdenarNumeros] = useState(false);
   const [verAprender, setVerAprender] = useState(false);
@@ -27,13 +27,24 @@ const Alfabeto = () => {
     Speech.stop();
   }, []);
 
+
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+    }
+   
+  }
+
   return (
     <View style={styles.containerAlfabeto}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => {
+          onLongPress={() => {
+            Speech.stop();
             setOption({ ...option, next: false });
           }}
+          onPress={() => narrarAccion("Cerrar Ventana")}
         >
           <AntDesign
             style={styles.btnClose}
@@ -51,24 +62,28 @@ const Alfabeto = () => {
         <View style={styles.opcionesModulo}>
           <TouchableOpacity
             style={styles.botonSubMenu}
-            onPress={() => {
+            onLongPress={() => {
+              Speech.stop();
               setVerAprender(false);
               setEncontrarNumeros(false);
               setOrdenarNumeros(true);
             }}
+            onPress={() => narrarAccion("Realizar prueba")}
           >
             <Text style={styles.txtSubmenu}>Realizar prueba</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.botonSubMenu}
-            onPress={() => {
+            onLongPress={() => {
+              Speech.stop();
               setOrdenarNumeros(false);
               setEncontrarNumeros(false);
               setVerAprender(true);
             }}
+            onPress={() => narrarAccion("Aprender el alfabeto")}
           >
-            <Text style={styles.txtSubmenu}>Aprender el Alfabeto</Text>
+            <Text style={styles.txtSubmenu}>Aprender el alfabeto</Text>
           </TouchableOpacity>
         </View>
         {ordenarNumeros && (

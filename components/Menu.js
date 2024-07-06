@@ -21,7 +21,7 @@ import numeros from "../assets/numeros.png";
 import figuras from "../assets/figuras.png";
 import musica from "../assets/musica.png";
 import Alerts from "./Alerts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import * as Speech from 'expo-speech';
 import { Gesture, GestureDetector  } from "react-native-gesture-handler";
@@ -32,10 +32,16 @@ const Menu = () => {
 
   const [ optionMenu, setOptionMenu] = useState("");
  
+  useEffect(() => {
+    Speech.stop()
+  },[])
 
   const seleccionarOpcion = async (option) => {
-    await Speech.stop();
-    Speech.speak(`Has seleccionado ${option}, manten precionado para ingresar`)
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`Has seleccionado ${option}, manten precionado para ingresar`)
+    }
+    
     setOption({
       activo: true,
       nameOption: option,

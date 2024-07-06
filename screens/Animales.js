@@ -18,7 +18,7 @@ import AnimalesAprender from "../components/AnimalesAprender";
 import * as Speech from "expo-speech";
 
 const Animales = () => {
-  const { dataAlert, setDataAlert, logOut, setOption, option } = useAuth();
+  const { dataAlert, setDataAlert, logOut, setOption, option, sonido } = useAuth();
 
   const [escogerObjetos, setEscogerObjetos] = useState(false);
   const [verAprender, setVerAprender] = useState(false);
@@ -28,13 +28,24 @@ const Animales = () => {
     Speech.stop();
   }, []);
 
+
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+    }
+   
+  }
+
   return (
     <View style={styles.containerColores}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => {
+          onLongPress={() => {
+            Speech.stop();
             setOption({ ...option, next: false });
           }}
+          onPress={() => narrarAccion("Cerrar Ventana")}
         >
           <AntDesign
             style={styles.btnClose}
@@ -53,22 +64,26 @@ const Animales = () => {
         <View style={styles.opcionesModulo}>
           <TouchableOpacity
             style={styles.botonSubMenu}
-            onPress={() => {
+            onLongPress={() => {
+              Speech.stop();
               setVerAprender(false);
               setEncontrarNumeros(false);
               setEscogerObjetos(true);
             }}
+            onPress={() => narrarAccion("Realizar prueba")}
           >
-            <Text style={styles.txtSubmenu}>Escoge el animal</Text>
+            <Text style={styles.txtSubmenu}>Realizar prueba</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.botonSubMenu}
-            onPress={() => {
+            onLongPress={() => {
+              Speech.stop();
               setEscogerObjetos(false);
               setEncontrarNumeros(false);
               setVerAprender(true);
             }}
+            onPress={() => narrarAccion("Aprender los animales")}
           >
             <Text style={styles.txtSubmenu}>Aprender los animales</Text>
           </TouchableOpacity>

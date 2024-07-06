@@ -19,9 +19,10 @@ import {
   import AbecedarioOneGame from "./AbecedarioOneGame";
   import ModalAlfabetoDetalles from "./ModalAlfabetoDetalles";
 import ModalVocalDetalle from "./ModalVocalDetalle";
+import * as Speech from "expo-speech";
   
   const VocalesAprender = ({ setVerAprender }) => {
-    const { dataAlert, setDataAlert, logOut, setOption } = useAuth();
+    const { dataAlert, setDataAlert, logOut, setOption, sonido } = useAuth();
   
     const [mostrarGame, setMostrarGame] = useState(false);
   
@@ -36,6 +37,22 @@ import ModalVocalDetalle from "./ModalVocalDetalle";
   
     const [letraSeleccionada, setLetraSeleccionada] = useState({})
   
+    useEffect(() => {
+      if (sonido) {
+        // Speech.speak(`Elegiste ${opcionSeleccionada.nombre}`);
+        Speech.speak(`Escoge una fruta para aprenderla`);
+      }
+      
+    }, []);
+
+    const narrarAccion = async ( text ) => {
+      if(sonido) {
+        await Speech.stop();
+        Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+      }
+     
+    }
+
     return (
       <View style={styles.containerOrdenarNumeros}>
         <ImageBackground
@@ -51,9 +68,11 @@ import ModalVocalDetalle from "./ModalVocalDetalle";
         >
           <TouchableOpacity
             style={styles.btnClose}
-            onPress={() => {
+            onLongPress={() => {
+              Speech.stop();
               setVerAprender(false);
             }}
+            onPress={() => narrarAccion("Cerrar Ventana")}
           >
             <AntDesign name="closecircle" size={32} color="red" />
           </TouchableOpacity>
@@ -67,7 +86,10 @@ import ModalVocalDetalle from "./ModalVocalDetalle";
   
             <View style={{ ...styles.game }}>
               {alfabeto.map((abc, index) => (
-                <TouchableOpacity key={index} onPress={() => setLetraSeleccionada(abc)}>
+                <TouchableOpacity key={index} 
+                onLongPress={() => setLetraSeleccionada(abc)}
+                onPress={() => narrarAccion(abc.letra)}
+                >
                   <Card style={styles.card}>
                     {/* <Card.Content> */}
                     <Text style={{ fontSize: 18, fontWeight: "700", color: "#242424" }}>

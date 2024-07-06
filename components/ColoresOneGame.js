@@ -53,9 +53,6 @@ const ColoresOneGame = ({
   const confettiRef = useRef(null);
 
   useEffect(() => {
-    if (sonido){
-      Speech.speak(dinamica);
-    }
    
   
     generarColorAleatorio();
@@ -90,7 +87,7 @@ const ColoresOneGame = ({
     const arrFinal = [objeto_secundario, objeto_principal]
     setObjetos(shuffle(arrFinal))
     // console.log(objetos);
-    Speech.speak(`La figura de color ${objeto_principal.nombre}`);
+    Speech.speak(`Escoge laa figura de color ${objeto_principal.nombre}`);
 
 
   };
@@ -159,6 +156,16 @@ const ColoresOneGame = ({
 
 
   }
+
+
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}`)
+    }
+   
+  }
+
 
   
   return (
@@ -229,9 +236,11 @@ const ColoresOneGame = ({
         <View style={styles.controles}>
           <TouchableOpacity
             style={styles.btnReload}
-            onPress={() => {
+            onLongPress={() => {
               generarColorAleatorio();
             }}
+            onPress={() => narrarAccion("Cambiar")}
+
           >
             {/* <FontAwesome name="stop" size={24} color="#5c6bc0" /> */}
             <Ionicons name="reload-circle" size={24} color="#5c6bc0" />

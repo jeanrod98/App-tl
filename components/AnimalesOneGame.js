@@ -69,12 +69,15 @@ const AnimalesOneGame = ({
 
   useEffect(() => {
     generarColorAleatorio();
+
+   
   }, []);
 
   const generarColorAleatorio = async () => {
     if (sonido) {
       Speech.speak(dinamica);
       Speech.speak("¿Qué animal es?");
+      Speech.speak("Presiona la imagen para escuchar el sonido del animal.")
     }
 
     let arregloNumeros = [
@@ -161,14 +164,15 @@ const AnimalesOneGame = ({
     await sound.playAsync();
   };
 
-  //   useEffect(() => {
-  //     return sound
-  //       ? () => {
-  //           console.log('Unloading Sound');
-  //           sound.unloadAsync();
-  //         }
-  //       : undefined;
-  //   }, [sound]);
+
+
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}`)
+    }
+   
+  }
 
   return (
     <>
@@ -191,6 +195,7 @@ const AnimalesOneGame = ({
                 width: 150,
                 height: 150,
               }}
+              onPress={() => reproducirSonido(colorCard)}
             >
               <Image
                 style={{ ...styles.imgCard, width: 150, height: 150 }}
@@ -231,12 +236,12 @@ const AnimalesOneGame = ({
                         {/* </Card.Content> */}
                       </Card>
                     </TouchableOpacity>
-                    <Fontisto
+                    {/* <Fontisto
                       name="applemusic"
                       size={24}
                       color="#7986cb"
                       onPress={() => reproducirSonido(obj)}
-                    />
+                    /> */}
                   </View>
                 ))}
               </>
@@ -261,9 +266,11 @@ const AnimalesOneGame = ({
         <View style={styles.controles}>
           <TouchableOpacity
             style={styles.btnReload}
-            onPress={() => {
+            onLongPress={() => {
               generarColorAleatorio();
             }}
+            onPress={() => narrarAccion("Cambiar")}
+
           >
             {/* <FontAwesome name="stop" size={24} color="#5c6bc0" /> */}
             <Ionicons name="reload-circle" size={24} color="#5c6bc0" />

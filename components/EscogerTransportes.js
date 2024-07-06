@@ -17,9 +17,10 @@ import fondo_number_2 from "../assets/juego_transportes_1.jpg";
 import { Card } from "react-native-paper";
 import AbecedarioOneGame from "./AbecedarioOneGame";
 import TrnsportesOneGame from "./TrnsportesOneGame";
+import * as Speech from "expo-speech";
 
 const EscogerTransportes = ({ setOrdenarNumeros }) => {
-  const { dataAlert, auth, logOut, setOption } = useAuth();
+  const { dataAlert, auth, logOut, setOption, sonido } = useAuth();
 
   const [mostrarGame, setMostrarGame] = useState(false);
 
@@ -51,6 +52,15 @@ const EscogerTransportes = ({ setOrdenarNumeros }) => {
     }
   };
 
+
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+    }
+   
+  }
+
   return (
     <View style={styles.containerOrdenarNumeros}>
       <View
@@ -63,13 +73,15 @@ const EscogerTransportes = ({ setOrdenarNumeros }) => {
       >
         <TouchableOpacity
           style={styles.btnClose}
-          onPress={() => {
+          onLongPress={() => {
+            Speech.stop();
             setOrdenarNumeros(false);
             capturarTiempo(false);
             setAciertos(0);
             setErrores(0);
             setTiempo(0);
           }}
+          onPress={() => narrarAccion("Cerrar Ventana")}
         >
           <AntDesign name="closecircle" size={32} color="red" />
         </TouchableOpacity>
@@ -101,10 +113,11 @@ const EscogerTransportes = ({ setOrdenarNumeros }) => {
               <>
                 <TouchableOpacity
                   style={styles.btnPlay}
-                  onPress={() => {
+                  onLongPress={() => {
                     setMostrarGame(true);
                     if (auth?.tipo === "Cliente") capturarDatos();
                   }}
+                  onPress={() => narrarAccion("Iniciar")}
                 >
                   <Card style={styles.card}>
                     <Card.Content>

@@ -16,9 +16,11 @@ import fondo_number_2 from "../assets/juego_numero_start.jpg";
 import { Card } from "react-native-paper";
 import NumerosOnGame from "./NumerosOnGame";
 import clienteAxios from "../config/axios";
+import * as Speech from "expo-speech";
+
 
 const OrdenarNumeros = ({ setOrdenarNumeros }) => {
-  const { dataAlert, setDataAlert, logOut, setOption, auth } = useAuth();
+  const { dataAlert, setDataAlert, logOut, setOption, auth, sonido } = useAuth();
 
   const [mostrarGame, setMostrarGame] = useState(false);
 
@@ -68,6 +70,14 @@ const OrdenarNumeros = ({ setOrdenarNumeros }) => {
     }
   };
 
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+    }
+   
+  }
+
   return (
     <View style={styles.containerOrdenarNumeros}>
       <View
@@ -80,7 +90,8 @@ const OrdenarNumeros = ({ setOrdenarNumeros }) => {
       >
         <TouchableOpacity
           style={styles.btnClose}
-          onPress={() => {
+          onLongPress={() => {
+            Speech.stop();
             setOrdenarNumeros(false);
             if (auth?.tipo === "Cliente") capturarTiempo(false);
             if (aciertos > 0 || errores > 0) {
@@ -92,6 +103,7 @@ const OrdenarNumeros = ({ setOrdenarNumeros }) => {
             setErrores(0);
             setTiempo(0);
           }}
+          onPress={() => narrarAccion("Cerrar Ventana")}
         >
           <AntDesign name="closecircle" size={32} color="red" />
         </TouchableOpacity>
@@ -124,10 +136,12 @@ const OrdenarNumeros = ({ setOrdenarNumeros }) => {
               <>
                 <TouchableOpacity
                   style={styles.btnPlay}
-                  onPress={() => {
+                  onLongPress={() => {
                     setMostrarGame(true);
                     if (auth?.tipo === "Cliente") capturarDatos();
                   }}
+                  onPress={() => narrarAccion("Iniciar")}
+                  
                 >
                   <Card style={styles.card}>
                     <Card.Content>

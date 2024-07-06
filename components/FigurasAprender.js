@@ -42,12 +42,12 @@ import circulo from "../assets/circulo.jpg";
 import rectangulo from "../assets/rectangulo.jpg";
 import triangulo from "../assets/triangulo.jpg";
 
-
+import * as Speech from "expo-speech";
 
 import ModalFigurasDetalle from "./ModalFigurasDetalle";
   
   const FigurasAprender = ({ setVerAprender }) => {
-    const { dataAlert, setDataAlert, logOut, setOption } = useAuth();
+    const { dataAlert, setDataAlert, logOut, setOption, sonido } = useAuth();
   
     const [mostrarGame, setMostrarGame] = useState(false);
   
@@ -61,6 +61,22 @@ import ModalFigurasDetalle from "./ModalFigurasDetalle";
   
     const [ opcionSeleccionada, setOpcionSeleccionada] = useState({});
   
+    useEffect(() => {
+      if (sonido) {
+        // Speech.speak(`Elegiste ${opcionSeleccionada.nombre}`);
+        Speech.speak(`Escoge una figura para aprenderla`);
+      }
+      
+    }, []);
+
+    const narrarAccion = async ( text ) => {
+      if(sonido) {
+        await Speech.stop();
+        Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+      }
+     
+    }
+
     return (
       <View style={styles.containerOrdenarNumeros}>
         <ImageBackground
@@ -76,9 +92,11 @@ import ModalFigurasDetalle from "./ModalFigurasDetalle";
         >
           <TouchableOpacity
             style={styles.btnClose}
-            onPress={() => {
+            onLongPress={() => {
+              Speech.stop();
               setVerAprender(false);
             }}
+            onPress={() => narrarAccion("Cerrar Ventana")}
           >
             <AntDesign name="closecircle" size={32} color="red" />
           </TouchableOpacity>
@@ -94,7 +112,8 @@ import ModalFigurasDetalle from "./ModalFigurasDetalle";
               {transporte.map((transporte, index) => (
                 <TouchableOpacity
                   key={index}
-                  onPress={() => setOpcionSeleccionada(transporte)}
+                  onLongPress={() => setOpcionSeleccionada(transporte)}
+                  onPress={() => narrarAccion(transporte.nombre)}
                 >
                   <Card style={styles.card}>
                     {/* <Card.Content> */}

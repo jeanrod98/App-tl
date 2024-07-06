@@ -10,6 +10,8 @@ import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { FontAwesome6 } from "@expo/vector-icons";
 
 import useAuth from "../Hooks/useAuth";
+import { useEffect } from "react";
+import * as Speech from "expo-speech";
 
 const Alerts = ({ tipe }) => {
   const {
@@ -25,6 +27,12 @@ const Alerts = ({ tipe }) => {
     actualizarCliente,
     deleteCliente
   } = useAuth();
+
+
+  // useEffect(()=> {
+  //   Speech.stop()
+    
+  // },[])
 
   const salir = () => {
     setDataAlert({

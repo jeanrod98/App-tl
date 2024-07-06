@@ -29,22 +29,32 @@ const ModalAlfabetoDetalles = ({ letraSeleccionada, setLetraSeleccionada }) => {
 
   useEffect(() => {
     if (sonido) { 
+      // Speech.speak(`Elegiste la letra ${letraSeleccionada.letra}`);
       Speech.speak("Presiona las palabras para escuchar como suenan");
-      Speech.speak(`Elegiste la letra ${letraSeleccionada.letra}`);
     }
     
   }, []);
+
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+    }
+   
+  }
 
   return (
     <>
       <View style={styles.contenido}>
         <TouchableOpacity
           style={styles.btnClose}
-          onPress={() => {
+          onLongPress={() => {
+            Speech.stop();
             setLetraSeleccionada({});
             if (sonido) Speech.stop();
             
           }}
+          onPress={() => narrarAccion("Cerrar Ventana")}
         >
           <AntDesign name="closecircle" size={32} color="red" />
         </TouchableOpacity>

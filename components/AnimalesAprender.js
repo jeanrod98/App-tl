@@ -78,12 +78,22 @@ import sonido_cabra from "../assets/sounds/cabra.mp3";
 import sonido_gallo from "../assets/sounds/gallo.mp3";
 import sonido_lobo from "../assets/sounds/lobo.mp3";
 import sonido_cerdo from "../assets/sounds/cerdo.mp3";
-
+import * as Speech from "expo-speech";
 
 import ModalAnimalesDetalle from "./ModalAnimalesDetalle";
   
   const AnimalesAprender = ({ setVerAprender }) => {
-    const { dataAlert, setDataAlert, logOut, setOption } = useAuth();
+    const { dataAlert, setDataAlert, logOut, setOption, sonido } = useAuth();
+
+    useEffect(() => {
+      if (sonido) { 
+        // Speech.speak(`Elegiste la letra ${letraSeleccionada.letra}`);
+        Speech.stop();
+        Speech.speak("Escoge un animal para aprenderlo");
+      }
+      
+    }, []);
+
   
     const [mostrarGame, setMostrarGame] = useState(false);
   
@@ -105,6 +115,13 @@ import ModalAnimalesDetalle from "./ModalAnimalesDetalle";
   
     const [ opcionSeleccionada, setOpcionSeleccionada] = useState({});
   
+    const narrarAccion = async ( text ) => {
+      if(sonido) {
+        await Speech.stop();
+        Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+      }
+     
+    }
     return (
       <View style={styles.containerOrdenarNumeros}>
         <ImageBackground
@@ -120,9 +137,11 @@ import ModalAnimalesDetalle from "./ModalAnimalesDetalle";
         >
           <TouchableOpacity
             style={styles.btnClose}
-            onPress={() => {
+            onLongPress={() => {
+              Speech.stop();
               setVerAprender(false);
             }}
+            onPress={() => narrarAccion("Cerrar Ventana")}
           >
             <AntDesign name="closecircle" size={32} color="red" />
           </TouchableOpacity>
@@ -138,7 +157,10 @@ import ModalAnimalesDetalle from "./ModalAnimalesDetalle";
               {transporte.map((transporte, index) => (
                 <TouchableOpacity
                   key={index}
-                  onPress={() => setOpcionSeleccionada(transporte)}
+                  onLongPress={() => setOpcionSeleccionada(transporte)}
+                    onPress={() => narrarAccion(transporte.nombre)}
+
+                  
                 >
                   <Card style={styles.card}>
                     {/* <Card.Content> */}

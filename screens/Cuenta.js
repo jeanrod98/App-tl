@@ -24,8 +24,16 @@ const Cuenta = ({ setMostrar }) => {
   
 
   useEffect(() => {
-    if (sonido) Speech.speak("Cuenta");
+    if (sonido) {
+      Speech.stop()
+      Speech.speak("Cuenta");
+    }
   }, []);
+
+  const narrarAccion = async ( text ) => {
+    await Speech.stop();
+    Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+  }
 
   
   const [mostrarCambioPassword, setMostrarCambioPassword] = useState(false);
@@ -75,9 +83,11 @@ const Cuenta = ({ setMostrar }) => {
     imageStyle={{ opacity: 0.2 }} style={styles.cuenta}>
       <TouchableOpacity
         style={styles.btnClose}
-        onPress={() => {
+        onLongPress={() => {
+          Speech.stop();
           setMostrar("");
         }}
+        onPress={() => narrarAccion("Cerrar Ventana")}
       >
         <AntDesign name="closecircle" size={24} color="red" />
       </TouchableOpacity>

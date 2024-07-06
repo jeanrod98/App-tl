@@ -31,21 +31,32 @@ const ModalFrutasDetalle = ({ opcionSeleccionada, setOpcionSeleccionada }) => {
   useEffect(() => {
     // console.log(opcionSeleccionada);
     if (sonido) {
-      Speech.speak(`Elegiste la fruta ${opcionSeleccionada.nombre}`);
+      // Speech.speak(`Elegiste la fruta ${opcionSeleccionada.nombre}`);
       Speech.speak("Presiona la fruta para escuchar su nombre");
     }
     
   }, []);
+
+
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+    }
+   
+  }
 
   return (
     <>
       <View style={styles.contenido}>
         <TouchableOpacity
           style={styles.btnClose}
-          onPress={() => {
+          onLongPress={() => {
+            Speech.stop();
             setOpcionSeleccionada({});
             if (sonido) Speech.stop();
           }}
+          onPress={() => narrarAccion("Cerrar Ventana")}
         >
           <AntDesign name="closecircle" size={32} color="red" />
         </TouchableOpacity>

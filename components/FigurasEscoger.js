@@ -19,9 +19,11 @@ import AbecedarioOneGame from "./AbecedarioOneGame";
 import ColoresOneGame from "./ColoresOneGame";
 import FigurasOneGame from "./FigurasOneGame";
 import clienteAxios from "../config/axios";
+import * as Speech from "expo-speech";
+
 
 const FigurasEscoger = ({ setEscogerObjetos }) => {
-  const { auth, dataAlert, setDataAlert, logOut, setOption } = useAuth();
+  const { auth, dataAlert, setDataAlert, logOut, setOption, sonido } = useAuth();
 
   const [mostrarGame, setMostrarGame] = useState(false);
 
@@ -71,6 +73,15 @@ const FigurasEscoger = ({ setEscogerObjetos }) => {
     }
   };
 
+
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+    }
+   
+  }
+
   return (
     <View style={styles.containerEscogerObjetos}>
       <View
@@ -83,7 +94,8 @@ const FigurasEscoger = ({ setEscogerObjetos }) => {
       >
         <TouchableOpacity
           style={styles.btnClose}
-          onPress={() => {
+          onLongPress={() => {
+            Speech.stop();
             setEscogerObjetos(false);
             if (auth?.tipo === "Cliente") capturarTiempo(false);
             if (aciertos > 0 || errores > 0) {
@@ -95,6 +107,8 @@ const FigurasEscoger = ({ setEscogerObjetos }) => {
             setErrores(0);
             setTiempo(0);
           }}
+
+          onPress={() => narrarAccion("Cerrar Ventana")}
         >
           <AntDesign name="closecircle" size={32} color="red" />
         </TouchableOpacity>
@@ -126,10 +140,12 @@ const FigurasEscoger = ({ setEscogerObjetos }) => {
               <>
                 <TouchableOpacity
                   style={styles.btnPlay}
-                  onPress={() => {
+                  onLongPress={() => {
                     setMostrarGame(true);
                     if (auth?.tipo === "Cliente") capturarDatos();
                   }}
+                  onPress={() => narrarAccion("Iniciar")}
+                  
                 >
                   <Card style={styles.card}>
                     <Card.Content>

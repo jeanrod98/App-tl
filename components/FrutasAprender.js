@@ -33,10 +33,11 @@ import {
   import naranja from "../assets/naranja.jpg";
   import mandarina from "../assets/mandarina.jpg";
 import ModalFrutasDetalle from "./ModalFrutasDetalle";
+import * as Speech from "expo-speech";
 
 
   const FrutasAprender = ({ setVerAprender }) => {
-    const { dataAlert, setDataAlert, logOut, setOption } = useAuth();
+    const { dataAlert, setDataAlert, logOut, setOption, sonido } = useAuth();
   
     const [mostrarGame, setMostrarGame] = useState(false);
   
@@ -56,6 +57,23 @@ import ModalFrutasDetalle from "./ModalFrutasDetalle";
     ]);
   
     const [ opcionSeleccionada, setOpcionSeleccionada] = useState({});
+
+
+    useEffect(() => {
+      if (sonido) {
+        // Speech.speak(`Elegiste ${opcionSeleccionada.nombre}`);
+        Speech.speak(`Escoge una fruta para aprenderla`);
+      }
+      
+    }, []);
+
+    const narrarAccion = async ( text ) => {
+      if(sonido) {
+        await Speech.stop();
+        Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+      }
+     
+    }
   
     return (
       <View style={styles.containerOrdenarNumeros}>
@@ -72,9 +90,12 @@ import ModalFrutasDetalle from "./ModalFrutasDetalle";
         >
           <TouchableOpacity
             style={styles.btnClose}
-            onPress={() => {
+            onLongPress={() => {
+              Speech.stop();
               setVerAprender(false);
             }}
+
+            onPress={() => narrarAccion("Cerrar Ventana")}
           >
             <AntDesign name="closecircle" size={32} color="red" />
           </TouchableOpacity>
@@ -90,7 +111,8 @@ import ModalFrutasDetalle from "./ModalFrutasDetalle";
               {transporte.map((transporte, index) => (
                 <TouchableOpacity
                   key={index}
-                  onPress={() => setOpcionSeleccionada(transporte)}
+                  onLongPress={() => setOpcionSeleccionada(transporte)}
+                  onPress={() => narrarAccion(transporte.nombre)}
                 >
                   <Card style={styles.card}>
                     {/* <Card.Content> */}

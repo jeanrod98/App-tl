@@ -29,12 +29,19 @@ const ModalColorDetalle = ({ colorSeleccionada, setColorSeleccionada }) => {
   const confettiRef = useRef(null);
 
   useEffect(() => {
-    console.log(colorSeleccionada);
     if (sonido) {
-      Speech.speak("Presiona la palabra para escuchar el color");
-      Speech.speak(`Elegiste el color ${colorSeleccionada.nombre}`);
+      Speech.speak("Presiona la palabra para escuchar el nombre de éste color");
+      // Speech.speak(`Elegiste el color ${colorSeleccionada.nombre}`);
     }
   }, []);
+
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+    }
+   
+  }
 
   return (
     <>
@@ -46,10 +53,12 @@ const ModalColorDetalle = ({ colorSeleccionada, setColorSeleccionada }) => {
       >
         <TouchableOpacity
           style={styles.btnClose}
-          onPress={() => {
+          onLongPress={() => {
+            Speech.stop();
             setColorSeleccionada({});
             if (sonido) Speech.stop();
           }}
+          onPress={() => narrarAccion("Cerrar Ventana")}
         >
           <AntDesign
             name="closecircle"

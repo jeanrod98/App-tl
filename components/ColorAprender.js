@@ -21,9 +21,11 @@ import {
   import ModalAlfabetoDetalles from "./ModalAlfabetoDetalles";
 import ModalVocalDetalle from "./ModalVocalDetalle";
 import ModalColorDetalle from "./ModalColorDetalle";
+
+import * as Speech from "expo-speech";
   
   const ColorAprender = ({ setVerAprender }) => {
-    const { dataAlert, setDataAlert, logOut, setOption } = useAuth();
+    const { dataAlert, setDataAlert, logOut, setOption, sonido } = useAuth();
   
     const [mostrarGame, setMostrarGame] = useState(false);
   
@@ -42,6 +44,24 @@ import ModalColorDetalle from "./ModalColorDetalle";
     ]);
   
     const [colorSeleccionada, setColorSeleccionada] = useState({})
+
+    useEffect(() => {
+      if (sonido) { 
+        // Speech.speak(`Elegiste la letra ${letraSeleccionada.letra}`);
+        Speech.stop();
+        Speech.speak("Escoge un color para aprenderlo");
+      }
+      
+    }, []);
+
+    const narrarAccion = async ( text ) => {
+      if(sonido) {
+        await Speech.stop();
+        Speech.speak(`${text}, mantén presionado para seleccionar esta opción.`)
+      }
+     
+    }
+
   
     return (
       <View style={styles.containerOrdenarNumeros}>
@@ -58,9 +78,11 @@ import ModalColorDetalle from "./ModalColorDetalle";
         >
           <TouchableOpacity
             style={styles.btnClose}
-            onPress={() => {
+            onLongPress={() => {
+              Speech.stop();
               setVerAprender(false);
             }}
+            onPress={() => narrarAccion("Cerrar Ventana")}
           >
             <AntDesign name="closecircle" size={32} color="red" />
           </TouchableOpacity>
@@ -74,7 +96,10 @@ import ModalColorDetalle from "./ModalColorDetalle";
   
             <View style={{ ...styles.game }}>
               {colores.map((color, index) => (
-                <TouchableOpacity key={index} onPress={() => setColorSeleccionada(color)}>
+                <TouchableOpacity key={index} 
+                onLongPress={() => setColorSeleccionada(color)}
+                onPress={() => narrarAccion(color.nombre)}
+                >
                   <Card style={{...styles.card, backgroundColor: color.color}}>
                     {/* <Card.Content> */}
                     <Text style={{ fontSize: 12, fontWeight: "700", color: color.nombre === "BLANCO" || color.nombre === "AMARILLO" ? "#242424" : "#f9f9f9"  }}>

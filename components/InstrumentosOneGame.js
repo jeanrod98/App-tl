@@ -169,6 +169,17 @@ const InstrumentosOneGame = ({
     }
   };
 
+
+  const narrarAccion = async ( text ) => {
+    if(sonido) {
+      await Speech.stop();
+      Speech.speak(`${text}`)
+    }
+   
+  }
+
+
+
   return (
     <>
       <View style={styles.contenido}>
@@ -258,9 +269,11 @@ const InstrumentosOneGame = ({
         <View style={styles.controles}>
           <TouchableOpacity
             style={styles.btnReload}
-            onPress={() => {
+            onLongPress={() => {
               generarColorAleatorio();
             }}
+            onPress={() => narrarAccion("Cambiar")}
+
           >
             {/* <FontAwesome name="stop" size={24} color="#5c6bc0" /> */}
             <Ionicons name="reload-circle" size={24} color="#5c6bc0" />

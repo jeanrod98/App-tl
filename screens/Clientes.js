@@ -38,7 +38,10 @@ const Clientes = ({ setMostrar }) => {
   });
 
   useEffect(() => {
-    if (sonido) Speech.speak("Clientes");
+    if (sonido) {
+      Speech.stop();
+      Speech.speak("Clientes");
+    }
     setClient(clientes);
     // console.log("Actualizado");
   }, [clientes]);
